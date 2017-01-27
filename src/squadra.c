@@ -20,26 +20,27 @@ union semun {
 
 struct sembuf pluto; // Alloco la struttura pluto di tipo sembuf
 
-int main() {
+int main(int argc, char* argv[]){
 
 
   int semaforo;
   int giocatore;
-  int squadra = getpid();
+  int squadra=getpid();
   semaforo = semget(IPC_PRIVATE, 1, 0777);
   printf("\nCreata la squadra: %d\n", semaforo);
-  semctl(semaforo, 0, GETALL, &pippo);
+  printf("\nPALLA=%d\n\n",atoi(argv[1]));
+  semctl(semaforo,0,GETALL,&pippo);
 
-  while (1) {
+  while(1){
 
-    if ( (pippo.val < 5) && (giocatore == 0)) {
+    if( (pippo.val<5)&&(giocatore==0)){
       printf("Sto per creare un nuovo giocatore\n");
-      pippo.val = pippo.val + 1;
-      semctl(semaforo, 0, SETVAL, pippo);
-      giocatore = fork();
-      if (giocatore != 0) {
-        printf("Giocatore creato %d della squadra %d\n", giocatore, semaforo);
-        printf("Numero giocatori: %d\n", pippo.val);
+      pippo.val = pippo.val+1;
+      semctl(semaforo,0,SETVAL,pippo);
+      giocatore=fork();
+      if (giocatore!=0){
+	printf("Giocatore creato %d della squadra %d\n",giocatore,semaforo);
+	printf("Numero giocatori: %d\n",pippo.val);
 
       }
 
@@ -50,5 +51,5 @@ int main() {
 
 
 
-  return 0;
+	return 0;
 }

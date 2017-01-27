@@ -5,17 +5,17 @@
 #include<string.h>
 #include<sys/wait.h>
 #include <sys/types.h>
-
-int main() {
+int sembal;
+int main(){
 
   int pid = getpid();
   //creo cronometro
-  if (pid == getpid()) {
-    pid_t cronometro = fork();
+  if(pid==getpid()){
+    pid_t cronometro= fork();
 
-    if (cronometro == 0) {
-      printf("nato processo cronometro\n");
-      execl("cronometro", (char* )0);
+    if (cronometro==0){
+
+      execl("cronometro",(char* )0);
       return 0;
     }
     //eseguo file cronometro
@@ -23,42 +23,42 @@ int main() {
   //creo palla (sem)
   int p = palla();
 
-
   //creo squadra A
-  if (pid == getpid()) {
+  if (pid==getpid()){
     sleep(1);
     pid_t squadraA = fork();
-    if (squadraA == 0) {
-
-      execl("squadra", (char* )0);
+   if (squadraA==0){
+     char* str;
+      sprintf(str, "%d", p);
+     execl("c","c",&str,(char* )0);
       return 1;
     }
   }
 
-  if (pid == getpid()) {
+  if (pid==getpid()){
     sleep(2);
-    //creo squadra B
-    pid_t squadraB = fork();
-    if (squadraB == 0) {
-      execl("squadra", (char* )0);
+  //creo squadra B
+     pid_t squadraB = fork();
+     if (squadraB==0){
+	execl("squadra",(char* )0);
       return 1;
-    }
+      }
 
   }
 
-  if (pid == getpid()) {
+  if (pid==getpid()){
     sleep(3);
-    //creo il fato
+  //creo il fato
     pid_t fato = fork();
-    if (fato == 0) {
+    if (fato==0){
       printf("nato processo fato\n");
-      execl("fato", (char* )0);
+      execl("fato",(char* )0);
 
     }
   }
   return 0;
 
-}
+ }
 
 
 #include <sys/types.h>
@@ -78,11 +78,13 @@ union semun {
 } pippo; // Alloco la unione semun
 #endif
 
-struct sembuf pluto; // Alloco la struttura pluto di tipo sembuf
 
-int palla() {
-  int sembal;
+
+int palla(){
+
   sembal = semget(IPC_PRIVATE, 1, 0777);
-  printf("\n\nPalla %d\n\n", sembal);
+  printf("\n\nPalla %d\n\n",sembal);
   return sembal;
+
+
 }
