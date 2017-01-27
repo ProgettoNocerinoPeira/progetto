@@ -1,3 +1,10 @@
+/*
+Funzione arbitro, crea i processi fato, squadraA, squadraB e avvia il cronometro.
+Legge da file config.txt la configurazione della partita e la salva in relative variabili.
+I parametri di configurazione vengono inseriti in memoria condivisa per accesso a fato.
+
+Realizzato da Mattia Nocerino e Paolo Peira
+*/
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -5,7 +12,18 @@
 #include<string.h>
 #include<sys/wait.h>
 #include <sys/types.h>
+
 int sembal;
+
+void signalHandler(int sig);
+
+
+void signalHandler(int sig){
+  
+}
+
+
+
 int main(){
 
   int pid = getpid();
