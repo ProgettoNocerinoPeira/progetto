@@ -42,6 +42,10 @@ int createMessageQueue();
 bool destroySharedResources(int type, int idResource);
 //Scope of this function is to delete all shared resources like semaphores and message queues.The type is passed as int, 1 equals semaphore set, 2 message queues, 3 shared memory
 void destroyAll();
+
+bool writeConfigToSharedMemorySegment();
+//Scope of this function is to write config data to the shared memory segment.
+
 //From here we start writing our functions
 bool readConfigFile() {
   char *token;
@@ -156,6 +160,10 @@ void destroyAll(){
   printf("Destroying message queue %d\n", destroySharedResources(2,messageQueueId));
   printf("Destroying shared memory segment %d\n", destroySharedResources(3,sharedMemoryId));
 }
+
+bool writeConfigToSharedMemorySegment(){
+  return 1;
+}
 int main(){
   //First of all I'll create a semaphoreset with 2 semaphores, 1 for the ball, and 1 to let "fato" know when I'll have the configuration data.
   //The ball semaphore will be locked and released when all the children will be running.
@@ -168,6 +176,8 @@ int main(){
     // I store the values on the shared memory to let fato know the probabiliy values.
     printf("\n\nsemaphoreSetId: %d, messageQueueId: %d, sharedMemoryId: %d\n", semaphoreSetId, messageQueueId, sharedMemoryId);
     printf("Everyting looks fine right now.\n");
+    writeConfigToSharedMemorySegment();
+
     destroyAll();
   }
   return -1;
