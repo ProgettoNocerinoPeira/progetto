@@ -138,7 +138,7 @@ int main(){
       if (squadraA==0){
         char* str;
         sprintf(str, "%d", p);
-        execl("c","c",&str,(char* )0);
+        execl("squadra", "squadra", p, (char* )0);
         return 1;
       }
     }
@@ -147,7 +147,7 @@ int main(){
       //creo squadra B
       pid_t squadraB = fork();
       if (squadraB==0){
-        execl("squadra",(char* )0);
+        execl("squadra", "squadra", p, (char* )0);
         return 1;
       }
     }

@@ -5,6 +5,7 @@
 #include <sys/sem.h>
 #include <sys/errno.h>
 #include <stdlib.h>
+#include <unistd.h>
 #if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)
 /* L'unione semun è già definita in <sys/sem.h> */
 #else
