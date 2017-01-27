@@ -138,7 +138,7 @@ int main(){
       if (squadraA==0){
         char* str;
         sprintf(str, "%d", p);
-        execl("c","c",&str,(char* )0);
+        execl("squadra","squadra",&str,(char* )0);
         return 1;
       }
     }
