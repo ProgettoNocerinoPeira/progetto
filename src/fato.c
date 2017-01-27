@@ -13,9 +13,10 @@
 #include "chiaviComuni.h"
 
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
-int idMessaggi; 
+int idMessaggi;
 bool writeLog(char* text);
 int leggiConfigurazione();
+void removeMessageQueue();
 
 
 int leggiConfigurazione() {
@@ -86,6 +87,11 @@ int leggiConfigurazione() {
   else writeLog("Errore nell'apertura del file");
   return 0;
 }
+
+void removeMessageQueue(){
+  msgctl(idMessaggi, IPC_RMID, 0);
+  writeLog("Ho eliminato la coda messaggi");
+}
 bool writeLog(char* text){
 	FILE *logFile = fopen("log.txt", "a");
 	if (logFile!=NULL){
@@ -108,13 +114,11 @@ int main() {
 	 idMessaggi=msgget(KEYMESSAGGI, IPC_CREAT | 0666);
 	 if (idMessaggi==-1) {
 		writeLog("Errore nella creazione coda di messaggi");
-		
+
 	}
-		else 
+		else
 		{
 			writeLog("Ho creato la coda di messaggi");
-			msgctl(idMessaggi, IPC_RMID, 0);
-			writeLog("Ho eliminato la coda messaggi");
 		}
     return 0;
   }

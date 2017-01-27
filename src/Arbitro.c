@@ -85,6 +85,4 @@ int palla() {
   sembal = semget(IPC_PRIVATE, 1, 0777);
   printf("\n\nPalla %d\n\n", sembal);
   return sembal;
-
-
 }
