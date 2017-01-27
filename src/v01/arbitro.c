@@ -23,7 +23,8 @@ This is where the magic happens.
 #include "commonKeys.h"
 
 //Declaration of global variables
-int semaphoreSetId, messageQueueId;
+int semaphoreSetId, messageQueueId, sharedMemoryId;
+int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 
 //Protitype our functions
 
@@ -38,11 +39,11 @@ int createSharedMemory();
 int createMessageQueue();
 //This function will create a message queue.
 
-bool deleteSharedResources(int type, idResource);
+bool destroySharedResources(int type, int idResource);
 //Scope of this function is to delete all shared resources like semaphores and message queues.The type is passed as int, 1 equals semaphore set, 2 message queues, 3 shared memory
 
 //From here we start writing our functions
-bool leggiConfigurazione() {
+bool readConfigFile() {
   char *token;
   char *search = "=";
   static const char filename[] = "config.txt";
@@ -102,7 +103,7 @@ bool leggiConfigurazione() {
         printf(buffer);
       }
     }
-    fclose ( file );
+    fclose (file);
     printf("Tutti i dati di configurazione sono stati trovati e caricati");
     return true;
   }
@@ -112,12 +113,15 @@ bool leggiConfigurazione() {
 
 //Create a semaphore set using a numSem int var as the number of sempahore in the set we create.
 int createSemaphores(int numSem){
-  int semaphoreId = semget(KEYSEMAPHORES, numSem, 0666);
+  key_t semaphoreKey = KEYSEMAPHORES;
+  int semaphoreId;
+  semaphoreId=semget(semaphoreKey, numSem, IPC_CREAT | 0666);
   return semaphoreId;
 }
 int createMessageQueue(){
   int messageQueue;
-  if (messageQueueId=msgget(KEYMESSAGEQUEUE, IPC_CREAT | 0666)){
+  key_t messageKey = KEYMESSAGEQUEUE;
+  if (messageQueue=msgget(messageKey, IPC_CREAT | 0666)){
     return messageQueue;
   }
   else return 0;
@@ -125,8 +129,25 @@ int createMessageQueue(){
 
 int createSharedMemory(){
   int id;
-  //TODO create it you tool!
-  return id
+  key_t key = KEYSHAREDMEMORY;
+  id = shmget(key, SIZESHAREDMEMORY, IPC_CREAT | 0655);
+  return id;
+}
+
+bool destroySharedResources(int type, int id){
+  if(type==1){
+    if(semctl(id, 0, IPC_RMID)) return 1;
+    else return -1;
+  }
+  else if (type==2) {
+    if(msgctl(id, IPC_RMID, 0)) return 1;
+    else return -1;
+  }
+  else if (type==3) {
+    if(shmctl(id, IPC_RMID, NULL)) return 1;
+    else return -1;
+  }
+  return -1;
 }
 
 
@@ -134,12 +155,18 @@ int main(){
   //First of all I'll create a semaphoreset with 2 semaphores, 1 for the ball, and 1 to let "fato" know when I'll have the configuration data.
   //The ball semaphore will be locked and released when all the children will be running.
   //I'll also create the message queue.
-  if(!semaphoreSetId = createSemaphores(2)) return -1;
-  if(!messageQueueId = createMessageQueue()) return -1;
+  if(!(semaphoreSetId=createSemaphores(2))) return -1;
+  if(!(messageQueueId = createMessageQueue())) return -1;
+  if(!(sharedMemoryId = createSharedMemory())) return -1;
   //If i can read the config file I can go on with the execution of the program, otherwise I'll exit the program.
-  if readConfigFile(){
+  if (readConfigFile()){
     // I store the values on the shared memory to let fato know the probabiliy values.
-
+    printf("\n\nsemaphoreSetId: %d, messageQueueId: %d, sharedMemoryId: %d\n", semaphoreSetId, messageQueueId, sharedMemoryId);
+    printf("Everyting looks fine right now.\n");
+    printf("Destrying shared resources...\n");
+    printf("Destroying semaphores %d\n", destroySharedResources(1,semaphoreSetId));
+    printf("Destroying message queue %d\n", destroySharedResources(2,messageQueueId));
+    printf("Destroying shared memory segment %d\n", destroySharedResources(3,sharedMemoryId));
 
   }
   return -1;
