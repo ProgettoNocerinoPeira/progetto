@@ -138,7 +138,11 @@ int main(){
       if (squadraA==0){
         char* str;
         sprintf(str, "%d", p);
+<<<<<<< HEAD
         execl("squadra", "squadra", p, (char* )0);
+=======
+        execl("squadra","squadra",&str,(char* )0);
+>>>>>>> origin/master
         return 1;
       }
     }
