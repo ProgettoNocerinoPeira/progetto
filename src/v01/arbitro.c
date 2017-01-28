@@ -233,7 +233,7 @@ int main(){
     //From here we start to create all the other process needed for our simulation
     createTeam(1);
 
-    sleep(10);
+    sleep(12);
     destroyAll();
   }
   return -1;
