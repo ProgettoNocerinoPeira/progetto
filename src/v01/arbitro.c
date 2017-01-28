@@ -228,6 +228,7 @@ bool createTeam(int teamNumber){
 int main(){
   signal(SIGINT, sig_handler);
   signal(SIGALRM, sig_handler);
+  alarm(5);
   //First of all I'll create a semaphoreset with 2 semaphores, 1 for the ball, and 1 to let "fato" know when I'll have the configuration data.
   //The ball semaphore will be locked and released when all the children will be running.
   //I'll also create the message queue and the handlers for our signals.
