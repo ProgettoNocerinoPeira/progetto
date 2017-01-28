@@ -52,7 +52,6 @@ signal(SIGINT, sig_handler);
 signal(SIGALRM, sig_handler);
 
 //Protitype our functions
-void DoStuff(void);
 
 void sig_handler(int signo);
 
@@ -205,37 +204,6 @@ void destroyAll(){
   printf("Destroying shared memory segment %d\n", destroySharedResources(3,sharedMemoryId));
 }
 
-int timer(int time){struct itimerval it_val;
-
-  /* Upon SIGALRM, call DoStuff().
-  * Set interval timer.  We want frequency in ms,
-  * but the setitimer call needs seconds and useconds. */
-  if (signal(SIGALRM, (void (*)(int)) DoStuff) == SIG_ERR) {
-    perror("Unable to catch SIGALRM");
-    return 1;
-  }
-  it_val.it_value.tv_sec =     time;
-  it_val.it_value.tv_usec =    time;
-  it_val.it_interval = it_val.it_value;
-  if (setitimer(ITIMER_REAL, &it_val, NULL) == -1) {
-    perror("error calling setitimer()");
-    return 1;
-  }
-
-  while (1)
-  pause();
-}
-/*
-* DoStuff
-*/
-void DoStuff(void) {
-  //We'll write in the console and the log the final score, and start deallocate all the shared resources.
-  //All the other process will need to stop.
-
-  printf("Timer went off.\n");
-
-}
-
 /*
 bool writeConfigToSharedMemorySegment(){
 bool completed=false;
@@ -261,9 +229,11 @@ bool createTeam(int teamNumber){
 }
 
 int main(){
+  signal(SIGINT, sig_handler);
+  signal(SIGALRM, sig_handler);
   //First of all I'll create a semaphoreset with 2 semaphores, 1 for the ball, and 1 to let "fato" know when I'll have the configuration data.
   //The ball semaphore will be locked and released when all the children will be running.
-  //I'll also create the message queue.
+  //I'll also create the message queue and the handlers for our signals.
 
   //We're creating a set of 3 semaphore, first two will be used by teams to manage
   if((semaphoreSetId=createSemaphores(3))==-1){
