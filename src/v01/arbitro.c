@@ -165,7 +165,7 @@ void destroyAll(){
   printf("Destroying message queue %d\n", destroySharedResources(2,messageQueueId));
   printf("Destroying shared memory segment %d\n", destroySharedResources(3,sharedMemoryId));
 }
-
+/*
 bool writeConfigToSharedMemorySegment(){
   bool completed=false;
   char *data;
@@ -174,7 +174,7 @@ bool writeConfigToSharedMemorySegment(){
   completed = true;
   return completed;
 }
-
+*/
 bool createTeam(int teamNumber){
   int pid = getpid();
   int numeroTeam = teamNumber;
@@ -212,11 +212,11 @@ int main(){
     // I store the values on the shared memory to let fato know the probabiliy values.
     printf("\n\nsemaphoreSetId: %d, messageQueueId: %d, sharedMemoryId: %d\n", semaphoreSetId, messageQueueId, sharedMemoryId);
     printf("Everyting looks fine right now.\n");
-    printf("Attached? %d\n", writeConfigToSharedMemorySegment());
+    //printf("Attached? %d\n", writeConfigToSharedMemorySegment());
 
     //From here we start to create all the other process needed for our simulation
     createTeam(1);
-
+    sleep(10);
     destroyAll();
   }
   return -1;

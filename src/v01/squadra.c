@@ -14,8 +14,8 @@
 
 //Include our commonKeys header file
 #include "commonKeys.h"
-int semaphoreSetId, teamNumber;
-int connectToBall();
+
+
 union semun {
   // value for SETVAL
   int val;
@@ -31,42 +31,62 @@ union semun {
 } semaphore;
 struct sembuf buffer;
 
+
+
+int semaphoreSetId, teamNumber;
+int connectToBall();
+bool spawn();
+
+bool spawn(){
+  int pid = getpid();
+  if(pid==getpid()){
+    pid_t player = fork();
+    if (player==0){
+      char father[8];
+      sprintf(father, "%d", pid);
+      execl("giocatore", "giocatore", &father, (char* )0);
+      return 0;
+    }
+  }
+}
+
 int connectToBall(){
   key_t semaphoreKey = KEYSEMAPHORES;
   int semaphoreId;
   semaphoreId=semget(semaphoreKey, 2, IPC_CREAT | 0666);
   return semaphoreId;
 }
- int main (int argc, char *argv[]){
-   teamNumner = atoi(argv[1]);
-   semaphoreSetId=connectToBall();
-   while (1){
-     while ((semctl(semaphoreSetId,1, GETVAL, semaphore))<5){
-       //TODO Spawn players
-       arg.val=arg.val++;
-       semctl(semaphoreSetId,1, SETVAL, semaphore);
-       spawn();
-       
-
-     }
-   }
- }
+int main (int argc, char *argv[]){
+  teamNumber = atoi(argv[1]);
+  semaphoreSetId=connectToBall();
+  bool finished = false;
+  while (1 && finished ==false){
+    while ((semctl(semaphoreSetId,1, GETVAL, semaphore))<5){
+      //TODO Spawn players
+      semaphore.val=semaphore.val+1;
+      semctl(semaphoreSetId,1, SETVAL, semaphore);
+      spawn();
+      sleep(2);
+    }
+    finished = true;
+  }
+}
 
 /*
 int main(int argc, char *argv[]){
-  teamNumber=atoi(argv[1]);
-  printf("Team %d\n", teamNumber);
-  //Get "connected" to the semaphore representing the ball in our simulation.
-  semaphoreSetId = connectToBall();
+teamNumber=atoi(argv[1]);
+printf("Team %d\n", teamNumber);
+//Get "connected" to the semaphore representing the ball in our simulation.
+semaphoreSetId = connectToBall();
 
-  int valueOfBall = semctl(semaphoreSetId, 1, GETVAL);
-  printf("Value: %d", valueOfBall);
-  semaphore.val=semaphore.val-1;
-  semctl(semaphoreSetId,1, SETVAL, semaphore);
+int valueOfBall = semctl(semaphoreSetId, 1, GETVAL);
+printf("Value: %d", valueOfBall);
+semaphore.val=semaphore.val-1;
+semctl(semaphoreSetId,1, SETVAL, semaphore);
 
-  valueOfBall = semctl(semaphoreSetId, 1, GETVAL);
-  printf("Value: %d", valueOfBall);
+valueOfBall = semctl(semaphoreSetId, 1, GETVAL);
+printf("Value: %d", valueOfBall);
 
-  return 0;
+return 0;
 }
 */
