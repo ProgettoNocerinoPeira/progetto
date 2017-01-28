@@ -50,15 +50,15 @@ bool spawn(){
   }
 }
 
-int connectToBall(){
+int connectToSemaphore(){
   key_t semaphoreKey = KEYSEMAPHORES;
   int semaphoreId;
-  semaphoreId=semget(semaphoreKey, 2, IPC_CREAT | 0666);
+  semaphoreId=semget(semaphoreKey, 3, IPC_CREAT | 0666);
   return semaphoreId;
 }
 int main (int argc, char *argv[]){
   teamNumber = atoi(argv[1]);
-  semaphoreSetId=connectToBall();
+  semaphoreSetId=connectToSemaphore();
   bool finished = false;
 
   while (1 && finished==false){

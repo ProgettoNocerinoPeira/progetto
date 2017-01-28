@@ -5,9 +5,9 @@ ______                     _   _          _____  _____
 |  __/ '__/ _ \ / _` |/ _ \ __| __/ _ \   `--. \| | | |
 | |  | | | (_) | (_| |  __/ |_| || (_) | /\__/ /\ \_/ /
 \_|  |_|  \___/ \__, |\___|\__|\__\___/  \____/  \___/
-                 __/ |
-                |___/
- _   _                     _              ______    _
+__/ |
+|___/
+_   _                     _              ______    _
 | \ | |                   (_)             | ___ \  (_)
 |  \| | ___   ___ ___ _ __ _ _ __   ___   | |_/ /__ _ _ __ __ _
 | . ` |/ _ \ / __/ _ \ '__| | '_ \ / _ \  |  __/ _ \ | '__/ _` |
@@ -47,10 +47,14 @@ int semaphoreSetId, messageQueueId, sharedMemoryId;
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
 
-/* function prototype */
-void DoStuff(void);
+//Signal handlers
+signal(SIGINT, sig_handler);
+signal(SIGALRM, sig_handler);
 
 //Protitype our functions
+void DoStuff(void);
+
+void sig_handler(int signo);
 
 bool readConfigFile();
 //It's scope is to read from our config.txt file the values like DurataPartita, Perc_Tiro etc.
@@ -75,6 +79,20 @@ bool writeConfigToSharedMemorySegment();
 //Scope of this function is to write config data to the shared memory segment.
 
 //From here we start writing our functions
+
+void sig_handler(int signo){
+  if (signo == SIGINT){
+    printf("received SIGINT\n");
+    destroyAll();
+    exit(0);
+  }
+  if(signo==SIGALRM){
+    printf("Timer up.\n");
+    destroyAll();
+    exit(0);
+  }
+}
+
 bool readConfigFile() {
   char *token;
   char *search = "=";
@@ -190,8 +208,8 @@ void destroyAll(){
 int timer(int time){struct itimerval it_val;
 
   /* Upon SIGALRM, call DoStuff().
-   * Set interval timer.  We want frequency in ms,
-   * but the setitimer call needs seconds and useconds. */
+  * Set interval timer.  We want frequency in ms,
+  * but the setitimer call needs seconds and useconds. */
   if (signal(SIGALRM, (void (*)(int)) DoStuff) == SIG_ERR) {
     perror("Unable to catch SIGALRM");
     return 1;
@@ -204,12 +222,12 @@ int timer(int time){struct itimerval it_val;
     return 1;
   }
 
-   while (1)
-     pause();
+  while (1)
+  pause();
 }
 /*
- * DoStuff
- */
+* DoStuff
+*/
 void DoStuff(void) {
   //We'll write in the console and the log the final score, and start deallocate all the shared resources.
   //All the other process will need to stop.
@@ -220,12 +238,12 @@ void DoStuff(void) {
 
 /*
 bool writeConfigToSharedMemorySegment(){
-  bool completed=false;
-  char *data;
-  data = (char *) shmat(sharedMemoryId,(void *)0,0);
-  if (data == (char *)(-1)) return completed;
-  completed = true;
-  return completed;
+bool completed=false;
+char *data;
+data = (char *) shmat(sharedMemoryId,(void *)0,0);
+if (data == (char *)(-1)) return completed;
+completed = true;
+return completed;
 }
 */
 bool createTeam(int teamNumber){
@@ -246,7 +264,9 @@ int main(){
   //First of all I'll create a semaphoreset with 2 semaphores, 1 for the ball, and 1 to let "fato" know when I'll have the configuration data.
   //The ball semaphore will be locked and released when all the children will be running.
   //I'll also create the message queue.
-  if((semaphoreSetId=createSemaphores(2))==-1){
+
+  //We're creating a set of 3 semaphore, first two will be used by teams to manage
+  if((semaphoreSetId=createSemaphores(3))==-1){
     printf("Errore semaforo\n");
     exit(-1);
   }
