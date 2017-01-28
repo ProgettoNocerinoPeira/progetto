@@ -183,9 +183,7 @@ bool createTeam(int teamNumber){
     if (team==0){
       char teamName[16];
       sprintf(teamName, "%d", numeroTeam);
-      char idSemaphore[16];
-      sprintf(idSemaphore, "%d", semaphoreSetId);
-      execl("squadra", "squadra", &teamName, &idSemaphore,(char* )0);
+      execl("squadra", "squadra", &teamName, (char* )0);
       return 0;
     }
   }
