@@ -47,9 +47,6 @@ int semaphoreSetId, messageQueueId, sharedMemoryId;
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
 
-//Signal handlers
-signal(SIGINT, sig_handler);
-signal(SIGALRM, sig_handler);
 
 //Protitype our functions
 
