@@ -61,7 +61,7 @@ int main (int argc, char *argv[]){
   semaphoreSetId=connectToBall();
   bool finished = false;
   while (1 && finished==false){
-    int semValue = (semctl(semaphoreSetId,1, GETVAL, semaphore);
+    int semValue = semctl(semaphoreSetId,1, GETVAL, semaphore);
     while(semValue<5){
       //TODO Spawn players
       semaphore.val=semaphore.val+1;
@@ -71,7 +71,6 @@ int main (int argc, char *argv[]){
       if (semValue==5) finished=true;
       //spawn();
       sleep(2);
-
     }
   }
 }
