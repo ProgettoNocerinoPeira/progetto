@@ -87,11 +87,15 @@ void sig_handler(int signo){
     destroyAll();
     exit(0);
   }
-  if (signo==SIGUSR1){
-    printf("Goaaaaaaaaaaaaaal squadra 1");
+   if (signo==SIGUSR1){
+    printf("\nGoaaaaaaaaaaaaaal squadra 1\n");
+    score[0]=score[0]+1;
+    printf("Nuovo risultato:\n squadra 1 %d-%d squadra 2",score[0],score[1]);
   }
   if(signo==SIGUSR2){
-    printf("Goaaaaaaaaaaaaaal squadra 2");
+    printf("\nGoaaaaaaaaaaaaaal squadra 2\n");
+    score[1]=score[1]+1;
+    printf("Nuovo risultato:\n squadra 1 %d-%d squadra 2",score[0],score[1]);    
   }
 }
 
