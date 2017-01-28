@@ -5,11 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include<signal.h>
-void signalHandler(int signo);
 
-void signalHandler(int signo){
-  if (signo==USR1) exit(0);
-}
  int main(int argc, char *argv[]){
 	int idPalla=atoi(argv[1]);
 	printf("Ho ricevuto idPalla = %d\n", idPalla);
