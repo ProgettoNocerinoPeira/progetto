@@ -18,14 +18,24 @@ This is where the magic happens.
 #include <sys/msg.h>
 #include <sys/sem.h>
 #include <sys/errno.h>
+#include <sys/stat.h>
 
 //Include our commonKeys header file
 #include "commonKeys.h"
+
+//Create a structure to hold our data in the shared memory.
+
+struct configDataStruct{
+  int infortunio; //Counter for bytes unsigned
+  int tiro;
+  int dribbling;
+};
 
 //Declaration of global variables
 int semaphoreSetId, messageQueueId, sharedMemoryId;
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
+struct configDataStruct configurationData;
 
 //Protitype our functions
 
@@ -44,7 +54,7 @@ bool destroySharedResources(int type, int idResource);
 //Scope of this function is to delete all shared resources like semaphores and message queues.The type is passed as int, 1 equals semaphore set, 2 message queues, 3 shared memory
 void destroyAll();
 
-int writeConfigToSharedMemorySegment();
+bool writeConfigToSharedMemorySegment();
 //Scope of this function is to write config data to the shared memory segment.
 
 //From here we start writing our functions
@@ -79,6 +89,7 @@ bool readConfigFile() {
           return false;
         }
         Perc_Infortunio = atoi(value);
+        configurationData.infortunio=Perc_Infortunio;
         char buffer[256];
         sprintf(buffer, "Dato Perc_Infortunio valido: %d", Perc_Infortunio);
         printf(buffer);
@@ -130,10 +141,12 @@ int createMessageQueue(){
   return messageQueue;
 }
 
+
+
 int createSharedMemory(){
   int id;
-  key_t key = KEYSHAREDMEMORY;
-  id = shmget(key, SIZESHAREDMEMORY, IPC_CREAT | 0666);
+  key_t sharedMemorykey = 461328;
+  id = shmget(sharedMemorykey, sizeof(struct configDataStruct), IPC_CREAT | 0666);
   return id;
 }
 
@@ -154,32 +167,36 @@ bool destroySharedResources(int type, int id){
 }
 
 void destroyAll(){
-  printf("Destrying shared resources...\n");
+  printf("Destroying shared resources...\n");
   printf("Destroying semaphores %d\n", destroySharedResources(1,semaphoreSetId));
   printf("Destroying message queue %d\n", destroySharedResources(2,messageQueueId));
   printf("Destroying shared memory segment %d\n", destroySharedResources(3,sharedMemoryId));
 }
 
-int writeConfigToSharedMemorySegment(){
+bool writeConfigToSharedMemorySegment(){
+  bool completed=false;
   int attached = shmat(sharedMemoryId, NULL, 0);
-  //if (attached == (char *)-1) return -1;
-  return attached;
+  if (attached==-1) return completed;
+  else{
+    completed=true;
+  }
+  return completed;
 }
 int main(){
   //First of all I'll create a semaphoreset with 2 semaphores, 1 for the ball, and 1 to let "fato" know when I'll have the configuration data.
   //The ball semaphore will be locked and released when all the children will be running.
   //I'll also create the message queue.
   if((semaphoreSetId=createSemaphores(2))==-1){
-    printf("Errore semaforo");
+    printf("Errore semaforo\n");
     exit(-1);
   }
   if((messageQueueId = createMessageQueue())==-1) {
-    printf("Errore message");
+    printf("Errore message\n");
     destroyAll();
     exit(-1);
   }
   if((sharedMemoryId = createSharedMemory())==-1) {
-    printf("Errore mem");
+    printf("Errore mem\n");
     destroyAll();
     exit(-1);
   }
@@ -188,7 +205,7 @@ int main(){
     // I store the values on the shared memory to let fato know the probabiliy values.
     printf("\n\nsemaphoreSetId: %d, messageQueueId: %d, sharedMemoryId: %d\n", semaphoreSetId, messageQueueId, sharedMemoryId);
     printf("Everyting looks fine right now.\n");
-    printf("Attached: %d", writeConfigToSharedMemorySegment());
+    printf("Attached: %d\n", writeConfigToSharedMemorySegment());
 
     destroyAll();
   }
