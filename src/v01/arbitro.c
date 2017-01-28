@@ -35,6 +35,8 @@ This is where the magic happens.
 #include <sys/sem.h>
 #include <sys/errno.h>
 #include <sys/stat.h>
+#include <sys/time.h>		/* for setitimer */
+#include <signal.h>		/* for signal */
 
 //Include our commonKeys header file
 #include "commonKeys.h"
@@ -44,6 +46,9 @@ This is where the magic happens.
 int semaphoreSetId, messageQueueId, sharedMemoryId;
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
+
+/* function prototype */
+void DoStuff(void);
 
 //Protitype our functions
 
@@ -181,6 +186,36 @@ void destroyAll(){
   printf("Destroying message queue %d\n", destroySharedResources(2,messageQueueId));
   printf("Destroying shared memory segment %d\n", destroySharedResources(3,sharedMemoryId));
 }
+
+int timer(int time){struct itimerval it_val;	
+
+  /* Upon SIGALRM, call DoStuff().
+   * Set interval timer.  We want frequency in ms, 
+   * but the setitimer call needs seconds and useconds. */
+  if (signal(SIGALRM, (void (*)(int)) DoStuff) == SIG_ERR) {
+    perror("Unable to catch SIGALRM");
+    return 1;
+  }
+  it_val.it_value.tv_sec =     time;
+  it_val.it_value.tv_usec =    time;	
+  it_val.it_interval = it_val.it_value;
+  if (setitimer(ITIMER_REAL, &it_val, NULL) == -1) {
+    perror("error calling setitimer()");
+    return 1;
+  }
+
+   while (1) 
+     pause();
+}
+/*
+ * DoStuff
+ */
+void DoStuff(void) {
+
+  printf("Timer went off.\n");
+  
+}
+
 /*
 bool writeConfigToSharedMemorySegment(){
   bool completed=false;
@@ -233,7 +268,7 @@ int main(){
     //From here we start to create all the other process needed for our simulation
     createTeam(1);
 
-    sleep(12);
+    sleep(10);
     destroyAll();
   }
   return -1;
