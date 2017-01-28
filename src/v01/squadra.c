@@ -28,7 +28,7 @@ union semun {
   // buffer for IPC_INFO
   struct seminfo* __buf;
   #endif
-} semaphore;
+} semaphore, ballSemaphore;
 struct sembuf buffer;
 
 
@@ -60,6 +60,7 @@ int main (int argc, char *argv[]){
   teamNumber = atoi(argv[1]);
   semaphoreSetId=connectToBall();
   bool finished = false;
+
   while (1 && finished==false){
     int semValue = semctl(semaphoreSetId,1, GETVAL, semaphore);
     while(semaphore.val<5){
@@ -70,7 +71,7 @@ int main (int argc, char *argv[]){
       printf("Stato del semaforo: %d\n", semValue);
       if (semaphore.val==5) finished=true;
       //spawn();
-      sleep(2);
+
     }
   }
 }
