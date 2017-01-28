@@ -60,35 +60,16 @@ int main (int argc, char *argv[]){
   teamNumber = atoi(argv[1]);
   semaphoreSetId=connectToBall();
   bool finished = false;
-  while (1 && finished ==false){
+  while (1 && finished==false){
     while ((semctl(semaphoreSetId,1, GETVAL, semaphore))<5){
       //TODO Spawn players
       semaphore.val=semaphore.val+1;
       semctl(semaphoreSetId,1, SETVAL, semaphore);
       int semValue = semctl(semaphoreSetId, 1, GETVAL, semaphore);
-      printf("Stato del semaforo: %d", semValue);
+      printf("Stato del semaforo: %d\n", semValue);
       //spawn();
       sleep(2);
     }
     finished = true;
   }
 }
-
-/*
-int main(int argc, char *argv[]){
-teamNumber=atoi(argv[1]);
-printf("Team %d\n", teamNumber);
-//Get "connected" to the semaphore representing the ball in our simulation.
-semaphoreSetId = connectToBall();
-
-int valueOfBall = semctl(semaphoreSetId, 1, GETVAL);
-printf("Value: %d", valueOfBall);
-semaphore.val=semaphore.val-1;
-semctl(semaphoreSetId,1, SETVAL, semaphore);
-
-valueOfBall = semctl(semaphoreSetId, 1, GETVAL);
-printf("Value: %d", valueOfBall);
-
-return 0;
-}
-*/
