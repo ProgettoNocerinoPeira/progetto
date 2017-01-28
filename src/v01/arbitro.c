@@ -87,6 +87,12 @@ void sig_handler(int signo){
     destroyAll();
     exit(0);
   }
+  if (signo==SIGUSR1){
+    printf("Goaaaaaaaaaaaaaal squadra 1");
+  }
+  if(signo==SIGUSR2){
+    printf("Goaaaaaaaaaaaaaal squadra 2");
+  }
 }
 
 bool readConfigFile() {
@@ -228,6 +234,8 @@ bool createTeam(int teamNumber){
 int main(){
   signal(SIGINT, sig_handler);
   signal(SIGALRM, sig_handler);
+  signal(SIGUSR1, sig_handler);//goal squadra 1
+  signal(SIGUSR2, sig_handler);//goal squadra 2
 
   //First of all I'll create a semaphoreset with 2 semaphores, 1 for the ball, and 1 to let "fato" know when I'll have the configuration data.
   //The ball semaphore will be locked and released when all the children will be running.
