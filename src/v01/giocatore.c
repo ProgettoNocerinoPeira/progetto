@@ -15,18 +15,24 @@
 //Include our commonKeys header file
 #include "commonKeys.h"
 //Protitype our functions
-int tiro(int goal,int team);
+int tiro(int team);
+int infortunio(int team);
 
 //From here we start writing our functions
-int tiro(int goal, int team){
+int tiro(int team){
   if ((goal==1)&&(team==1)){
     //goal team 1
     SIGUSR1;
   }else{
     //goal team 2
     SIGUSR2;
-  }
-  
+  } 
+}
+
+int infortunio(int team){
+//decremento di 1 il semaforo
+  printf("Giocatore %d della squadra %d infortunato\n",(int) getpid(),team);
+exit();//dovrebbe chiudere il processo
 }
 
 
