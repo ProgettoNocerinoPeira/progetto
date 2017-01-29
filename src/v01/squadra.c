@@ -37,14 +37,15 @@ int semaphoreSetId, teamNumber;
 int connectToBall();
 bool spawn();
 
-bool spawn(){
+bool spawn(int teamNumber){
   int pid = getpid();
   if(pid==getpid()){
     pid_t player = fork();
     if (player==0){
       char father[8];
       sprintf(father, "%d", pid);
-      execl("giocatore", "giocatore", &father, (char* )0);
+      sprintf(team, "%d", teamNumber);
+      execl("giocatore", "giocatore", &father,&team, (char* )0);
       return 0;
     }
   }
@@ -70,7 +71,7 @@ int main (int argc, char *argv[]){
       
       printf("Team: %d ,numero giocatori: %d\n", teamNumber,semaphore.val);
       if (semaphore.val==5) finished=true;
-      //spawn();
+      //spawn(teamNumber);
 
     }
   }
