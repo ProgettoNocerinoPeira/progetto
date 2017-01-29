@@ -68,7 +68,7 @@ int main (int argc, char *argv[]){
       semaphore.val=semaphore.val+1;
       semctl(semaphoreSetId,1, SETVAL, semaphore);
       
-      printf("Team: ,stato del semaforo: %d\n", teamNumber,semaphore.val);
+      printf("Team: %d ,stato del semaforo: %d\n", teamNumber,semaphore.val);
       if (semaphore.val==5) finished=true;
       //spawn();
 
