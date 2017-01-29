@@ -20,6 +20,7 @@ int messageQueueId;
 
 int createMessageQueue();
 void writeLog(char *message);
+int random(int value);
 
 int createMessageQueue(){
   int messageQueue;
@@ -43,6 +44,17 @@ void writeLog(char* text){
   }
 else printf("Errore nel file di log!!!\n");
 }
+//funzione che randomizza in base al tempo  preso in input un parametro restituisce 0/1
+int random (int value){
+   srand(time(NULL));
+   sleep(1);//per cambiare il risultato ad ogni accesso
+   if (value>rand()%100){
+     return 0;
+   }else{
+     return 1;
+   }
+}
+
 int main(int argc, char *argv[]){
   writeLog("Testing the log writer");
   messageQueueId=createMessageQueue();
