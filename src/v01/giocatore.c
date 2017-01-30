@@ -165,9 +165,9 @@ void main (int argc, char *argv[]){
     bool dribbling = true;
     while (dribbling){
       if (sendTiro()){
+        printf("Chiamo tiro();\n\n");
         tiro();
         dribbling=false;
-
       }
       else if (sendInfortunio()){
         dribbling=false;
