@@ -21,7 +21,8 @@ TODO: Finish the comment.
 
 //Global variables
 int teamNumber, semaphoreSetId,messageQueueId;
-int arbitro = getppid()
+
+
 struct mymsg {
   int mtype;
   int mtext;
@@ -41,6 +42,8 @@ void decreaseSemaphore();
 bool sendTiro();
 bool sendInfortunio();
 bool sendDribbling();
+void takeBall();
+void releaseBall();
 
 
 void sig_handler(int signo){
@@ -51,14 +54,27 @@ void sig_handler(int signo){
 }
 //From here we start writing our functions
 
+void takeBall(){
+  ops.sem_num=3;
+  ops.sem_op=-1;
+  ops.sem_flg = 0;
+  semop(semaphoreSetId, &ops, 1);
+}
+void releaseBall(){
+  ops.sem_num=3;
+  ops.sem_op=+1;
+  ops.sem_flg = 0;
+  semop(semaphoreSetId, &ops, 1);
+}
+
 void tiro(){
   if (teamNumber==1){
     //goal teamNumberNumber 1
-    raise(SIGUSR1);
+    kill(getppid(),SIGUSR1);
 
   }else{
     //goal teamNumber 2
-    raise(SIGUSR2);
+    kill(getppid(),SIGUSR2);
 
   }
 }
@@ -93,18 +109,7 @@ void increaseSemaphore(){
   ops.sem_flg = 0;
   semop(semaphoreSetId, &ops, 1);
 }
-void takeBall(){
-  ops.sem_num=3;
-  ops.sem_op=-1;
-  ops.sem_flg = 0;
-  semop(semaphoreSetId, &ops, 1);
-}
-void releaseBall(){
-  ops.sem_num=3;
-  ops.sem_op=+1;
-  ops.sem_flg = 0;
-  semop(semaphoreSetId, &ops, 1);
-}
+
 bool sendTiro(){
   msg.mtype=1;
   msg.mtext=teamNumber;
@@ -114,6 +119,7 @@ bool sendTiro(){
   if (response==1) return true;
   else return false;
 }
+
 bool sendInfortunio(){
   msg.mtype=2;
   msg.mtext=teamNumber;
