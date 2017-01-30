@@ -46,7 +46,7 @@ This is where the magic happens.
 int semaphoreSetId, messageQueueId, sharedMemoryId;
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
-
+struct sembuf ops;
 
 //Protitype our functions
 
