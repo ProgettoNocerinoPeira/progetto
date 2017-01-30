@@ -165,6 +165,7 @@ void main (int argc, char *argv[]){
     bool dribbling = true;
     while (dribbling){
       if (sendTiro()){
+        tiro();
         dribbling=false;
 
       }
