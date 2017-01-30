@@ -34,6 +34,7 @@ union semun {
   struct seminfo* __buf;
   #endif
 } semaphore, ballSemaphore;
+
 struct sembuf buffer;
 //Protitype our functions
 void tiro();
@@ -42,8 +43,13 @@ void releseSemaphore();
 int connectToSemaphore();
 
 //From here we start writing our functions
-void releaseSemaphore(){
-  printf("Hello world!");
+void releaseSemaphore(int semaphoreNumber, int type){
+  if (type==1){
+    int semValue = semctl(semaphoreSetId, semaphoreNumber, GETVAL, semaphore);
+    
+  }
+  int semValue = semctl(semaphoreSetId, semaphoreNumber, GETVAL, semaphore);
+
 }
 void tiro(){
   if (team==1){
@@ -60,7 +66,8 @@ void tiro(){
 int infortunio(){
   //decremento di 1 il semaforo
   printf("Giocatore %d della squadra %d infortunato\n",(int) getpid(),team);
-  releaseSemaphore();
+  releaseSemaphore(team);
+  releaseSemaphore(3)
   exit(1);//dovrebbe chiudere il processo
 }
 

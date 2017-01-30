@@ -59,19 +59,18 @@ int connectToSemaphore(){
 int main (int argc, char *argv[]){
   teamNumber = atoi(argv[1]);
   semaphoreSetId=connectToSemaphore();
+  semaphore.val=5;
+  semctl(semaphoreSetId,1, SETVAL, semaphore);
   bool finished = false;
 
   while (1 && finished==false){
     int semValue = semctl(semaphoreSetId,teamNumber, GETVAL, semaphore);
-    while(semaphore.val<5){
+    while(semaphore.val!=0){
       //TODO Spawn players
-      semaphore.val=semaphore.val+1;
+      semaphore.val=semaphore.val-1;
       semctl(semaphoreSetId,1, SETVAL, semaphore);
-
       printf("Team: %d ,numero giocatori: %d\n", teamNumber,semaphore.val);
-      if (semaphore.val==5) finished=true;
       //spawn(teamNumber);
-
     }
   }
 }
