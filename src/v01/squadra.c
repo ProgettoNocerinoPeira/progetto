@@ -69,7 +69,7 @@ int main (int argc, char *argv[]){
       //TODO Spawn players
       semaphore.val=semaphore.val-1;
       semctl(semaphoreSetId,1, SETVAL, semaphore);
-      printf("Team: %d ,numero giocatori: %d\n", teamNumber,semaphore.val);
+      printf("Team: %d ,numero giocatori: %d\n", teamNumber,(semaphore.val));
       //spawn(teamNumber);
     }
   }
