@@ -115,7 +115,8 @@ int main(int argc, char *argv[]){
     writeLog("Failed to attach to shared memory");
     kill(0,SIGKILL);
   }
-  struct shared_data * my_data;
+
+  shared_data * my_data;
   my_data = (shared_data *)shmat(sharedMemoryId, NULL, 0);
 
   perc_Tiro=my_data->tiro;
