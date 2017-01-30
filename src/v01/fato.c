@@ -60,13 +60,13 @@ int readAndAnswerMessage(){
   msgrcv(messageQueueId, &msg, sizeof(msg), 0, 0);
   teamNumber=msg.mtext;
   if (msg.mtype==1){
-    if(generateRandom(6)==1) msg.mtext=1;
+    if(generateRandom(50)==1) msg.mtext=1;
   }
   else if (msg.mtype==2){
-    if(generateRandom(5)==1) msg.mtext=1;
+    if(generateRandom(50)==1) msg.mtext=1;
   }
   else if (msg.mtype==3){
-    if(generateRandom(30)==1) msg.mtext=1;
+    if(generateRandom(50)==1) msg.mtext=1;
   }
   else msg.mtext=0;
   msg.mtype=4;
