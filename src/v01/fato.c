@@ -108,12 +108,11 @@ int main(int argc, char *argv[]){
   if ((messageAnswerId==-1)) writeLog("Failed to create/attach to messageQueue");
   while(1){
     msgrcv(messageQueueId,&msg,sizeof(msg),0,0);
-    printf("Fato: ho ricevuto un messaggio %d, %d\n", msg.mtype, msg.mtext);
     teamNumber=msg.mtext;
     type=msg.mtype;
     printf("Type %d, team %d",type, teamNumber);
   }
-  
+
   /*
   while(1){
   int response = readAndAnswerMessage();
