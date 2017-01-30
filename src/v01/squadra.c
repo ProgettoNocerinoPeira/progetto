@@ -73,9 +73,7 @@ int main (int argc, char *argv[]){
   semaphoreSetId=connectToSemaphore();
   printf("Semaforo squadra %d, id: %d\n", teamNumber,semaphoreSetId);
   semaphore.val=5;
-  semctl(semaphoreSetId,1, SETVAL, semaphore);
-  bool finished = false;
-
+  semctl(semaphoreSetId,teamNumber, SETVAL, semaphore);
   while (1){
     int semValue = semctl(semaphoreSetId,teamNumber, GETVAL, semaphore);
     printf("Semaforo team: %d, valore: %d\n", teamNumber, semaphore.val);
