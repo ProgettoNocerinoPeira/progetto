@@ -60,7 +60,7 @@ void decreaseSemaphore(){
 
 int main (int argc, char *argv[]){
   teamNumber = atoi(argv[1]);
-  strcpy(arbitro, argv[1]);
+  strcpy(arbitro, argv[2]);
   signal(SIGINT, sig_handler);
   semaphoreSetId=connectToSemaphore();
   semctl(semaphoreSetId,teamNumber, SETVAL, 5);
