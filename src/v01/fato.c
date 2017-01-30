@@ -101,19 +101,8 @@ bool readConfigFile() {
     while ( fgets ( line, sizeof line, file ) != NULL ) //Lettura del file riga per riga
     {
       token = strtok(line, search);
-      if ((strcmp(token, "Durata_Partita")) == 0) {
-        token = strtok(NULL, search);
-        char *value = token;
-        if (atoi(value)<1){
-          printf("Dato durata partita non valido");
-          return false;
-        }
-        Durata_Partita = atoi(value);
-        char buffer[256];
-        //sprintf(buffer, "Dato Durata_Partita valido: %d", Durata_Partita);
-        //printf(buffer);
-      }
-      else if ((strcmp(token, "Perc_Infortunio")) == 0) {
+
+      if ((strcmp(token, "Perc_Infortunio")) == 0) {
         token = strtok(NULL, search);
         char *value = token;
         if (atoi(value)<1 && atoi(value)>100){
