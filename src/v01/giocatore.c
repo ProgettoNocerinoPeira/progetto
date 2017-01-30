@@ -188,10 +188,8 @@ void main (int argc, char *argv[]){
       }
       if (sendDribbling()==1){
         //Do nothing.
-        sleep(1);
       }
     }
-    sleep(1);
     releaseBall();
   }
 }

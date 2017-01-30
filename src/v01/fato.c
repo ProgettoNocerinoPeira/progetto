@@ -113,7 +113,7 @@ int main(int argc, char *argv[]){
       }
       else if (type==2){
 
-        if(generateRandom(10)==1){
+        if(generateRandom(60)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
