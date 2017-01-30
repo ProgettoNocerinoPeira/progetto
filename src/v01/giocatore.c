@@ -30,7 +30,7 @@ int infortunio();
 
 int connectToSemaphore();
 void sig_handler(int signo);
-void increaseSemaphore(int teamNumber);
+void increaseSemaphore();
 
 void sig_handler(int signo){
   if (signo == SIGINT){
@@ -55,7 +55,7 @@ void tiro(){
 int infortunio(){
   //decremento di 1 il semaforo
   printf("Giocatore %d della squadra %d infortunato\n",(int) getpid(),teamNumber);
-  increaseSemaphore(teamNumber); //Release teamNumberPlayer
+  increaseSemaphore(); //Release teamNumberPlayer
   //releaseSemaphore(3); //Release palla
   exit(1);//dovrebbe chiudere il processo
 }
