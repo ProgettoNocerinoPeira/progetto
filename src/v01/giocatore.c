@@ -126,7 +126,7 @@ int sendTiro(){
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
   printf("Ho inviato tiro.\n");
-  sleep(1);
+  sleep(2);
   msgrcv(messageAnswerId,&msg,sizeof(msg), 4,0);
   printf("Ho ricevuto risposta\n");
   int response = msg.mtext;
