@@ -136,8 +136,7 @@ int sendDribbling(){
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
   sleep(1);
-  msg.mtype=4;
-  msgrcv(messageQueueId,&msg,sizeof(msg), 4,0);
+  msgrcv(messageQueueId,&msg,sizeof(msg.mtext), 4,0);
   int response = msg.mtext;
   return response;
 }
