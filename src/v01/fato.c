@@ -111,47 +111,9 @@ int main(int argc, char *argv[]){
     printf("Fato: ho ricevuto un messaggio %d, %d\n", msg.mtype, msg.mtext);
     teamNumber=msg.mtext;
     type=msg.mtype;
-    if (type==1){
-      printf("Messaggio ricevuto di tipo %d",msg.mtype);
-      if(generateRandom(30)==1){
-        msg.mtype=4;
-        msg.mtext=1;
-        printf("Rispondo %d, %d",msg.mtext, msg.mtype);
-        msgrcv(messageAnswerId,&msgbuf,sizeof(msgbuf),0,IPC_NOWAIT);
-        msgsnd(messageAnswerId, &msg, sizeof(msg),0);
-
-      }
-    }
-    else if (type==2){
-      printf("Messaggio ricevuto di tipo %d",msg.mtype);
-      if(generateRandom(30)==1){
-        msg.mtype=4;
-        msg.mtext=1;
-        printf("Rispondo %d, %d",msg.mtext, msg.mtype);
-        msgrcv(messageAnswerId,&msgbuf,sizeof(msgbuf),0,IPC_NOWAIT);
-        msgsnd(messageAnswerId, &msg, sizeof(msg),0);
-      }
-    }
-    else if (type==3){
-      printf("Messaggio ricevuto di tipo %d",msg.mtype);
-      if(generateRandom(30)==1){
-        msg.mtype=4;
-        msg.mtext=1;
-        printf("Rispondo %d, %d",msg.mtext, msg.mtype);
-        msgrcv(messageAnswerId,&msgbuf,sizeof(msgbuf),0,IPC_NOWAIT);
-        msgsnd(messageAnswerId, &msg, sizeof(msg),0);
-      }
-    }
-    else {
-      printf("Messaggio ricevuto di tipo %d",msg.mtype);
-      printf("Ho riceuvto %d da %d\n",msg.mtype, msg.mtext);
-      msg.mtype=4;
-      msg.mtext=0;
-      msgrcv(messageAnswerId,&msgbuf,sizeof(msgbuf),0,IPC_NOWAIT);
-      msgsnd(messageAnswerId,&msg,sizeof(msg),0);
-      printf("Ho inviato un messaggio con testo 0, tipo 4 perche non so che succede");
-    }
+    printf("Type %d, team %d",type, teamNumber);
   }
+}
   /*
   while(1){
   int response = readAndAnswerMessage();
