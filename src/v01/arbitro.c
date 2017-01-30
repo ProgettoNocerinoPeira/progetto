@@ -84,7 +84,7 @@ void sig_handler(int signo){
   }
   if(signo==SIGALRM){
     printf("\n\n\n\n\n\n\n\n====================Timer up.====================\n");
-    ops.sem_num=3;
+    ops.sem_num=4;
     ops.sem_op=-1;
     ops.sem_flg = 0;
     semop(semaphoreSetId, &ops, 1);
@@ -277,6 +277,7 @@ int main(){
 
     //From here we start to create all the other process needed for our simulation
     int valoreKill = 1;
+    sleep(2);
     semctl(semaphoreSetId,4,SETVAL,valoreKill);
     valoreKill=semctl(semaphoreSetId,4,GETVAL);
     printf("Valore killare: %d\n", valoreKill);
