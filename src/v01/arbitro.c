@@ -88,7 +88,7 @@ void sig_handler(int signo){
     ops.sem_op=0;
     ops.sem_flg = 0;
     semop(semaphoreSetId, &ops, 1);
-    delay(10);
+    sleep(10);
     destroyAll();
     exit(0);
   }
