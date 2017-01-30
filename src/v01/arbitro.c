@@ -229,10 +229,10 @@ bool writeConfigToSharedMemorySegment(){
   char configData[12];
   sprintf(configData, "%d;%d;%d",Perc_Tiro,Perc_Infortunio,Perc_Dribbling);
   printf("configData: %s",configData);
-  for (i=0,i<12;i++){
+  for (i=0;i<12;i++){
     pun1[i]=configData[i];
   }
-  
+
   return true;
 }
 
