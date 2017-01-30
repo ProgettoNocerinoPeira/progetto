@@ -117,9 +117,9 @@ int main(int argc, char *argv[]){
   struct shared_data * my_data;
   struct shared_data dataConfig;
   my_data = &dataConfig;
-  perc_Tiro=(dataConfig.tiro);
-  perc_Infortunio=(dataConfig.infortunio);
-  perc_Dribbling=(dataConfig.dribbling);
+  perc_Tiro=(*dataConfig.tiro);
+  perc_Infortunio=(*dataConfig.infortunio);
+  perc_Dribbling=(*dataConfig.dribbling);
   printf("Dati di configurazione: %d %d %d",perc_Tiro, perc_Infortunio, perc_Dribbling);
   while(1){
     msg.mtype=0;
