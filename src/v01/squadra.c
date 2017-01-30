@@ -28,7 +28,6 @@ void decreaseSemaphore();
 void sig_handler(int signo){
   if (signo == SIGINT){
     printf("received SIGINT- squadra\n");
-    raise(SIGINT);
     exit(0);
   }
 }

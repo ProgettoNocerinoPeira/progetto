@@ -77,20 +77,25 @@ bool writeConfigToSharedMemorySegment();
 //From here we start writing our functions
 
 void sig_handler(int signo){
-  if (signo == SIGINT){
+  /*if (signo == SIGINT){
     printf("received SIGINT\n");
     destroyAll();
     exit(0);
   }
-  else if(signo==SIGALRM){
+  */
+   if(signo==SIGALRM){
     printf("\n\n\n\n\n\n\n\n====================Timer up.====================\n");
     ops.sem_num=4;
     ops.sem_op=-1;
     ops.sem_flg = 0;
     semop(semaphoreSetId, &ops, 1);
+    /*
     kill (team1, SIGINT);
     kill(team2, SIGINT);
     kill(fato, SIGINT);
+    */
+    kill(0,SIGINT);
+    sleep(2);
     destroyAll();
     exit(0);
   }

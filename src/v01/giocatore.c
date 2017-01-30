@@ -71,13 +71,13 @@ void releaseBall(){
 void tiro(){
   if (teamNumber==1){
     //goal teamNumberNumber 1
-    printf("Invio SIGUSR1 a %d", arbitro);
+    printf("Invio SIGUSR1 a %d\n", arbitro);
     kill(arbitro,SIGUSR1);
 
   }
   else {
     //goal teamNumber 2
-    printf("Invio SIGUSR2 a %d", arbitro);
+    printf("Invio SIGUSR2 a %d\n", arbitro);
     kill(arbitro,SIGUSR2);
 
   }
