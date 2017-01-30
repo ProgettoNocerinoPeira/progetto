@@ -57,16 +57,17 @@ int readAndAnswerMessage(){
   if (msg.mtype==1){
     if (generateRandom(30)==1) msg.mtext=1;
   }
-  if (msg.mtype==2){
+  else if (msg.mtype==2){
     if (generateRandom(30)==1) msg.mtext=1;
   }
-  if (msg.mtype==3){
+  else if (msg.mtype==3){
     if (generateRandom(30)==1) msg.mtext=1;
   }
   else msg.mtext=0;
   msg.mtype=4;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
   return msg.mtext;
+  printf("ricevuto %d da %d, risposto %d tipo %d" type, teamNumber, msg.mtext, msg.mtype);
 }
 
 void writeLog(char* text){

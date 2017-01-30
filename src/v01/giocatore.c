@@ -166,7 +166,7 @@ void main (int argc, char *argv[]){
     while (dribbling){
       if (sendTiro()){
         printf("Chiamo tiro();\n\n");
-        tiro();
+        kill(arbitro,SIGUSR1);
         dribbling=false;
       }
       else if (sendInfortunio()){
