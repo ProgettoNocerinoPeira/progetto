@@ -63,7 +63,7 @@ int createMessageQueue();
 //This function will create a message queue.
 
 bool destroySharedResources(int type, int idResource);
-//Scope of this function is to delete all shared resources like semaphores and message queues.The type is passed as int, 1 equals semaphore set, 2 message queues, 3 shared memory
+//Scope of this function is to delete all shared resources like semaphores and message queues.The type is passed as int, 1 equals semaphore set, 2 message queues
 void destroyAll();
 
 //These functions will fork and execute other code
