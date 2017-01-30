@@ -148,26 +148,5 @@ int main(int argc, char *argv[]){
       }
     }
   }
-
-  /*
-  while(1){
-  int response = readAndAnswerMessage();
-  if (response==1){
-  if (type==1){
-  sprintf(msglog, "La squadra %d ha fatto Goal.", teamNumber);
-  writeLog (msglog);
-}
-if (type==2){
-sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
-writeLog (msglog);
-}
-if (type==3){
-sprintf(msglog, "Il giocatore della squadra %d ha vinto il dribbling.", teamNumber);
-writeLog (msglog);
-}
-}
-
-}
-*/
 return 0;
 }

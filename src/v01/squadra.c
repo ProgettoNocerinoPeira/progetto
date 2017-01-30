@@ -76,6 +76,6 @@ int main (int argc, char *argv[]){
       printf("Team: %d ,numero giocatori: %d\n", teamNumber,semctl(semaphoreSetId,teamNumber,GETVAL));
       spawn(teamNumber);
     }
-    else sleep(2);
+    //else sleep(2);
   }
 }
