@@ -108,7 +108,8 @@ bool sendTiro(){
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
   msgrcv(messageQueueId,&msg,sizeof(msg), 4,0);
-  if (msg.mtext==1) return true;
+  int response = msg.mtext;
+  if (response==1) return true;
   else return false;
 }
 bool sendInfortunio(){
@@ -116,7 +117,8 @@ bool sendInfortunio(){
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
   msgrcv(messageQueueId,&msg,sizeof(msg), 4,0);
-  if (msg.mtext==1) return true;
+  int response = msg.mtext;
+  if (response==1) return true;
   else return false;
 }
 
@@ -125,7 +127,8 @@ bool sendDribbling(){
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
   msgrcv(messageQueueId,&msg,sizeof(msg), 4,0);
-  if (msg.mtext==1) return true;
+  int response = msg.mtext;
+  if (response==1) return true;
   else return false;
 }
 int main (int argc, char *argv[]){
