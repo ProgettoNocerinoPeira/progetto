@@ -76,8 +76,8 @@ void tiro(){
 
   }else{
     //goal teamNumber 2
-    kill(arbitro,SIGUSR2);
     printf("Invio SIGUSR2 a %d", arbitro);
+    kill(arbitro,SIGUSR2);
 
   }
 }
