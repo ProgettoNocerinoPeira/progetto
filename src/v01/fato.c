@@ -113,7 +113,7 @@ int main(int argc, char *argv[]){
       teamNumber=msg.mtext;
       type=msg.mtype;
       if (type==1){
-        if(generateRandom(30)==1){
+        if(generateRandom(5)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "La squadra %d ha fatto Goal.", teamNumber);
@@ -124,7 +124,7 @@ int main(int argc, char *argv[]){
       }
       else if (type==2){
 
-        if(generateRandom(30)==1){
+        if(generateRandom(5)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
@@ -133,7 +133,7 @@ int main(int argc, char *argv[]){
         }
       }
       else if (type==3){
-        if(generateRandom(30)==1){
+        if(generateRandom(5)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "Il giocatore della squadra %d ha vinto il dribbling.", teamNumber);
