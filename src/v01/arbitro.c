@@ -43,7 +43,7 @@ This is where the magic happens.
 
 
 //Declaration of global variables
-int semaphoreSetId, messageQueueId, sharedMemoryId;
+int semaphoreSetId, messageQueueId, sharedMemoryId,team1,team2;
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
 struct sembuf ops;
@@ -88,7 +88,8 @@ void sig_handler(int signo){
     ops.sem_op=-1;
     ops.sem_flg = 0;
     semop(semaphoreSetId, &ops, 1);
-    raise(SIGINT);
+    kill (team1, SIGINT);
+    kill(team2, SIGINT);
     sleep(10);
     destroyAll();
     exit(0);
@@ -227,7 +228,7 @@ completed = true;
 return completed;
 }
 */
-bool createTeam(int teamNumber){
+int createTeam(int teamNumber){
   int pid = getpid();
   int numeroTeam = teamNumber;
   if(pid==getpid()){
@@ -236,8 +237,8 @@ bool createTeam(int teamNumber){
       char teamName[16];
       sprintf(teamName, "%d", numeroTeam);
       execl("squadra", "squadra", &teamName, (char* )0);
-      return 0;
-    }
+      }
+    return team;
   }
 }
 
@@ -281,8 +282,8 @@ int main(){
     printf("Valore killare: %d\n", valoreKill);
     sleep(2);
     alarm(Durata_Partita);
-    createTeam(1);
-    createTeam(2);
+    team1 = createTeam(1);
+    team2 = createTeam(2);
 
     while(1){}
   }
