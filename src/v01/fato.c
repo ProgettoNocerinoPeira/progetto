@@ -60,13 +60,13 @@ int readAndAnswerMessage(){
   msgrcv(messageQueueId, &msg, sizeof(msg), 0, 0);
   teamNumber=msg.mtext;
   if (msg.mtype==1){
-    if(generateRandom(5)==1) msg.mtext=1;
+    if(generateRandom(20)==1) msg.mtext=1;
   }
   else if (msg.mtype==2){
-    if(generateRandom(5)==1) msg.mtext=1;
+    if(generateRandom(50)==1) msg.mtext=1;
   }
   else if (msg.mtype==3){
-    if(generateRandom(5)==1) msg.mtext=1;
+    if(generateRandom(30)==1) msg.mtext=1;
   }
   else msg.mtext=0;
   msg.mtype=4;
@@ -92,8 +92,7 @@ void writeLog(char* text){
 //funzione che randomizza in base al tempo  preso in input un parametro restituisce 0/1
 int generateRandom(int value){
   srand(time(NULL));
-  //sleep(1);//per cambiare il risultato ad ogni accesso
-  if (value>rand()%100){
+  if (value>rand()%100+1){
     return 0;
   }else{
     return 1;
