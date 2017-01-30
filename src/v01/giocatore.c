@@ -179,7 +179,7 @@ int main (int argc, char *argv[]){
       */
       printf("Ho fatto goal.\n");
       tiro();
-      sleep(3);
+      dribbling = false;
     }
     releaseBall();
   }
