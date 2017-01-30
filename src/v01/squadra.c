@@ -17,6 +17,7 @@
 
 struct sembuf ops;
 int semaphoreSetId, teamNumber, val;
+char arbitro[16];
 
 
 int connectToBall();
@@ -38,7 +39,7 @@ bool spawn(int teamNumber){
     if (player==0){
       char team[2];
       sprintf(team, "%d", teamNumber);
-      execl("giocatore", "giocatore",&team, (char* )0);
+      execl("giocatore", "giocatore",&team, &arbitro, (char* )0);
       return 0;
     }
   }
@@ -60,6 +61,7 @@ void decreaseSemaphore(){
 int main (int argc, char *argv[]){
 
   teamNumber = atoi(argv[1]);
+  arbitro[]= argv[1];
   signal(SIGINT, sig_handler);
   semaphoreSetId=connectToSemaphore();
   semctl(semaphoreSetId,teamNumber, SETVAL, 5);

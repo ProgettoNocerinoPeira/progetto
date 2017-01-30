@@ -230,13 +230,16 @@ return completed;
 */
 int createTeam(int teamNumber){
   int pid = getpid();
+  int parent = pid();
   int numeroTeam = teamNumber;
   if(pid==getpid()){
     pid_t team = fork();
     if (team==0){
       char teamName[16];
       sprintf(teamName, "%d", numeroTeam);
-      execl("squadra", "squadra", &teamName, (char* )0);
+      char parentId[16];
+      sprintf(parentId, "%d", parent);
+      execl("squadra", "squadra", &teamName,&parentId, (char* )0);
       }
     return team;
   }
@@ -284,7 +287,7 @@ int main(){
     semctl(semaphoreSetId,3,SETVAL,1);
     alarm(Durata_Partita);
     while(1){
-      //Do nothing, wait for signals from children. 
+      //Do nothing, wait for signals from children.
     }
   }
   return -1;

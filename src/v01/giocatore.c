@@ -21,6 +21,7 @@ TODO: Finish the comment.
 
 //Global variables
 int teamNumber, semaphoreSetId,messageQueueId;
+int arbitro;
 
 
 struct mymsg {
@@ -70,11 +71,11 @@ void releaseBall(){
 void tiro(){
   if (teamNumber==1){
     //goal teamNumberNumber 1
-    kill(getppid(),SIGUSR1);
+    kill(arbitro,SIGUSR1);
 
   }else{
     //goal teamNumber 2
-    kill(getppid(),SIGUSR2);
+    kill(arbitro,SIGUSR2);
 
   }
 }
@@ -141,6 +142,7 @@ bool sendDribbling(){
 }
 int main (int argc, char *argv[]){
   teamNumber=atoi(argv[1]);
+  arbitro = atoi(argv[2]);
   signal(SIGINT, sig_handler);
   printf("Sono il giocatore %d della squadra %d\n",getpid(),teamNumber);
   semaphoreSetId=connectToSemaphore(); //printf("Semaphoreset id %d\n",semaphoreSetId);
