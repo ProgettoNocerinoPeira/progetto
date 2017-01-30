@@ -84,6 +84,7 @@ void sig_handler(int signo){
   }
   if(signo==SIGALRM){
     printf("Timer up.\n");
+    raise(SIGTERM);
     destroyAll();
     exit(0);
   }
@@ -269,10 +270,11 @@ int main(){
 
 
     //From here we start to create all the other process needed for our simulation
+    alarm(Durata_Partita);
     createTeam(1);
     createTeam(2);
-
-    sleep(60);
+    //
+    while(1){}
   }
   return -1;
 }

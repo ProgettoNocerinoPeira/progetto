@@ -25,8 +25,8 @@ void sig_handler(int signo);
 void decreaseSemaphore();
 
 void sig_handler(int signo){
-  if (signo == SIGINT){
-    printf("received SIGINT- squadra\n");
+  if (signo == SIGTERM){
+    printf("received SIGTERM- squadra\n");
     exit(0);
   }
 }
