@@ -84,8 +84,8 @@ void increaseSemaphore(){
 int main (int argc, char *argv[]){
   teamNumber=atoi(argv[1]);
   signal(SIGINT, sig_handler);
-
-  semaphoreSetId=connectToSemaphore(); printf("Semaphoreset id %d\n",semaphoreSetId);
+  printf("Sono il giocatore %d della squadra %d\n",getpid(),teamNumber);
+  semaphoreSetId=connectToSemaphore(); //printf("Semaphoreset id %d\n",semaphoreSetId);
   messageQueueId=connectToMessageQueue();
   if (semaphoreSetId==-1 || messageQueueId==-1) {
     printf("Non sono collegato al semaforo o alla coda messaggi");
