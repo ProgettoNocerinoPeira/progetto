@@ -107,7 +107,7 @@ int main(int argc, char *argv[]){
   messageAnswerId=createAnswerQueue();
   if ((messageAnswerId==-1)) writeLog("Failed to create/attach to messageQueue");
   while(1){
-    msgrcv(messageQueueId,&msg,sizeof(msg),0,0);
+    msgrcv(messageQueueId,&msg,sizeof(msg),0,IPC_NOWAIT);
     teamNumber=msg.mtext;
     type=msg.mtype;
     printf("Type %d, team %d",type, teamNumber);
