@@ -103,18 +103,23 @@ int main(int argc, char *argv[]){
     if (response==1){
       if (type==1){
         sprintf(msglog, "La squadra %d ha fatto Goal.", teamNumber);
+        printf("Sending %d type %d", msg.mtext, msg.mtype);
         msgsnd(messageQueueId, &msg, sizeof(msg),0);
+        printf("Sent %d type %d", msg.mtext, msg.mtype);
         writeLog (msglog);
       }
       if (type==2){
         sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
-        msgsnd(messageQueueId, &msg, sizeof(msg),0);
         printf("Sending %d type %d", msg.mtext, msg.mtype);
+        msgsnd(messageQueueId, &msg, sizeof(msg),0);
+        printf("Sent %d type %d", msg.mtext, msg.mtype);
         writeLog (msglog);
       }
       if (type==3){
         sprintf(msglog, "Il giocatore della squadra %d ha vinto il dribbling.", teamNumber);
+        printf("Sending %d type %d", msg.mtext, msg.mtype);
         msgsnd(messageQueueId, &msg, sizeof(msg),0);
+        printf("Sent %d type %d", msg.mtext, msg.mtype);;
         writeLog (msglog);
       }
     }
