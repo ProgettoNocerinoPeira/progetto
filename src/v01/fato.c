@@ -117,7 +117,7 @@ int main(int argc, char *argv[]){
     kill(0,SIGKILL);
   }
 
-  perc_Tiro=atoi(argv[1];)
+  perc_Tiro=atoi(argv[1]);
   perc_Infortunio=atoi(argv[2]);
   perc_Dribbling=atoi(argv[3]);
   printf("Dati di configurazione: %d %d %d",perc_Tiro, perc_Infortunio, perc_Dribbling);

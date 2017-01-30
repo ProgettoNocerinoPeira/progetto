@@ -258,7 +258,7 @@ int main(){
 
   //We're creating a set of 3 semaphore, first two will be used by teams to manage
   printf("Process id: %d\n\n",getpid());
-  if((semaphoreSetId=createSemaphores())==-1){
+  if((semaphoreSetId=createSemaphores(3))==-1){
     printf("Errore semaforo\n");
     exit(-1);
   }
