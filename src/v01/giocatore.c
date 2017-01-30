@@ -126,7 +126,6 @@ int sendTiro(){
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
   printf("Ho inviato tiro.\n");
-  sleep(2);
   msgrcv(messageAnswerId,&msg,sizeof(msg), 0,0);
   printf("Ho ricevuto risposta\n");
   int response = msg.mtext;
@@ -184,6 +183,7 @@ void main (int argc, char *argv[]){
         //Do nothing.
       }
     }
+    sleep(1);
     releaseBall();
   }
 }
