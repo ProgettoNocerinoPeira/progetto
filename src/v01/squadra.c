@@ -75,6 +75,7 @@ int main (int argc, char *argv[]){
   while (1){
     int semValue = semctl(semaphoreSetId,teamNumber, GETVAL, semaphore);
     printf("Semaforo team: %d, valore: %d\n", teamNumber, semaphore.val);
+    sleep(1);
 
     while(semaphore.val>0 && semaphore.val<=5){
       //TODO Spawn players
