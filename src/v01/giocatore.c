@@ -59,7 +59,7 @@ void takeBall(){
   ops.sem_num=3;
   ops.sem_op=-1;
   ops.sem_flg = 0;
-  semop(semaphoreSetId, &ops, 1);
+  if (semop(semaphoreSetId, &ops, 1)==-1) exit(0);
 }
 void releaseBall(){
   ops.sem_num=3;
