@@ -109,7 +109,7 @@ int main(int argc, char *argv[]){
   }
   messageAnswerId=createAnswerQueue();
   if ((messageAnswerId==-1)) {
-    writeLog("Failed to create/attach to messageQueue");
+    writeLog("Failed to create/attach to messageQueue"); 
     kill(0,SIGKILL);
   }
   if ((sharedMemoryId==-1)) {
@@ -117,12 +117,9 @@ int main(int argc, char *argv[]){
     kill(0,SIGKILL);
   }
 
-  struct shared_data * my_data;
-  my_data = shmat(sharedMemoryId, NULL, 0);
-
-  perc_Tiro=my_data->tiro;
-  perc_Infortunio=my_data->infortunio;
-  perc_Dribbling=my_data->dribbling;
+  perc_Tiro=argv[1];
+  perc_Infortunio=argv[2];
+  perc_Dribbling=argv[3];
   printf("Dati di configurazione: %d %d %d",perc_Tiro, perc_Infortunio, perc_Dribbling);
   while(1){
     msg.mtype=0;

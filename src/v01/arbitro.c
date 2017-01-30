@@ -44,16 +44,11 @@ This is where the magic happens.
 
 
 //Declaration of global variables
-int semaphoreSetId, messageQueueId,messageAnswerId, sharedMemoryId,team1,team2,fato;
+int semaphoreSetId, messageQueueId,messageAnswerId,team1,team2,fato;
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
 struct sembuf ops;
 
-struct shared_data{
-  int tiro;
-  int infortunio;
-  int dribbling;
-};
 
 
 //Protitype our functions
@@ -66,8 +61,7 @@ bool readConfigFile();
 
 int createSemaphores();
 //This function will create semaphores and return the id of the semaphore itself.
-int createSharedMemory();
-//This function will create a shared memory
+
 
 int createMessageQueue();
 //This function will create a message queue.
@@ -193,13 +187,7 @@ int createAnswerQueue(){
   messageQueue=msgget(messageKey, IPC_CREAT | 0666);
   return messageQueue;
 }
-int createSharedMemory(){
-  int id;
-  key_t sharedMemorykey = KEYSHAREDMEMORY;
-  size_t size = SIZESHAREDMEMORY;
-  id = shmget(sharedMemorykey, size, IPC_CREAT | 0666);
-  return id;
-}
+
 
 bool destroySharedResources(int type, int id){
   if(type==1){
@@ -210,10 +198,6 @@ bool destroySharedResources(int type, int id){
     if(msgctl(id, IPC_RMID, 0)) return 1;
     else return -1;
   }
-  else if (type==3) {
-    if(shmctl(id, IPC_RMID, NULL)) return 1;
-    else return -1;
-  }
   return -1;
 }
 
@@ -222,7 +206,7 @@ void destroyAll(){
   printf("Destroying semaphores %d\n", destroySharedResources(1,semaphoreSetId));
   printf("Destroying message queue %d\n", destroySharedResources(2,messageQueueId));
   printf("Destroying message answer queue %d\n", destroySharedResources(2,messageAnswerId));
-  printf("Destroying shared memory segment %d\n", destroySharedResources(3,sharedMemoryId));
+
 }
 
 
@@ -249,7 +233,13 @@ int createFato(){
   if(pid==getpid()){
     pid_t fato = fork();
     if (fato==0){
-      execl("fato", "fato", (char* )0);
+      char config_tiro[3];
+      sprintf(config_tiro,"%d", Perc_Tiro);
+      char config_infortunio[3];
+      sprintf(config_infortunio,"%d", Perc_Infortunio);
+      char config_dribbling[3];
+      sprintf(config_dribbling,"%d", Perc_Dribbling);
+      execl("fato", "fato",&config_tiro,&config_infortunio,&config_dribbling ,(char* )0);
     }
     return fato;
   }
@@ -268,7 +258,7 @@ int main(){
 
   //We're creating a set of 3 semaphore, first two will be used by teams to manage
   printf("Process id: %d\n\n",getpid());
-  if((semaphoreSetId=createSemaphores(4))==-1){
+  if((semaphoreSetId=createSemaphores())==-1){
     printf("Errore semaforo\n");
     exit(-1);
   }
@@ -282,20 +272,12 @@ int main(){
     destroyAll();
     exit(-1);
   }
-  if((sharedMemoryId = createSharedMemory())==-1) {
-    printf("Errore mem\n");
-    destroyAll();
-    exit(-1);
-  }
+
   //If i can read the config file I can go on with the execution of the program, otherwise I'll exit the program.
   if (readConfigFile()){
     // I store the values on the shared memory to let fato know the probabiliy values.
-    printf("\n\nsemaphoreSetId: %d, messageQueueId: %d, sharedMemoryId: %d\n", semaphoreSetId, messageQueueId, sharedMemoryId);
-    struct shared_data * my_data;
-    my_data = shmat(sharedMemoryId, NULL, 0);
-    my_data->tiro = Perc_Tiro;
-    my_data->infortunio = Perc_Infortunio;
-    my_data->dribbling = Perc_Dribbling;
+    printf("\n\nsemaphoreSetId: %d, messageQueueId: %d, \n", semaphoreSetId, messageQueueId);
+
 
     printf("Everyting looks fine right now.\n");
 
