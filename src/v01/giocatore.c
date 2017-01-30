@@ -56,7 +56,7 @@ void releaseSemaphore(int semaphoreNumber){
   printf("Semaforo team: %d, valore: %d", team, semaphore.val);
   semaphore.val=semaphore.val+1;
   semctl(semaphoreSetId, semaphoreNumber, SETVAL, semaphore);
-  int semValue = semctl(semaphoreSetId, semaphoreNumber, GETVAL, semaphore);
+  semValue = semctl(semaphoreSetId, semaphoreNumber, GETVAL, semaphore);
   printf("Semaforo team dopo: %d, valore: %d", team, semaphore.val);
 }
 void tiro(){
