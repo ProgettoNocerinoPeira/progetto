@@ -154,6 +154,7 @@ int generateRandom(int value){
 
 int main(int argc, char *argv[]){
   signal(SIGKILL, sig_handler);
+  readConfigFile();
   messageQueueId=createMessageQueue();
   if ((messageQueueId==-1)) writeLog("Failed to create/attach to messageQueue");
   messageAnswerId=createAnswerQueue();
