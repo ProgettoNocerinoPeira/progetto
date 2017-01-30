@@ -46,7 +46,7 @@ void sig_handler(int signo);
 
 void sig_handler(int signo){
   if (signo == SIGINT){
-    printf("received SIGINT\n");
+    printf("received SIGINT - giocatore\n");
     exit(0);
   }
 }
@@ -101,8 +101,9 @@ int main (int argc, char *argv[]){
     raise(SIGINT);
   }
   while(1){
+    printf("Sono giocatore\n");
     sleep(1);
-    exit(1);
+    infortunio();
   }
   return 1;
 }
