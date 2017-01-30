@@ -80,8 +80,6 @@ void destroyAll();
 int createTeam(int teamNumber);
 int createFato();
 
-bool writeConfigToSharedMemorySegment();
-//Scope of this function is to write config data to the shared memory segment.
 
 //From here we start writing our functions
 
@@ -228,18 +226,6 @@ void destroyAll(){
 }
 
 
-bool writeConfigToSharedMemorySegment(){
-  pun1 = (char *)(sharedMemoryId,0, SHM_RND);
-  int i;
-  char configData[32];
-  sprintf(configData, "%d;%d;%d",Perc_Tiro,Perc_Infortunio,Perc_Dribbling);
-  printf("configData: %s",&configData);
-  for (i=0;i<12;i++){
-    pun1[i]=configData[i];
-  }
-
-  return true;
-}
 
 int createTeam(int teamNumber){
   int pid = getpid();
@@ -312,7 +298,7 @@ int main(){
     my_data->dribbling = Perc_Dribbling;
 
     printf("Everyting looks fine right now.\n");
-    //printf("Attached? %d\n", writeConfigToSharedMemorySegment());
+
 
 
     //From here we start to create all the other process needed for our simulation
