@@ -47,7 +47,7 @@ This is where the magic happens.
 int semaphoreSetId, messageQueueId,messageAnswerId, sharedMemoryId,team1,team2,fato;
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
-char datiCondivisi[64];
+char (*datiCondivisi)[64];
 char *pun1, *pun2;
 struct sembuf ops;
 
@@ -224,8 +224,8 @@ void destroyAll(){
 
 
 bool writeConfigToSharedMemorySegment(){
-  pun1 = (char *)(sharedMemoryId,0, SHM_RND);
-  sprintf(pun1, "%d;%d;%d", Perc_Tiro,Perc_Infortunio,Perc_Dribbling);
+  datiCondivisi = (char *)shmat(sharedMemoryId,0, SHM_RND);
+  sprintf(datiCondivisi, "%d;%d;%d", Perc_Tiro,Perc_Infortunio,Perc_Dribbling);
   return true;
 }
 
