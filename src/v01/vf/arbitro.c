@@ -81,7 +81,7 @@ void sig_handler(int signo){
     destroyAll();
     printf("\n\n=====FINE PARTITA=====\n\n");
     sleep(1);
-    printf("*****Risultato:\n squadra 1 %d-%d squadra 2\n*****",score[0],score[1]);
+    printf("\n\n*****Risultato: squadra 1: %d-%d :squadra 2*****\n\n",score[0],score[1]);
     kill(0,SIGKILL);
   }
   else if (signo==SIGUSR1){
