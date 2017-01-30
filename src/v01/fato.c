@@ -117,8 +117,9 @@ int main(int argc, char *argv[]){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "La squadra %d ha fatto Goal.", teamNumber);
-          writeLog (msglog);
+
           msgsnd(messageAnswerId, &msg, sizeof(msg),0);
+          writeLog (msglog);
         }
       }
       else if (type==2){
@@ -127,8 +128,8 @@ int main(int argc, char *argv[]){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
-          writeLog (msglog);
           msgsnd(messageAnswerId, &msg, sizeof(msg),0);
+          writeLog (msglog);
         }
       }
       else if (type==3){
@@ -136,8 +137,8 @@ int main(int argc, char *argv[]){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "Il giocatore della squadra %d ha vinto il dribbling.", teamNumber);
-          writeLog (msglog);
           msgsnd(messageAnswerId, &msg, sizeof(msg),0);
+          writeLog (msglog);
         }
       }
       else {
