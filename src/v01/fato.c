@@ -109,8 +109,9 @@ int main(int argc, char *argv[]){
     writeLog("Failed to attach to shared memory");
     kill(0,SIGKILL);
   }
-  datiCondivisi = (char *)shmat(sharedMemoryId,0, SHM_RND);
-  printf("LEGGO CONFIGURAZIONE %s",datiCondivisi);
+  datiCondivisi = (char *)shmat(sharedMemoryId,0, SHM_RDONLY);
+  printf(datiCondivisi);
+  //printf("LEGGO CONFIGURAZIONE %s",datiCondivisi);
   while(1){
     msg.mtype=0;
     //sleep(1);
