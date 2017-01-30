@@ -41,7 +41,7 @@ void sig_handler(int signo);
 
 void sig_handler(int signo){
   if (signo == SIGINT){
-    printf("received SIGINT\n");
+    printf("received SIGINT- squadra\n");
     exit(0);
   }
 }
@@ -67,6 +67,7 @@ int connectToSemaphore(){
 int main (int argc, char *argv[]){
 
   teamNumber = atoi(argv[1]);
+  signal(SIGINT, sig_handler);
   semaphoreSetId=connectToSemaphore();
   printf("Semaforo squadra %d, id: %d\n", teamNumber,semaphoreSetId);
   semaphore.val=5;

@@ -53,8 +53,11 @@ void sig_handler(int signo){
 //From here we start writing our functions
 void releaseSemaphore(int semaphoreNumber){
   int semValue = semctl(semaphoreSetId, semaphoreNumber, GETVAL, semaphore);
+  printf("Semaforo team: %d, valore: %d", team, semaphore.val);
   semaphore.val=semaphore.val+1;
   semctl(semaphoreSetId, semaphoreNumber, SETVAL, semaphore);
+  int semValue = semctl(semaphoreSetId, semaphoreNumber, GETVAL, semaphore);
+  printf("Semaforo team dopo: %d, valore: %d", team, semaphore.val);
 }
 void tiro(){
   if (team==1){
@@ -101,7 +104,6 @@ int main (int argc, char *argv[]){
     raise(SIGINT);
   }
   while(1){
-    printf("Sono giocatore\n");
     sleep(1);
     infortunio();
   }
