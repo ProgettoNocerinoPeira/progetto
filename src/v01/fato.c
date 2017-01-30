@@ -51,26 +51,29 @@ int createMessageQueue(){
 
 
 int readAndAnswerMessage(){
-  bool forMe=false;
-  if (msgrcv(messageQueueId, &msg, sizeof(msg), 1, IPC_NOWAIT)!=-1) forMe=true;
-  if (msgrcv(messageQueueId, &msg, sizeof(msg), 2, IPC_NOWAIT)!=-1) forMe=true;
-  if (msgrcv(messageQueueId, &msg, sizeof(msg), 3, IPC_NOWAIT)!=-1) forMe=true;
-  while (forMe){
+
+  if (msgrcv(messageQueueId, &msg, sizeof(msg), 1, IPC_NOWAIT)){
     teamNumber = msg.mtext;
-    type = msg.mtype;
-    if (msg.mtype==1){
-      if (generateRandom(30)==1) msg.mtext=1;
-    }
-    else if (msg.mtype==2){
-      if (generateRandom(30)==1) msg.mtext=1;
-    }
-    else if (msg.mtype==3){
-      if (generateRandom(30)==1) msg.mtext=1;
-    }
+    if (generateRandom(30)==1) msg.mtext=1;
     else msg.mtext=0;
     msg.mtype=4;
     return msg.mtext;
   }
+  if (msgrcv(messageQueueId, &msg, sizeof(msg), 2, IPC_NOWAIT)){
+    teamNumber = msg.mtext;
+    if (generateRandom(30)==1) msg.mtext=1;
+    else msg.mtext=0;
+    msg.mtype=4;
+    return msg.mtext;
+  }
+  if (msgrcv(messageQueueId, &msg, sizeof(msg), 3, IPC_NOWAIT)) {
+    teamNumber = msg.mtext;
+    if (generateRandom(30)==1) msg.mtext=1;
+    else msg.mtext=0;
+    msg.mtype=4;
+    return msg.mtext;
+  }
+  return 0;
 }
 
 void writeLog(char* text){
