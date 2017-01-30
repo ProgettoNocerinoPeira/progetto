@@ -22,12 +22,13 @@ int messageQueueId,messageAnswerId,sharedMemoryId;
 int perc_Tiro,perc_Dribbling,perc_Infortunio;
 int teamNumber;
 char msglog [256];
+
 struct shared_data{
   int tiro;
   int infortunio;
   int dribbling;
 };
-typedef struct shared_data shared_data;
+
 
 
 struct mymsg
@@ -116,7 +117,7 @@ int main(int argc, char *argv[]){
     kill(0,SIGKILL);
   }
 
-  shared_data * my_data;
+  struct shared_data * my_data;
   my_data = shmat(sharedMemoryId, NULL, 0);
 
   perc_Tiro=my_data->tiro;
