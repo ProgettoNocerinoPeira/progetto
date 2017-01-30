@@ -230,7 +230,7 @@ return completed;
 */
 int createTeam(int teamNumber){
   int pid = getpid();
-  int parent = pid();
+  int parent = pid;
   int numeroTeam = teamNumber;
   if(pid==getpid()){
     pid_t team = fork();
