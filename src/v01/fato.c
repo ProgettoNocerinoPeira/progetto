@@ -108,13 +108,14 @@ int main(int argc, char *argv[]){
   if ((messageAnswerId==-1)) writeLog("Failed to create/attach to messageQueue");
   while(1){
     msgrcv(messageQueueId,&msg,sizeof(msg),0,0);
-    printf("Fato: ho ricevuto un messaggio.\n");
+    printf("Fato: ho ricevuto un messaggio %d, %d\n", msg.mtype, msg.mtext);
     teamNumber=msg.mtext;
     if (msg.mtype==1){
       if(generateRandom(30)==1){
         msg.mtype=4;
         msg.mtext=1;
         msgsnd(messageAnswerId, &msg, sizeof(msg),0);
+
       }
     }
     else if (msg.mtype==2){
@@ -130,6 +131,13 @@ int main(int argc, char *argv[]){
         msg.mtext=1;
         msgsnd(messageAnswerId, &msg, sizeof(msg),0);
       }
+    }
+    else {
+      printf("Ho riceuvto %d da %d\n",msg.mtype, msg.mtext);
+      msg.mtype=4;
+      msg.mtext=0;
+      msgsnd(messageAnswerId,&msg,sizeof(msg),0);
+      printf("Ho inviato un messaggio con testo 0, tipo 4 perche non so che succede");
     }
   }
   /*
