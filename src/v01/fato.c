@@ -107,22 +107,49 @@ int main(int argc, char *argv[]){
   messageAnswerId=createAnswerQueue();
   if ((messageAnswerId==-1)) writeLog("Failed to create/attach to messageQueue");
   while(1){
-    int response = readAndAnswerMessage();
-    if (response==1){
-      if (type==1){
-        sprintf(msglog, "La squadra %d ha fatto Goal.", teamNumber);
-        writeLog (msglog);
-      }
-      if (type==2){
-        sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
-        writeLog (msglog);
-      }
-      if (type==3){
-        sprintf(msglog, "Il giocatore della squadra %d ha vinto il dribbling.", teamNumber);
-        writeLog (msglog);
+    msgrcv(messageQueueId,&msg,sizeof(msg),0,0);
+    teamNumber=msg.mtext;
+    if (msg.mtype==1){
+      if(generateRandom(30)==1){
+        msg.mtype=4;
+        msg.mtext=1;
+        msgsnd(messageAnswerId, &msg, sizeof(msg),0);
       }
     }
-
+    else if (msg.mtype==2){
+      if(generateRandom(30)==1){
+        msg.mtype=4;
+        msg.mtext=1;
+        msgsnd(messageAnswerId, &msg, sizeof(msg),0);
+      }
+    }
+    else if (msg.mtype==3){
+      if(generateRandom(30)==1){
+        msg.mtype=4;
+        msg.mtext=1;
+        msgsnd(messageAnswerId, &msg, sizeof(msg),0);
+      }
+    }
   }
-  return 0;
+  /*
+  while(1){
+  int response = readAndAnswerMessage();
+  if (response==1){
+  if (type==1){
+  sprintf(msglog, "La squadra %d ha fatto Goal.", teamNumber);
+  writeLog (msglog);
+}
+if (type==2){
+sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
+writeLog (msglog);
+}
+if (type==3){
+sprintf(msglog, "Il giocatore della squadra %d ha vinto il dribbling.", teamNumber);
+writeLog (msglog);
+}
+}
+
+}
+*/
+return 0;
 }
