@@ -178,10 +178,10 @@ void main (int argc, char *argv[]){
         tiro();
         dribbling=false;
       }
-      else if (sendInfortunio()==1){
+      if (sendInfortunio()==1){
         infortunio();
       }
-      else if (sendDribbling()==1){
+      if (sendDribbling()==1){
         //Do nothing.
         sleep(1);
       }
