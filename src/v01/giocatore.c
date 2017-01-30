@@ -62,8 +62,8 @@ int infortunio(){
 }
 
 void releaseSemaphore(){
-
 }
+
 int connectToSemaphore(){
   key_t semaphoreKey = KEYSEMAPHORES;
   int semaphoreId;
@@ -86,7 +86,7 @@ int main (int argc, char *argv[]){
   }
   while(1){
     sleep(10);
-    exit();
+    exit(1);
   }
   return 1;
 }
