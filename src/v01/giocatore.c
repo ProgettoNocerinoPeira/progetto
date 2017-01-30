@@ -127,7 +127,7 @@ int sendTiro(){
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
   printf("Ho inviato tiro.\n");
   sleep(2);
-  msgrcv(messageAnswerId,&msg,sizeof(msg), 4,0);
+  msgrcv(messageAnswerId,&msg,sizeof(msg), 0,0);
   printf("Ho ricevuto risposta\n");
   int response = msg.mtext;
   return response;
@@ -137,7 +137,7 @@ int sendInfortunio(){
   msg.mtype=2;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),IPC_NOWAIT);
-  msgrcv(messageAnswerId,&msg,sizeof(msg), 4,0);
+  msgrcv(messageAnswerId,&msg,sizeof(msg),0,0);
   int response = msg.mtext;
   return response;
 }
@@ -146,7 +146,7 @@ int sendDribbling(){
   msg.mtype=3;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
-  msgrcv(messageAnswerId,&msg,sizeof(msg), 4,0);
+  msgrcv(messageAnswerId,&msg,sizeof(msg), 0,0);
   int response = msg.mtext;
   return response;
 }
