@@ -27,8 +27,6 @@ void decreaseSemaphore();
 void sig_handler(int signo){
   if (signo == SIGINT){
     printf("received SIGINT- squadra\n");
-    semaphore.val=-1;
-    semctl(semaphoreSetId,teamNumber, SETVAL, semaphore);
     exit(0);
   }
 }
@@ -55,8 +53,9 @@ void decreaseSemaphore(){
   ops.sem_num=teamNumber;
   ops.sem_op=-1;
   ops.sem_flg = 0;
-  semop(semaphoreSetId, ops, 1);
+  semop(semaphoreSetId, &ops, 1);
 }
+
 int main (int argc, char *argv[]){
 
   teamNumber = atoi(argv[1]);
