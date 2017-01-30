@@ -176,7 +176,6 @@ void main (int argc, char *argv[]){
 
       }
       else dribbling=false;
-      sleep(1);
     }
     releaseBall();
   }
