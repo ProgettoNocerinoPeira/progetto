@@ -27,6 +27,7 @@ struct shared_data{
   int infortunio;
   int dribbling;
 };
+typedef struct shared_data shared_data;
 
 
 struct mymsg
