@@ -92,7 +92,7 @@ int main (int argc, char *argv[]){
     raise(SIGINT);
   }
   while(1){
-    if (semctl(semaphoreSetId,4,GETVAL)==0){
+    if (semctl(semaphoreSetId,teamNumber,GETVAL)==-1){
       printf("Fine partita./n");
       exit(0);
     }
