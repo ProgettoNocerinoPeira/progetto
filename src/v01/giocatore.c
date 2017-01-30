@@ -64,7 +64,7 @@ int infortunio(){
   //decremento di 1 il semaforo
   printf("Giocatore %d della squadra %d infortunato\n",(int) getpid(),team);
   releaseSemaphore(team); //Release teamPlayer
-  releaseSemaphore(3) //Release palla
+  releaseSemaphore(3); //Release palla
   exit(1);//dovrebbe chiudere il processo
 }
 
