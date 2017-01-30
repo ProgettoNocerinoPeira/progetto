@@ -224,11 +224,9 @@ void destroyAll(){
 
 
 bool writeConfigToSharedMemorySegment(){
-  bool completed=false;
   pun1 = (char *)(sharedMemoryId,0, SHM_RND);
-  if (pun1 == (char *)(-1)) return completed;
-  completed = true;
-  return completed;
+  sprintf(pun1, "%d;%d;%d", Perc_Tiro,Perc_Infortunio,Perc_Dribbling);
+  return true;
 }
 
 int createTeam(int teamNumber){
@@ -295,6 +293,8 @@ int main(){
   if (readConfigFile()){
     // I store the values on the shared memory to let fato know the probabiliy values.
     printf("\n\nsemaphoreSetId: %d, messageQueueId: %d, sharedMemoryId: %d\n", semaphoreSetId, messageQueueId, sharedMemoryId);
+    writeConfigToSharedMemorySegment();
+    
     printf("Everyting looks fine right now.\n");
     //printf("Attached? %d\n", writeConfigToSharedMemorySegment());
 
