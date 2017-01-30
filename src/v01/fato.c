@@ -116,7 +116,7 @@ int main(int argc, char *argv[]){
   }
   struct shared_data * my_data;
   struct shared_data dataConfig;
-  &dataConfig = my_data
+  my_data = &dataConfig;
   perc_Tiro=(dataConfig.tiro);
   perc_Infortunio=(dataConfig.infortunio);
   perc_Dribbling=(dataConfig.dribbling);
