@@ -142,6 +142,7 @@ int main(int argc, char *argv[]){
       }
     }
     else {
+      printf("Messaggio ricevuto di tipo %d",msg.mtype);
       printf("Ho riceuvto %d da %d\n",msg.mtype, msg.mtext);
       msg.mtype=4;
       msg.mtext=0;
