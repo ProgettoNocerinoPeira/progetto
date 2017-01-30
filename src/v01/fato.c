@@ -9,6 +9,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
+#include <sys/shm.h>
 #include <sys/msg.h>
 #include <sys/sem.h>
 #include <sys/errno.h>
@@ -17,9 +18,10 @@
 //Include our commonKeys header file
 #include "commonKeys.h"
 //Global variables needed for this piece of software
-int messageQueueId,messageAnswerId;
+int messageQueueId,messageAnswerId,sharedMemoryId;
 int teamNumber;
 char msglog [256];
+char (*datiCondivisi)[64];
 
 
 struct mymsg
@@ -34,6 +36,14 @@ void writeLog(char *message);
 int generateRandom(int value);
 int readMessage();
 void sig_handler(int signo);
+
+int createSharedMemory(){
+  int id;
+  key_t sharedMemorykey = KEYSHAREDMEMORY;
+  size_t size = sizeof(datiCondivisi);
+  id = shmget(sharedMemorykey, size, IPC_CREAT | 0666);
+  return id;
+}
 
 void sig_handler(int signo){
   if (signo == SIGKILL){
@@ -86,9 +96,21 @@ int generateRandom(int value){
 int main(int argc, char *argv[]){
   signal(SIGKILL, sig_handler);
   messageQueueId=createMessageQueue();
-  if ((messageQueueId==-1)) writeLog("Failed to create/attach to messageQueue");
+  if ((messageQueueId==-1)) {
+    writeLog("Failed to create/attach to messageQueue");
+    kill(0,SIGKILL);
+  }
   messageAnswerId=createAnswerQueue();
-  if ((messageAnswerId==-1)) writeLog("Failed to create/attach to messageQueue");
+  if ((messageAnswerId==-1)) {
+    writeLog("Failed to create/attach to messageQueue");
+    kill(0,SIGKILL);
+  }
+  if ((sharedMemoryId==-1)) {
+    writeLog("Failed to attach to shared memory");
+    kill(0,SIGKILL);
+  }
+  datiCondivisi = (char *)shmat(sharedMemoryId,0, SHM_RND);
+  printf("LEGGO CONFIGURAZIONE %s",datiCondivisi);
   while(1){
     msg.mtype=0;
     //sleep(1);
