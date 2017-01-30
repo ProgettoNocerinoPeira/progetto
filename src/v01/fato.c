@@ -143,6 +143,7 @@ int main(int argc, char *argv[]){
       else {
         msg.mtype=4;
         msg.mtext=0;
+        printf("Mesaggio non valido\n");
         msgsnd(messageAnswerId, &msg, sizeof(msg),0);
       }
     }
