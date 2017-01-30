@@ -115,9 +115,9 @@ int main(int argc, char *argv[]){
     kill(0,SIGKILL);
   }
   struct shared_data * my_data;
-  Perc_Tiro=my_data.tiro;
-  Perc_Infortunio=my_data.infortunio;
-  Perc_Dribbling=my_data.dribbling;
+  Perc_Tiro=my_data->tiro;
+  Perc_Infortunio=my_data->infortunio;
+  Perc_Dribbling=my_data->dribbling;
   while(1){
     msg.mtype=0;
     //sleep(1);
