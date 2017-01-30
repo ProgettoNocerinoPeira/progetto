@@ -96,8 +96,8 @@ int main (int argc, char *argv[]){
       printf("Fine partita./n");
       exit(0);
     }
-    sleep(1);
-    infortunio();
+    // sleep(1);
+    // infortunio();
   }
   return 1;
 }
