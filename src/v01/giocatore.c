@@ -175,7 +175,7 @@ void main (int argc, char *argv[]){
     }
     printf("Ho preso la palla, squadra %d\n",teamNumber);
     bool dribbling = true;
-    bool didSomething = false
+    bool didSomething = false;
     while (dribbling && !didSomething){
       if (sendTiro()==1){
         tiro();
