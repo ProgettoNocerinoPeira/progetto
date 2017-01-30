@@ -110,7 +110,8 @@ int main(int argc, char *argv[]){
     msgrcv(messageQueueId,&msg,sizeof(msg),0,0);
     printf("Fato: ho ricevuto un messaggio %d, %d\n", msg.mtype, msg.mtext);
     teamNumber=msg.mtext;
-    if (msg.mtype==1){
+    type=msg.mtype;
+    if (type==1){
       printf("Messaggio ricevuto di tipo %d",msg.mtype);
       if(generateRandom(30)==1){
         msg.mtype=4;
@@ -121,7 +122,7 @@ int main(int argc, char *argv[]){
 
       }
     }
-    else if (msg.mtype==2){
+    else if (type==2){
       printf("Messaggio ricevuto di tipo %d",msg.mtype);
       if(generateRandom(30)==1){
         msg.mtype=4;
@@ -131,7 +132,7 @@ int main(int argc, char *argv[]){
         msgsnd(messageAnswerId, &msg, sizeof(msg),0);
       }
     }
-    else if (msg.mtype==3){
+    else if (type==3){
       printf("Messaggio ricevuto di tipo %d",msg.mtype);
       if(generateRandom(30)==1){
         msg.mtype=4;
