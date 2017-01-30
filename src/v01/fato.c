@@ -109,7 +109,7 @@ int main(int argc, char *argv[]){
       if (type==2){
         sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
         msgsnd(messageQueueId, &msg, sizeof(msg),0);
-        printf("Sending %d type %d", msg.mtext, msg.type);
+        printf("Sending %d type %d", msg.mtext, msg.mtype);
         writeLog (msglog);
       }
       if (type==3){
