@@ -42,6 +42,8 @@ void sig_handler(int signo);
 void sig_handler(int signo){
   if (signo == SIGINT){
     printf("received SIGINT- squadra\n");
+    semaphore.val=-1;
+    semctl(semaphoreSetId,teamNumber, SETVAL, semaphore);
     exit(0);
   }
 }
