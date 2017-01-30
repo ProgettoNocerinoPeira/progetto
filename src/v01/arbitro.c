@@ -78,7 +78,7 @@ bool writeConfigToSharedMemorySegment();
 
 void sig_handler(int signo){
   if (signo==SIGINT){
-    kill(0,SIGKILL);
+    kill(0,SIGALRM);
   }
    else if(signo==SIGALRM){
     printf("\n\n=====FINE PARTITA=====\n\n");
@@ -86,10 +86,10 @@ void sig_handler(int signo){
     ops.sem_op=-1;
     ops.sem_flg = 0;
     semop(semaphoreSetId, &ops, 1);
-    kill(0,SIGKILL);
     sleep(1);
     destroyAll();
-    exit(0);
+    kill(0,SIGKILL);
+    //exit(0);
   }
   else if (signo==SIGUSR1){
     printf("\nGOAL squadra 1\n");
