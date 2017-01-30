@@ -39,7 +39,7 @@ struct sembuf buffer;
 void tiro();
 int infortunio();
 void releseSemaphore();
-bool connectToSemaphore();
+int connectToSemaphore();
 
 //From here we start writing our functions
 void tiro(){
