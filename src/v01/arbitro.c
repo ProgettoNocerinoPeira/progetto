@@ -256,6 +256,7 @@ int main(){
   //I'll also create the message queue and the handlers for our signals.
 
   //We're creating a set of 3 semaphore, first two will be used by teams to manage
+  printf("Process id: %d\n\n",getpid());
   if((semaphoreSetId=createSemaphores(4))==-1){
     printf("Errore semaforo\n");
     exit(-1);
