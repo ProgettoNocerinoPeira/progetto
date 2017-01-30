@@ -121,11 +121,14 @@ int createAnswerQueue(){
 }
 
 int sendTiro(){
+  printf("Sto inviando tiro...\n");
   msg.mtype=1;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
+  printf("Ho inviato tiro.\n");
   sleep(1);
   msgrcv(messageAnswerId,&msg,sizeof(msg), 4,0);
+  printf("Ho ricevuto risposta\n");
   int response = msg.mtext;
   return response;
 }
@@ -171,19 +174,15 @@ void main (int argc, char *argv[]){
     bool dribbling = true;
     while (dribbling){
       if (sendTiro()==1){
-        printf("Chiamo tiro();\n\n");
-        kill(arbitro,SIGUSR1);
+        tiro();
         dribbling=false;
       }
       else if (sendInfortunio()==1){
-        dribbling=false;
-        printf("Muoio.\n");
+        infortunio();
       }
       else if (sendDribbling()==1){
         //Do nothing.
-        printf("dribbling");
       }
-      else dribbling=false;
     }
     releaseBall();
   }
