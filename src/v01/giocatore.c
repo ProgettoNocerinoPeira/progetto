@@ -40,9 +40,9 @@ int connectToSemaphore();
 void sig_handler(int signo);
 void increaseSemaphore();
 void decreaseSemaphore();
-bool sendTiro();
-bool sendInfortunio();
-bool sendDribbling();
+int sendTiro();
+int sendInfortunio();
+int sendDribbling();
 void takeBall();
 void releaseBall();
 
@@ -113,34 +113,31 @@ void increaseSemaphore(){
   semop(semaphoreSetId, &ops, 1);
 }
 
-bool sendTiro(){
+int sendTiro(){
   msg.mtype=1;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
   msgrcv(messageQueueId,&msg,sizeof(msg), 4,0);
   int response = msg.mtext;
-  if (response==1) return true;
-  else return false;
+  return response;
 }
 
-bool sendInfortunio(){
+int sendInfortunio(){
   msg.mtype=2;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
   msgrcv(messageQueueId,&msg,sizeof(msg), 4,0);
   int response = msg.mtext;
-  if (response==1) return true;
-  else return false;
+  return response;
 }
 
-bool sendDribbling(){
+int sendDribbling(){
   msg.mtype=3;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
   msgrcv(messageQueueId,&msg,sizeof(msg), 4,0);
   int response = msg.mtext;
-  if (response==1) return true;
-  else return false;
+  return response;
 }
 void main (int argc, char *argv[]){
   teamNumber=atoi(argv[1]);
@@ -164,17 +161,17 @@ void main (int argc, char *argv[]){
     printf("Ho preso la palla\n");
     bool dribbling = true;
     while (dribbling){
-      if (sendTiro()){
+      if (sendTiro()==1){
         printf("Chiamo tiro();\n\n");
         kill(arbitro,SIGUSR1);
         dribbling=false;
       }
-      else if (sendInfortunio()){
+      else if (sendInfortunio()==1){
         dribbling=false;
         printf("Muoio.\n");
       }
-      else if (sendDribbling()){
-
+      else if (sendDribbling()==1){
+        //Do nothing. 
       }
       else dribbling=false;
     }
