@@ -65,7 +65,7 @@ int infortunio(){
 int connectToSemaphore(){
   key_t semaphoreKey = KEYSEMAPHORES;
   int semaphoreId;
-  semaphoreId=semget(semaphoreKey, 3, IPC_CREAT | 0666);
+  semaphoreId=semget(semaphoreKey, 4, IPC_CREAT | 0666);
   return semaphoreId;
 }
 int connectToMessageQueue(){
