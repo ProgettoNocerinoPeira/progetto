@@ -69,7 +69,7 @@ void destroyAll();
 
 //These functions will fork and execute other code
 int createTeam(int teamNumber);
-bool createFato();
+int createFato();
 
 bool writeConfigToSharedMemorySegment();
 //Scope of this function is to write config data to the shared memory segment.
