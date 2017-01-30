@@ -68,6 +68,7 @@ int main (int argc, char *argv[]){
 
   teamNumber = atoi(argv[1]);
   semaphoreSetId=connectToSemaphore();
+  printf("Semaforo squadra %d, id: %d\n", teamNumber,semaphoreSetId);
   semaphore.val=5;
   semctl(semaphoreSetId,1, SETVAL, semaphore);
   bool finished = false;
