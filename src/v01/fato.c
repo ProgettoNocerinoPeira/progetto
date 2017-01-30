@@ -113,7 +113,7 @@ int main(int argc, char *argv[]){
     type=msg.mtype;
     printf("Type %d, team %d",type, teamNumber);
   }
-}
+  
   /*
   while(1){
   int response = readAndAnswerMessage();
