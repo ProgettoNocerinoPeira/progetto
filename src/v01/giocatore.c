@@ -20,7 +20,7 @@ TODO: Finish the comment.
 */
 
 //Global variables
-int team;
+int team, semaphoreSetId,messageQueueId;
 union semun {
   // value for SETVAL
   int val;
@@ -84,8 +84,8 @@ int connectToMessageQueue(){
 }
 int main (int argc, char *argv[]){
   team=atoi(argv[1]);
-  int semaphoreSetId=connectToSemaphore();
-  int messageQueueId=connectToMessageQueue();
+  semaphoreSetId=connectToSemaphore();
+  messageQueueId=connectToMessageQueue();
   if (semaphoreSetId==-1 || messageQueueId==-1) {
     printf("Non sono collegato al semaforo o alla coda messaggi");
     raise(SIGINT);
