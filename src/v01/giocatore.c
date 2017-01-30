@@ -42,6 +42,9 @@ void releseSemaphore();
 int connectToSemaphore();
 
 //From here we start writing our functions
+void releaseSemaphore(){
+  printf("Hello world!");
+}
 void tiro(){
   if (team==1){
     //goal team 1
@@ -61,9 +64,7 @@ int infortunio(){
   exit();//dovrebbe chiudere il processo
 }
 
-void releaseSemaphore(){
-  printf("Hello world!");
-}
+
 
 int connectToSemaphore(){
   key_t semaphoreKey = KEYSEMAPHORES;
