@@ -136,7 +136,7 @@ int sendTiro(){
 int sendInfortunio(){
   msg.mtype=2;
   msg.mtext=teamNumber;
-  msgsnd(messageQueueId, &msg, sizeof(msg),IPC_NOWAIT);
+  msgsnd(messageQueueId, &msg, sizeof(msg),0);
   msgrcv(messageAnswerId,&msg,sizeof(msg),0,0);
   int response = msg.mtext;
   return response;
@@ -184,7 +184,6 @@ void main (int argc, char *argv[]){
         //Do nothing.
       }
     }
-    sleep(1);
     releaseBall();
   }
 }
