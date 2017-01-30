@@ -308,6 +308,7 @@ int main(){
     team1 = createTeam(1);
     team2 = createTeam(2);
     fato = createFato();
+    sleep(1);
     printf("Fischio di inizio!\n");
     semctl(semaphoreSetId,3,SETVAL,1);
     alarm(Durata_Partita);
