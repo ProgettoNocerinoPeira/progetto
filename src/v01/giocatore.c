@@ -19,30 +19,74 @@
 TODO: Finish the comment.
 */
 
+//Global variables
+int team;
+union semun {
+  // value for SETVAL
+  int val;
+  // buffer for IPC_STAT, IPC_SET
+  struct semid_ds* buf;
+  // array for GETALL, SETALL
+  unsigned short* array;
+  // Linux specific part
+  #if defined(__linux__)
+  // buffer for IPC_INFO
+  struct seminfo* __buf;
+  #endif
+} semaphore, ballSemaphore;
+struct sembuf buffer;
 //Protitype our functions
-void tiro(int team);
-int infortunio(int team);
-
+void tiro();
+int infortunio();
+void releseSemaphore();
+bool connectToSemaphore();
 
 //From here we start writing our functions
-void tiro(int team){
-  if ((goal==1)&&(team==1)){
+void tiro(){
+  if (team==1){
     //goal team 1
-    signal(SIGUSR1);
+    raise(SIGUSR1);
+    releaseSemaphore();
   }else{
     //goal team 2
-    signal(SIGUSR2);
+    raise(SIGUSR2);
+    releaseSemaphore();
   }
 }
 
-int infortunio(int team){
-//decremento di 1 il semaforo
+int infortunio(){
+  //decremento di 1 il semaforo
   printf("Giocatore %d della squadra %d infortunato\n",(int) getpid(),team);
-exit();//dovrebbe chiudere il processo
+  releaseSemaphore();
+  exit();//dovrebbe chiudere il processo
 }
 
+void releaseSemaphore(){
 
+}
+int connectToSemaphore(){
+  key_t semaphoreKey = KEYSEMAPHORES;
+  int semaphoreId;
+  semaphoreId=semget(semaphoreKey, 3, IPC_CREAT | 0666);
+  return semaphoreId;
+}
+int connectToMessageQueue(){
+  int messageQueue;
+  key_t messageKey = KEYMESSAGEQUEUE;
+  messageQueue=msgget(messageKey, IPC_CREAT | 0666);
+  return messageQueue;
+}
 int main (int argc, char *argv[]){
-  int myteam=atoi(argv[1]);
-  int team=atoi(argv[2]);
+  team=atoi(argv[1]);
+  int semaphoreSetId=connectToSemaphore();
+  int messageQueueId=connectToMessageQueue();
+  if (semaphoreSetId==-1 || messageQueueId==-1) {
+    printf("Non sono collegato al semaforo o alla coda messaggi");
+    raise(SIGINT);
+  }
+  while(1){
+    sleep(10);
+    exit();
+  }
+  return 1;
 }

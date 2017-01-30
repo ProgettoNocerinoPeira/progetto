@@ -42,10 +42,9 @@ bool spawn(int teamNumber){
   if(pid==getpid()){
     pid_t player = fork();
     if (player==0){
-      char father[8];
-      sprintf(father, "%d", pid);
+      char string[2];
       sprintf(team, "%d", teamNumber);
-      execl("giocatore", "giocatore", &father,&team, (char* )0);
+      execl("giocatore", "giocatore",&team, (char* )0);
       return 0;
     }
   }
@@ -68,7 +67,7 @@ int main (int argc, char *argv[]){
       //TODO Spawn players
       semaphore.val=semaphore.val+1;
       semctl(semaphoreSetId,1, SETVAL, semaphore);
-      
+
       printf("Team: %d ,numero giocatori: %d\n", teamNumber,semaphore.val);
       if (semaphore.val==5) finished=true;
       //spawn(teamNumber);
