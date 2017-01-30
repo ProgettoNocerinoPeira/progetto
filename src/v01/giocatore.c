@@ -124,6 +124,7 @@ int sendTiro(){
   msg.mtype=1;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
+  sleep(1);
   msgrcv(messageAnswerId,&msg,sizeof(msg), 4,0);
   int response = msg.mtext;
   return response;
