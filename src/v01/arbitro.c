@@ -224,8 +224,15 @@ void destroyAll(){
 
 
 bool writeConfigToSharedMemorySegment(){
-  datiCondivisi = (char *)shmat(sharedMemoryId,0, SHM_RND);
-  sprintf(datiCondivisi, "%d;%d;%d", Perc_Tiro,Perc_Infortunio,Perc_Dribbling);
+  pun1 = (char *)(sharedMemoryId,0, SHM_RND);
+  int i;
+  char configData[12];
+  sprintf(configData, "%d;%d;%d",Perc_Tiro,Perc_Infortunio,Perc_Dribbling);
+  printf("configData: %s",configData);
+  for (i=0,i<12;i++){
+    pun1[i]=configData[i];
+  }
+  
   return true;
 }
 
