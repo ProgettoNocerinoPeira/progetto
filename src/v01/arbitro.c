@@ -83,7 +83,7 @@ void sig_handler(int signo){
     exit(0);
   }
   if(signo==SIGALRM){
-    printf("Timer up.\n");
+    printf("\n\n\n\n\n\n\n\n====================Timer up.====================\n");
     ops.sem_num=3;
     ops.sem_op=-1;
     ops.sem_flg = 0;
