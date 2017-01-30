@@ -76,7 +76,7 @@ void writeLog(char* text){
 //funzione che randomizza in base al tempo  preso in input un parametro restituisce 0/1
 int generateRandom(int value){
   srand(time(NULL));
-  if (value>rand()%100+1){
+  if (value<=rand()%100+1){
     return 0;
   }else{
     return 1;
@@ -97,7 +97,7 @@ int main(int argc, char *argv[]){
       teamNumber=msg.mtext;
       type=msg.mtype;
       if (type==1){
-        if(generateRandom(100)==1){
+        if(generateRandom(20)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "La squadra %d ha fatto Goal.", teamNumber);
@@ -113,21 +113,31 @@ int main(int argc, char *argv[]){
       }
       else if (type==2){
 
-        if(generateRandom(50)==1){
+        if(generateRandom(10)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
           msgsnd(messageAnswerId, &msg, sizeof(msg),0);
           writeLog (msglog);
         }
+        else {
+          msg.mtype=4;
+          msg.mtext=0;
+          msgsnd(messageAnswerId,&msg,sizeof(msg),0);
+        }
       }
       else if (type==3){
-        if(generateRandom(50)==1){
+        if(generateRandom(30)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "Il giocatore della squadra %d ha vinto il DRIBBLING.", teamNumber);
           msgsnd(messageAnswerId, &msg, sizeof(msg),0);
           writeLog (msglog);
+        }
+        else {
+          msg.mtype=4;
+          msg.mtext=0;
+          msgsnd(messageAnswerId,&msg,sizeof(msg),0);
         }
       }
       else {
@@ -138,5 +148,5 @@ int main(int argc, char *argv[]){
       }
     }
   }
-return 0;
+  return 0;
 }
