@@ -62,6 +62,7 @@ int infortunio(){
 }
 
 void releaseSemaphore(){
+  printf("Hello world!");
 }
 
 int connectToSemaphore(){
