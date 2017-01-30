@@ -97,12 +97,12 @@ void sig_handler(int signo){
    if (signo==SIGUSR1){
     printf("\nGoaaaaaaaaaaaaaal squadra 1\n");
     score[0]=score[0]+1;
-    printf("Nuovo risultato:\n squadra 1 %d-%d squadra 2",score[0],score[1]);
+    printf("Nuovo risultato:\n squadra 1 %d-%d squadra 2\n",score[0],score[1]);
   }
   if(signo==SIGUSR2){
     printf("\nGoaaaaaaaaaaaaaal squadra 2\n");
     score[1]=score[1]+1;
-    printf("Nuovo risultato:\n squadra 1 %d-%d squadra 2",score[0],score[1]);
+    printf("Nuovo risultato:\n squadra 1 %d-%d squadra 2\n",score[0],score[1]);
   }
 }
 

@@ -158,6 +158,9 @@ int main (int argc, char *argv[]){
       exit(0);
     }
     takeBall();
+    if (semctl(semaphoreSetId,teamNumber,GETVAL)==-1){
+      exit(0);
+    }
     printf("Ho preso la palla\n");
     bool dribbling = true;
     while (dribbling){/*
