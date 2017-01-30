@@ -156,7 +156,7 @@ int main (int argc, char *argv[]){
     takeBall();
     printf("Ho preso la palla\n");
     bool dribbling = true;
-    while (dribbling){
+    while (dribbling){/*
       if (sendTiro()){
         dribbling=false;
 
@@ -169,6 +169,10 @@ int main (int argc, char *argv[]){
 
       }
       else dribbling=false;
+      */
+      printf("Ho fatto goal.\n");
+      tiro();
+      sleep(3);
     }
     releaseBall();
   }
