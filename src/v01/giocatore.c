@@ -74,7 +74,8 @@ void tiro(){
     printf("Invio SIGUSR1 a %d", arbitro);
     kill(arbitro,SIGUSR1);
 
-  }else{
+  }
+  else {
     //goal teamNumber 2
     printf("Invio SIGUSR2 a %d", arbitro);
     kill(arbitro,SIGUSR2);
@@ -169,7 +170,7 @@ void main (int argc, char *argv[]){
     if (semctl(semaphoreSetId,teamNumber,GETVAL)==-1){
       exit(0);
     }
-    printf("Ho preso la palla\n");
+    printf("Ho preso la palla, squadra %d\n",teamNumber);
     bool dribbling = true;
     while (dribbling){
       if (sendTiro()==1){

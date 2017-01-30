@@ -82,7 +82,7 @@ void sig_handler(int signo){
     destroyAll();
     exit(0);
   }
-  if(signo==SIGALRM){
+  else if(signo==SIGALRM){
     printf("\n\n\n\n\n\n\n\n====================Timer up.====================\n");
     ops.sem_num=4;
     ops.sem_op=-1;
@@ -94,12 +94,12 @@ void sig_handler(int signo){
     destroyAll();
     exit(0);
   }
-  if (signo==SIGUSR1){
+  else if (signo==SIGUSR1){
     printf("\nGoaaaaaaaaaaaaaal squadra 1\n");
     score[0]=score[0]+1;
     printf("Nuovo risultato:\n squadra 1 %d-%d squadra 2\n",score[0],score[1]);
   }
-  if(signo==SIGUSR2){
+  else if(signo==SIGUSR2){
     printf("\nGoaaaaaaaaaaaaaal squadra 2\n");
     score[1]=score[1]+1;
     printf("Nuovo risultato:\n squadra 1 %d-%d squadra 2\n",score[0],score[1]);
