@@ -26,8 +26,7 @@ void sig_handler(int signo);
 void decreaseSemaphore();
 
 void sig_handler(int signo){
-  if (signo == SIGINT){
-    printf("received SIGINT- squadra\n");
+  if (signo == SIGKILL){
     exit(0);
   }
 }
@@ -61,7 +60,7 @@ void decreaseSemaphore(){
 int main (int argc, char *argv[]){
   teamNumber = atoi(argv[1]);
   strcpy(arbitro, argv[2]);
-  signal(SIGINT, sig_handler);
+  signal(SIGKILL, sig_handler);
   semaphoreSetId=connectToSemaphore();
   semctl(semaphoreSetId,teamNumber, SETVAL, 5);
   while (1){

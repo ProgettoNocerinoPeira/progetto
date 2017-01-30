@@ -48,8 +48,7 @@ void releaseBall();
 
 
 void sig_handler(int signo){
-  if (signo == SIGINT){
-    printf("received SIGINT - giocatore\n");
+  if (signo == SIGKILL){
     exit(0);
   }
 }
@@ -150,14 +149,14 @@ int sendDribbling(){
 void main (int argc, char *argv[]){
   teamNumber=atoi(argv[1]);
   arbitro = atoi(argv[2]);
-  signal(SIGINT, sig_handler);
+  signal(SIGKILL, sig_handler);
   printf("Sono il giocatore %d della squadra %d\n",getpid(),teamNumber);
   semaphoreSetId=connectToSemaphore(); //printf("Semaphoreset id %d\n",semaphoreSetId);
   messageQueueId=connectToMessageQueue();
   messageAnswerId=createAnswerQueue();
   if (semaphoreSetId==-1 || messageQueueId==-1) {
     printf("Non sono collegato al semaforo o alla coda messaggi");
-    raise(SIGINT);
+    exit(0);
   }
   while(1){
     if (semctl(semaphoreSetId,teamNumber,GETVAL)==-1){

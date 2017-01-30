@@ -36,8 +36,8 @@ int readMessage();
 void sig_handler(int signo);
 
 void sig_handler(int signo){
-  if (signo == SIGINT){
-    printf("received SIGINT - fato\n");
+  if (signo == SIGKILL){
+    printf("received SIGKILL - fato\n");
     exit(0);
   }
 }
@@ -84,7 +84,7 @@ int generateRandom(int value){
 }
 
 int main(int argc, char *argv[]){
-  signal(SIGINT, sig_handler);
+  signal(SIGKILL, sig_handler);
   messageQueueId=createMessageQueue();
   if ((messageQueueId==-1)) writeLog("Failed to create/attach to messageQueue");
   messageAnswerId=createAnswerQueue();

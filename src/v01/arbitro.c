@@ -77,29 +77,27 @@ bool writeConfigToSharedMemorySegment();
 //From here we start writing our functions
 
 void sig_handler(int signo){
-   if(signo==SIGALRM){
-    printf("\n\n\n\n\n\n\n\n====================Timer up.====================\n");
+  if (signo==SIGINT){
+    kill(0,SIGKILL);
+  }
+   else if(signo==SIGALRM){
+    printf("\n\n=====FINE PARTITA=====\n\n");
     ops.sem_num=4;
     ops.sem_op=-1;
     ops.sem_flg = 0;
     semop(semaphoreSetId, &ops, 1);
-    /*
-    kill (team1, SIGINT);
-    kill(team2, SIGINT);
-    kill(fato, SIGINT);
-    */
-    kill(0,SIGINT);
+    kill(0,SIGKILL);
     sleep(1);
     destroyAll();
     exit(0);
   }
   else if (signo==SIGUSR1){
-    printf("\nGoaaaaaaaaaaaaaal squadra 1\n");
+    printf("\nGOAL squadra 1\n");
     score[0]=score[0]+1;
     printf("Nuovo risultato:\n squadra 1 %d-%d squadra 2\n",score[0],score[1]);
   }
   else if(signo==SIGUSR2){
-    printf("\nGoaaaaaaaaaaaaaal squadra 2\n");
+    printf("\nGOAL squadra 2\n");
     score[1]=score[1]+1;
     printf("Nuovo risultato:\n squadra 1 %d-%d squadra 2\n",score[0],score[1]);
   }
