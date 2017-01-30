@@ -251,7 +251,7 @@ int main(){
   //I'll also create the message queue and the handlers for our signals.
 
   //We're creating a set of 3 semaphore, first two will be used by teams to manage
-  if((semaphoreSetId=createSemaphores(3))==-1){
+  if((semaphoreSetId=createSemaphores(4))==-1){
     printf("Errore semaforo\n");
     exit(-1);
   }
@@ -274,9 +274,10 @@ int main(){
 
 
     //From here we start to create all the other process needed for our simulation
-    int valoreKill = 1;
-    semctl(semaphoreSetId,3,SETVAL,valoreKill);
-    printf("Valore killare: %d\n", semctl(semaphoreSetId,4,GETVAL));
+    int valoreKill = 1;.
+    semctl(semaphoreSetId,4,SETVAL,valoreKill);
+    valoreKill=semctl(semaphoreSetId,4,GETVAL);
+    printf("Valore killare: %d\n", valoreKill);
     sleep(2);
     alarm(Durata_Partita);
     createTeam(1);
