@@ -95,7 +95,7 @@ void sig_handler(int signo){
   if(signo==SIGUSR2){
     printf("\nGoaaaaaaaaaaaaaal squadra 2\n");
     score[1]=score[1]+1;
-    printf("Nuovo risultato:\n squadra 1 %d-%d squadra 2",score[0],score[1]);    
+    printf("Nuovo risultato:\n squadra 1 %d-%d squadra 2",score[0],score[1]);
   }
 }
 
@@ -273,6 +273,8 @@ int main(){
     createTeam(2);
 
     sleep(10);
+    raise(SIGINT);
+    sleep(1);
     destroyAll();
   }
   return -1;

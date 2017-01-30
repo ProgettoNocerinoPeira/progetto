@@ -36,7 +36,15 @@ struct sembuf buffer;
 int semaphoreSetId, teamNumber;
 int connectToBall();
 bool spawn();
+void sig_handler(int signo);
 
+
+void sig_handler(int signo){
+  if (signo == SIGINT){
+    printf("received SIGINT\n");
+    exit(0);
+  }
+}
 bool spawn(int teamNumber){
   int pid = getpid();
   if(pid==getpid()){
@@ -57,20 +65,21 @@ int connectToSemaphore(){
   return semaphoreId;
 }
 int main (int argc, char *argv[]){
+
   teamNumber = atoi(argv[1]);
   semaphoreSetId=connectToSemaphore();
   semaphore.val=5;
   semctl(semaphoreSetId,1, SETVAL, semaphore);
   bool finished = false;
 
-  while (1 && finished==false){
+  while (1){
     int semValue = semctl(semaphoreSetId,teamNumber, GETVAL, semaphore);
     while(semaphore.val!=0){
       //TODO Spawn players
       semaphore.val=semaphore.val-1;
       semctl(semaphoreSetId,1, SETVAL, semaphore);
       printf("Team: %d ,numero giocatori: %d\n", teamNumber,(semaphore.val));
-      //spawn(teamNumber);
+      spawn(teamNumber);
     }
   }
 }

@@ -41,12 +41,20 @@ void tiro();
 int infortunio();
 void releseSemaphore();
 int connectToSemaphore();
+void sig_handler(int signo);
 
+
+void sig_handler(int signo){
+  if (signo == SIGINT){
+    printf("received SIGINT\n");
+    exit(0);
+  }
+}
 //From here we start writing our functions
 void releaseSemaphore(int semaphoreNumber){
-    int semValue = semctl(semaphoreSetId, semaphoreNumber, GETVAL, semaphore);
-    semaphore.val=semaphore.val-1;
-    semctl(semaphoreSetId, semaphoreNumber, SETVAL, semaphore);
+  int semValue = semctl(semaphoreSetId, semaphoreNumber, GETVAL, semaphore);
+  semaphore.val=semaphore.val-1;
+  semctl(semaphoreSetId, semaphoreNumber, SETVAL, semaphore);
 }
 void tiro(){
   if (team==1){
@@ -84,6 +92,8 @@ int connectToMessageQueue(){
 }
 int main (int argc, char *argv[]){
   team=atoi(argv[1]);
+  signal(SIGINT, sig_handler);
+
   semaphoreSetId=connectToSemaphore();
   messageQueueId=connectToMessageQueue();
   if (semaphoreSetId==-1 || messageQueueId==-1) {
@@ -91,7 +101,7 @@ int main (int argc, char *argv[]){
     raise(SIGINT);
   }
   while(1){
-    sleep(10);
+    sleep(1);
     exit(1);
   }
   return 1;
