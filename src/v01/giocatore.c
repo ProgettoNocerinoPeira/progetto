@@ -135,6 +135,7 @@ int sendDribbling(){
   msg.mtype=3;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
+  sleep(1);
   msgrcv(messageQueueId,&msg,sizeof(msg), 4,0);
   int response = msg.mtext;
   return response;
@@ -171,7 +172,7 @@ void main (int argc, char *argv[]){
         printf("Muoio.\n");
       }
       else if (sendDribbling()==1){
-        //Do nothing. 
+        //Do nothing.
       }
       else dribbling=false;
     }
