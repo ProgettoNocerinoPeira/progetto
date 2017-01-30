@@ -47,7 +47,7 @@ This is where the magic happens.
 int semaphoreSetId, messageQueueId,messageAnswerId, sharedMemoryId,team1,team2,fato;
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
-char datiCondivisi[12];
+char datiCondivisi[64];
 char *pun1, *pun2;
 struct sembuf ops;
 
@@ -294,7 +294,7 @@ int main(){
     // I store the values on the shared memory to let fato know the probabiliy values.
     printf("\n\nsemaphoreSetId: %d, messageQueueId: %d, sharedMemoryId: %d\n", semaphoreSetId, messageQueueId, sharedMemoryId);
     writeConfigToSharedMemorySegment();
-    
+
     printf("Everyting looks fine right now.\n");
     //printf("Attached? %d\n", writeConfigToSharedMemorySegment());
 
