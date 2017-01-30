@@ -20,29 +20,17 @@ TODO: Finish the comment.
 */
 
 //Global variables
-int team, semaphoreSetId,messageQueueId;
-union semun {
-  // value for SETVAL
-  int val;
-  // buffer for IPC_STAT, IPC_SET
-  struct semid_ds* buf;
-  // array for GETALL, SETALL
-  unsigned short* array;
-  // Linux specific part
-  #if defined(__linux__)
-  // buffer for IPC_INFO
-  struct seminfo* __buf;
-  #endif
-} semaphore, ballSemaphore;
+int teamNumber, semaphoreSetId,messageQueueId;
 
-struct sembuf buffer;
+
+struct sembuf ops;
 //Protitype our functions
 void tiro();
 int infortunio();
-void releseSemaphore();
+
 int connectToSemaphore();
 void sig_handler(int signo);
-
+void increaseSemaphore
 
 void sig_handler(int signo){
   if (signo == SIGINT){
@@ -51,30 +39,23 @@ void sig_handler(int signo){
   }
 }
 //From here we start writing our functions
-void releaseSemaphore(int semaphoreNumber){
-  int semValue = semctl(semaphoreSetId, semaphoreNumber, GETVAL, semaphore);
-  printf("Semaforo team: %d, valore: %d\n", team, semaphore.val);
-  semaphore.val=semaphore.val+1;
-  semctl(semaphoreSetId, semaphoreNumber, SETVAL, semaphore);
-  semValue = semctl(semaphoreSetId, semaphoreNumber, GETVAL, semaphore);
-  printf("Semaforo team dopo: %d, valore: %d\n", team, semaphore.val);
-}
+
 void tiro(){
-  if (team==1){
-    //goal team 1
+  if (teamNumber==1){
+    //goal teamNumberNumber 1
     raise(SIGUSR1);
-    releaseSemaphore(3);
+
   }else{
-    //goal team 2
+    //goal teamNumber 2
     raise(SIGUSR2);
-    releaseSemaphore(3);
+
   }
 }
 
 int infortunio(){
   //decremento di 1 il semaforo
-  printf("Giocatore %d della squadra %d infortunato\n",(int) getpid(),team);
-  releaseSemaphore(team); //Release teamPlayer
+  printf("Giocatore %d della squadra %d infortunato\n",(int) getpid(),teamNumber);
+  increaseSemaphore(teamNumber); //Release teamNumberPlayer
   //releaseSemaphore(3); //Release palla
   exit(1);//dovrebbe chiudere il processo
 }
@@ -93,8 +74,15 @@ int connectToMessageQueue(){
   messageQueue=msgget(messageKey, IPC_CREAT | 0666);
   return messageQueue;
 }
+
+void increaseSemaphore(){
+  ops.sem_num=teamNumber;
+  ops.sem_op=1;
+  ops.sem_flg = 0;
+  semop(semaphoreSetId, &ops, 1);
+}
 int main (int argc, char *argv[]){
-  team=atoi(argv[1]);
+  teamNumber=atoi(argv[1]);
   signal(SIGINT, sig_handler);
 
   semaphoreSetId=connectToSemaphore(); printf("Semaphoreset id %d\n",semaphoreSetId);
