@@ -224,7 +224,7 @@ void destroyAll(){
 bool writeConfigToSharedMemorySegment(){
   bool completed=false;
   datiCondivisi = (char *) shmat(sharedMemoryId,(void *)0,0);
-  if (data == (char *)(-1)) return completed;
+  if (datiCondivisi == (char *)(-1)) return completed;
   completed = true;
   return completed;
 }
