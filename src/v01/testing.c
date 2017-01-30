@@ -20,19 +20,8 @@ void sig_handler(int signalId){
   }
 }
 int main(){
-  bool createTeam(int teamNumber){
-    int pid = getpid();
-    if(pid==getpid()){
-      pid_t team = fork();
-      if (team==0){
-        signal(SIGUSR1, sig_handler);
-        while (1){
-          sleep(1);
-        }
-      }
-    }
-  }
-
-  sleep(1);
+  signal(SIGUSR1, sig_handler);
   raise(SIGUSR1);
+  sleep(1);
+  return 0;
 }
