@@ -47,13 +47,9 @@ int semaphoreSetId, messageQueueId,messageAnswerId,team1,team2,fato;
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
 struct sembuf ops;
-struct mymsg
-{
-  int  mtype;	/* Message type */
-  car  mtext[128];     /* Message body */
-} msg_finish;
+
 //Protitype our functions
-struct mymsg msgbuf;
+
 void sig_handler(int signo);
 
 bool readConfigFile();
