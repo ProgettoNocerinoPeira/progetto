@@ -244,6 +244,17 @@ int createTeam(int teamNumber){
     return team;
   }
 }
+int createFato(){
+  int pid = getpid();
+
+  if(pid==getpid()){
+    pid_t fato = fork();
+    if (fato==0){
+      execl("fato", "fato", (char* )0);
+      }
+    return team;
+  }
+}
 
 int main(){
   signal(SIGINT, sig_handler);
@@ -283,6 +294,7 @@ int main(){
     semctl(semaphoreSetId,3,SETVAL,0);
     team1 = createTeam(1);
     team2 = createTeam(2);
+    createFato();
     sleep(2);
     printf("Fischio di inizio!\n");
     semctl(semaphoreSetId,3,SETVAL,1);
