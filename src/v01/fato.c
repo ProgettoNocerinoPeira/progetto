@@ -18,16 +18,11 @@
 //Include our commonKeys header file
 #include "commonKeys.h"
 //Global variables needed for this piece of software
-int messageQueueId,messageAnswerId,sharedMemoryId;
+int messageQueueId,messageAnswerId;
 int perc_Tiro,perc_Dribbling,perc_Infortunio;
 int teamNumber;
 char msglog [256];
 
-struct shared_data{
-  int tiro;
-  int infortunio;
-  int dribbling;
-};
 
 
 
@@ -44,13 +39,7 @@ int generateRandom(int value);
 int readMessage();
 void sig_handler(int signo);
 
-int createSharedMemory(){
-  int id;
-  key_t sharedMemorykey = KEYSHAREDMEMORY;
-  size_t size = SIZESHAREDMEMORY;
-  id = shmget(sharedMemorykey, size,  0666);
-  return id;
-}
+
 
 void sig_handler(int signo){
   if (signo == SIGKILL){
@@ -112,10 +101,7 @@ int main(int argc, char *argv[]){
     writeLog("Failed to create/attach to messageQueue");
     kill(0,SIGKILL);
   }
-  if ((sharedMemoryId==-1)) {
-    writeLog("Failed to attach to shared memory");
-    kill(0,SIGKILL);
-  }
+
 
   perc_Tiro=atoi(argv[1]);
   perc_Infortunio=atoi(argv[2]);
