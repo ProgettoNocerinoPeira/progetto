@@ -47,7 +47,7 @@ int createSharedMemory(){
   int id;
   key_t sharedMemorykey = KEYSHAREDMEMORY;
   size_t size = SIZESHAREDMEMORY;
-  id = shmget(sharedMemorykey, size, IPC_CREAT | 0666);
+  id = shmget(sharedMemorykey, size,  0666);
   return id;
 }
 
