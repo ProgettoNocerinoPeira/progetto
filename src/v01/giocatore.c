@@ -142,7 +142,7 @@ bool sendDribbling(){
   if (response==1) return true;
   else return false;
 }
-int main (int argc, char *argv[]){
+void main (int argc, char *argv[]){
   teamNumber=atoi(argv[1]);
   arbitro = atoi(argv[2]);
   signal(SIGINT, sig_handler);
@@ -163,7 +163,7 @@ int main (int argc, char *argv[]){
     }
     printf("Ho preso la palla\n");
     bool dribbling = true;
-    while (dribbling){/*
+    while (dribbling){
       if (sendTiro()){
         dribbling=false;
 
@@ -176,13 +176,8 @@ int main (int argc, char *argv[]){
 
       }
       else dribbling=false;
-      */
-      printf("Ho fatto goal.\n");
-      tiro();
-      dribbling = false;
-      sleep(2);
+      sleep(1);
     }
     releaseBall();
   }
-  return 1;
 }
