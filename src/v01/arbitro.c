@@ -276,17 +276,16 @@ int main(){
 
 
     //From here we start to create all the other process needed for our simulation
-    int valoreKill = 1;
-    sleep(2);
-    semctl(semaphoreSetId,4,SETVAL,valoreKill);
-    valoreKill=semctl(semaphoreSetId,4,GETVAL);
-    printf("Valore killare: %d\n", valoreKill);
-    sleep(2);
-    alarm(Durata_Partita);
+    semctl(semaphoreSetId,3,SETVAL,0);
     team1 = createTeam(1);
     team2 = createTeam(2);
-
-    while(1){}
+    sleep(2);
+    printf("Fischio di inizio!\n");
+    semctl(semaphoreSetId,3,SETVAL,1);
+    alarm(Durata_Partita);
+    while(1){
+      //Do nothing, wait for signals from children. 
+    }
   }
   return -1;
 }

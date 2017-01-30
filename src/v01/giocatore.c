@@ -21,7 +21,11 @@ TODO: Finish the comment.
 
 //Global variables
 int teamNumber, semaphoreSetId,messageQueueId;
-
+int arbitro = getppid()
+struct mymsg {
+  int mtype;
+  int mtext;
+} msg;
 
 struct sembuf ops;
 //Protitype our functions
@@ -31,10 +35,15 @@ int infortunio();
 int connectToSemaphore();
 void sig_handler(int signo);
 void increaseSemaphore();
+void decreaseSemaphore();
+bool sendTiro();
+bool sendInfortunio();
+bool sendDribbling();
+
 
 void sig_handler(int signo){
   if (signo == SIGINT){
-    printf("received SIGTERM - giocatore\n");
+    printf("received SIGINT - giocatore\n");
     exit(0);
   }
 }
@@ -55,6 +64,7 @@ void tiro(){
 int infortunio(){
   //decremento di 1 il semaforo
   printf("Giocatore %d della squadra %d infortunato\n",(int) getpid(),teamNumber);
+  releaseBall();
   increaseSemaphore(); //Release teamNumberPlayer
   //releaseSemaphore(3); //Release palla
   exit(1);//dovrebbe chiudere il processo
@@ -81,6 +91,43 @@ void increaseSemaphore(){
   ops.sem_flg = 0;
   semop(semaphoreSetId, &ops, 1);
 }
+void takeBall(){
+  ops.sem_num=3;
+  ops.sem_op=-1;
+  ops.sem_flg = 0;
+  semop(semaphoreSetId, &ops, 1);
+}
+void releaseBall(){
+  ops.sem_num=3;
+  ops.sem_op=+1;
+  ops.sem_flg = 0;
+  semop(semaphoreSetId, &ops, 1);
+}
+bool sendTiro(){
+  msg.mtype=1;
+  msg.mtext=teamNumber;
+  msgsnd(messageQueueId, &msg, sizeof(msg),0);
+  msgrcv(messageQueueId,&msg,sizeof(msg), 4,0);
+  if (msg.mtext==1) return true;
+  else return false;
+}
+bool sendInfortunio(){
+  msg.mtype=2;
+  msg.mtext=teamNumber;
+  msgsnd(messageQueueId, &msg, sizeof(msg),0);
+  msgrcv(messageQueueId,&msg,sizeof(msg), 4,0);
+  if (msg.mtext==1) return true;
+  else return false;
+}
+
+bool sendDribbling(){
+  msg.mtype=3;
+  msg.mtext=teamNumber;
+  msgsnd(messageQueueId, &msg, sizeof(msg),0);
+  msgrcv(messageQueueId,&msg,sizeof(msg), 4,0);
+  if (msg.mtext==1) return true;
+  else return false;
+}
 int main (int argc, char *argv[]){
   teamNumber=atoi(argv[1]);
   signal(SIGINT, sig_handler);
@@ -93,11 +140,25 @@ int main (int argc, char *argv[]){
   }
   while(1){
     if (semctl(semaphoreSetId,teamNumber,GETVAL)==-1){
-      printf("Fine partita./n");
       exit(0);
     }
-    // sleep(1);
-    // infortunio();
+    takeBall();
+    bool dribbling = true;
+    while (dribbling){
+      if (sendTiro()){
+        dribbling=false;
+
+      }
+      else if (sendInfortunio()){
+        dribbling=false;
+        printf("Muoio.\n");
+      }
+      else if (sendDribbling()){
+
+      }
+      else dribbling=false;
+    }
+    releaseBall();
   }
   return 1;
 }

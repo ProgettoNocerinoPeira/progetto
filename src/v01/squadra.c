@@ -17,7 +17,7 @@
 
 struct sembuf ops;
 int semaphoreSetId, teamNumber, val,killing;
-
+int parent = getppid();
 
 int connectToBall();
 bool spawn();
