@@ -81,7 +81,6 @@ void sig_handler(int signo){
     destroyAll();
     printf("\n\n=====FINE PARTITA=====\n\n");
     sleep(1);
-    msg_finish.mtype=5;
     sprintf(msg_finish.mtext, "*****Risultato:\n squadra 1 %d-%d squadra 2\n*****",score[0],score[1]);
     kill(0,SIGKILL);
   }
