@@ -14,19 +14,25 @@
 
 //Include our commonKeys header file
 #include "commonKeys.h"
+
+/*
+TODO: Finish the comment.
+*/
+
 //Protitype our functions
-int tiro(int team);
+void tiro(int team);
 int infortunio(int team);
 
+
 //From here we start writing our functions
-int tiro(int team){
+void tiro(int team){
   if ((goal==1)&&(team==1)){
     //goal team 1
-    SIGUSR1;
+    signal(SIGUSR1);
   }else{
     //goal team 2
-    SIGUSR2;
-  } 
+    signal(SIGUSR2);
+  }
 }
 
 int infortunio(int team){
