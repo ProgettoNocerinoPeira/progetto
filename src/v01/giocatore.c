@@ -30,7 +30,7 @@ int infortunio();
 
 int connectToSemaphore();
 void sig_handler(int signo);
-void increaseSemaphore
+void increaseSemaphore(int teamNumber);
 
 void sig_handler(int signo){
   if (signo == SIGINT){
