@@ -123,6 +123,7 @@ int main(int argc, char *argv[]){
         writeLog (msglog);
       }
     }
+    sleep(1);
   }
   return 0;
 }
