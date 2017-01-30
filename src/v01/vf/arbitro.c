@@ -203,7 +203,7 @@ void destroyAll(){
   printf("Destroying semaphores %d\n", destroySharedResources(1,semaphoreSetId));
   printf("Destroying message queue %d\n", destroySharedResources(2,messageQueueId));
   printf("Destroying message answer queue %d\n", destroySharedResources(2,messageAnswerId));
-
+}
 int createTeam(int teamNumber){
   int pid = getpid();
   int parent = pid;
