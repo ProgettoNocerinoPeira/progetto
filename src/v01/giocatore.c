@@ -25,7 +25,9 @@ int arbitro = getppid()
 struct mymsg {
   int mtype;
   int mtext;
-} msg;
+};
+
+struct mymsg msg;
 
 struct sembuf ops;
 //Protitype our functions
