@@ -34,5 +34,5 @@ int main(){
   }
 
   sleep(1);
-  signal(SIGUSR1);
+  raise(SIGUSR1);
 }
