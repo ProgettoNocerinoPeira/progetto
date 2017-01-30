@@ -53,7 +53,7 @@ void sig_handler(int signo){
 //From here we start writing our functions
 void releaseSemaphore(int semaphoreNumber){
   int semValue = semctl(semaphoreSetId, semaphoreNumber, GETVAL, semaphore);
-  semaphore.val=semaphore.val-1;
+  semaphore.val=semaphore.val+1;
   semctl(semaphoreSetId, semaphoreNumber, SETVAL, semaphore);
 }
 void tiro(){
@@ -72,7 +72,7 @@ int infortunio(){
   //decremento di 1 il semaforo
   printf("Giocatore %d della squadra %d infortunato\n",(int) getpid(),team);
   releaseSemaphore(team); //Release teamPlayer
-  releaseSemaphore(3); //Release palla
+  //releaseSemaphore(3); //Release palla
   exit(1);//dovrebbe chiudere il processo
 }
 

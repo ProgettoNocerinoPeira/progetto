@@ -74,10 +74,10 @@ int main (int argc, char *argv[]){
 
   while (1){
     int semValue = semctl(semaphoreSetId,teamNumber, GETVAL, semaphore);
-    while(semaphore.val!=0 && semaphore.val<=5){
+    while(semaphore.val>=0 && semaphore.val<=5){
       //TODO Spawn players
       semaphore.val=semaphore.val-1;
-      semctl(semaphoreSetId,1, SETVAL, semaphore);
+      semctl(semaphoreSetId,teamNumber, SETVAL, semaphore);
       printf("Team: %d ,numero giocatori: %d\n", teamNumber,(semaphore.val));
       spawn(teamNumber);
     }
