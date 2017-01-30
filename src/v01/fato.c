@@ -21,7 +21,11 @@
 int messageQueueId,messageAnswerId,sharedMemoryId;
 int teamNumber;
 char msglog [256];
-char (*datiCondivisi)[64];
+struct shared_data{
+  int tiro;
+  int infortunio;
+  int dribbling;
+};
 
 
 struct mymsg
@@ -109,9 +113,7 @@ int main(int argc, char *argv[]){
     writeLog("Failed to attach to shared memory");
     kill(0,SIGKILL);
   }
-  //datiCondivisi = (char *)shmat(sharedMemoryId,0, SHM_RDONLY);
-  //printf(datiCondivisi);
-  //printf("LEGGO CONFIGURAZIONE %s",datiCondivisi);
+
   while(1){
     msg.mtype=0;
     //sleep(1);
