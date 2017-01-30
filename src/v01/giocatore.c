@@ -137,6 +137,7 @@ int sendInfortunio(){
   msg.mtype=2;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
+  printf("Ho inviato infortunio.\n");
   msgrcv(messageAnswerId,&msg,sizeof(msg),0,0);
   int response = msg.mtext;
   return response;
@@ -146,6 +147,7 @@ int sendDribbling(){
   msg.mtype=3;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
+  printf("Ho inviato dribbling.\n");
   msgrcv(messageAnswerId,&msg,sizeof(msg), 0,0);
   int response = msg.mtext;
   return response;
@@ -173,13 +175,15 @@ void main (int argc, char *argv[]){
     }
     printf("Ho preso la palla, squadra %d\n",teamNumber);
     bool dribbling = true;
-    while (dribbling){
+    bool didSomething = false
+    while (dribbling && !didSomething){
       if (sendTiro()==1){
         tiro();
-        dribbling=false;
+        didSomething=true;
       }
       if (sendInfortunio()==1){
         infortunio();
+        didSomething=true;
       }
       if (sendDribbling()==1){
         //Do nothing.
