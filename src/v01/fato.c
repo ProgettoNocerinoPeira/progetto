@@ -108,6 +108,7 @@ int main(int argc, char *argv[]){
   if ((messageAnswerId==-1)) writeLog("Failed to create/attach to messageQueue");
   while(1){
     msgrcv(messageQueueId,&msg,sizeof(msg),0,0);
+    printf("Fato: ho ricevuto un messaggio.\n");
     teamNumber=msg.mtext;
     if (msg.mtype==1){
       if(generateRandom(30)==1){
