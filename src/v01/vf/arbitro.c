@@ -47,9 +47,13 @@ int semaphoreSetId, messageQueueId,messageAnswerId,team1,team2,fato;
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
 struct sembuf ops;
-
+struct mymsg
+{
+  int  mtype;	/* Message type */
+  car  mtext[128];     /* Message body */
+} msg_finish;
 //Protitype our functions
-
+struct mymsg msgbuf;
 void sig_handler(int signo);
 
 bool readConfigFile();
@@ -81,9 +85,9 @@ void sig_handler(int signo){
     destroyAll();
     printf("\n\n=====FINE PARTITA=====\n\n");
     sleep(1);
-    printf("*****Risultato:\n squadra 1 %d-%d squadra 2\n*****",score[0],score[1]);
+    msg_finish.mtype=5;
+    sprintf(msg_finish.mtext, "*****Risultato:\n squadra 1 %d-%d squadra 2\n*****",score[0],score[1]);
     kill(0,SIGKILL);
-    //exit(0);
   }
   else if (signo==SIGUSR1){
     printf("\nGOAL squadra 1\n");
