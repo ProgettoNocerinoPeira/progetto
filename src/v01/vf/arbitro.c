@@ -81,6 +81,7 @@ void sig_handler(int signo){
     destroyAll();
     printf("\n\n=====FINE PARTITA=====\n\n");
     sleep(1);
+    printf("*****Risultato:\n squadra 1 %d-%d squadra 2\n*****",score[0],score[1]);
     kill(0,SIGKILL);
     //exit(0);
   }
@@ -263,11 +264,6 @@ int main(){
 
   //If i can read the config file I can go on with the execution of the program, otherwise I'll exit the program.
   if (readConfigFile()){
-    // I store the values on the shared memory to let fato know the probabiliy values.
-    printf("\n\nsemaphoreSetId: %d, messageQueueId: %d\n", semaphoreSetId, messageQueueId);
-    printf("Everyting looks fine right now.\n");
-    //printf("Attached? %d\n", writeConfigToSharedMemorySegment());
-
 
     //From here we start to create all the other process needed for our simulation
     semctl(semaphoreSetId,3,SETVAL,0);

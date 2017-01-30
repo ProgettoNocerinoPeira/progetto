@@ -96,7 +96,6 @@ bool readConfigFile() {
       }
     }
     fclose (file);
-    printf("Tutti i dati di configurazione sono stati trovati e caricati");
     return true;
   }
   else printf("Errore nell'apertura del file");
