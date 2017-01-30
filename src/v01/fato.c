@@ -37,7 +37,7 @@ void sig_handler(int signo);
 
 void sig_handler(int signo){
   if (signo == SIGINT){
-    printf("received SIGINT - giocatore\n");
+    printf("received SIGINT - fato\n");
     exit(0);
   }
 }
