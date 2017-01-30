@@ -180,6 +180,8 @@ void main (int argc, char *argv[]){
       }
       else if (sendDribbling()==1){
         //Do nothing.
+        printf("dribbling");
+        )
       }
       else dribbling=false;
     }
