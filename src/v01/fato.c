@@ -33,7 +33,14 @@ int createMessageQueue();
 void writeLog(char *message);
 int generateRandom(int value);
 int readMessage();
+void sig_handler(int signo);
 
+void sig_handler(int signo){
+  if (signo == SIGINT){
+    printf("received SIGINT - giocatore\n");
+    exit(0);
+  }
+}
 
 int createMessageQueue(){
   int messageQueue;
@@ -89,7 +96,7 @@ int generateRandom(int value){
 }
 
 int main(int argc, char *argv[]){
-  writeLog("Testing the log writer");
+  signal(SIGINT, sig_handler);
   messageQueueId=createMessageQueue();
   if ((messageQueueId==-1)) writeLog("Failed to create/attach to messageQueue");
   while(1){
