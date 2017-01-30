@@ -70,7 +70,9 @@ int readAndAnswerMessage(){
   }
   else msg.mtext=0;
   msg.mtype=4;
+  printf("Sto rispondendo...\n");
   msgsnd(messageAnswerId,&msg,sizeof(msg), 0);
+  printf("Ho risposto.\n");
   return msg.mtext;
 }
 
