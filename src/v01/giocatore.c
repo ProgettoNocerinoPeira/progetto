@@ -164,7 +164,7 @@ void main (int argc, char *argv[]){
       exit(0);
     }
     takeBall();
-    //sleep(1);
+    sleep(1);
     if (semctl(semaphoreSetId,teamNumber,GETVAL)==-1){
       exit(0);
     }
@@ -183,7 +183,6 @@ void main (int argc, char *argv[]){
       if (sendDribbling()==1){
         //Do nothing.
       }
-      sleep(1);
     }
     releaseBall();
   }
