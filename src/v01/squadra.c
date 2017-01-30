@@ -16,8 +16,8 @@
 #include "commonKeys.h"
 
 struct sembuf ops;
-int semaphoreSetId, teamNumber, val,killing;
-int parent = getppid();
+int semaphoreSetId, teamNumber, val;
+
 
 int connectToBall();
 bool spawn();
@@ -64,10 +64,9 @@ int main (int argc, char *argv[]){
   semaphoreSetId=connectToSemaphore();
   semctl(semaphoreSetId,teamNumber, SETVAL, 5);
   while (1){
-    killing = semctl(semaphoreSetId,4,GETVAL);
-    printf("Killing: %d\n", killing);
+    int killing = semctl(semaphoreSetId,4,GETVAL);
     if (killing==0){
-      printf("Fine partita./n");
+      printf("Fine partita.\n");
       exit(0);
     }
     val = semctl(semaphoreSetId,teamNumber,GETVAL);
