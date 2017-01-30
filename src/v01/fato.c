@@ -17,7 +17,7 @@
 //Include our commonKeys header file
 #include "commonKeys.h"
 //Global variables needed for this piece of software
-int messageQueueId;
+int messageQueueId,messageAnswerId;
 int teamNumber;
 char msglog [256];
 
@@ -49,31 +49,29 @@ int createMessageQueue(){
   return messageQueue;
 }
 
+int createAnswerQueue(){
+  int messageQueue;
+  key_t messageKey = KEYMESSAGEANSWER;
+  messageQueue=msgget(messageKey, IPC_CREAT | 0666);
+  return messageQueue;
+}
 
 int readAndAnswerMessage(){
-
-  if (msgrcv(messageQueueId, &msg, sizeof(msg), 1, IPC_NOWAIT)){
-    teamNumber = msg.mtext;
-    if (generateRandom(30)==1) msg.mtext=1;
-    else msg.mtext=0;
-    msg.mtype=4;
-    return msg.mtext;
+  msgrcv(messageQueueId, &msg, sizeof(msg), 0, 0);
+  teamNumber=msg.mtext;
+  if (msg.mtype==1){
+    if(generateRandom(30)==1) msg.mtext=1;
   }
-  if (msgrcv(messageQueueId, &msg, sizeof(msg), 2, IPC_NOWAIT)){
-    teamNumber = msg.mtext;
-    if (generateRandom(30)==1) msg.mtext=1;
-    else msg.mtext=0;
-    msg.mtype=4;
-    return msg.mtext;
+  else if (msg.mtype==2){
+    if(generateRandom(30)==1) msg.mtext=1;
   }
-  if (msgrcv(messageQueueId, &msg, sizeof(msg), 3, IPC_NOWAIT)) {
-    teamNumber = msg.mtext;
-    if (generateRandom(30)==1) msg.mtext=1;
-    else msg.mtext=0;
-    msg.mtype=4;
-    return msg.mtext;
+  else if (msg.mtype==3){
+    if(generateRandom(30)==1) msg.mtext=1;
   }
-  return 0;
+  else msg.mtext=0;
+  msg.mtype=4;
+  msgsnd(messageAnswerId,&msg,sizeof(msg), 0);
+  return msg.mtext;
 }
 
 void writeLog(char* text){
@@ -106,28 +104,21 @@ int main(int argc, char *argv[]){
   signal(SIGINT, sig_handler);
   messageQueueId=createMessageQueue();
   if ((messageQueueId==-1)) writeLog("Failed to create/attach to messageQueue");
+  messageAnswerId=createAnswerQueue();
+  if ((messageAnswerId==-1)) writeLog("Failed to create/attach to messageQueue");
   while(1){
     int response = readAndAnswerMessage();
     if (response==1){
       if (type==1){
         sprintf(msglog, "La squadra %d ha fatto Goal.", teamNumber);
-        printf("Sending %d type %d", msg.mtext, msg.mtype);
-        msgsnd(messageQueueId, &msg, sizeof(msg),0);
-        printf("Sent %d type %d", msg.mtext, msg.mtype);
         writeLog (msglog);
       }
       if (type==2){
         sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
-        printf("Sending %d type %d", msg.mtext, msg.mtype);
-        msgsnd(messageQueueId, &msg, sizeof(msg),0);
-        printf("Sent %d type %d", msg.mtext, msg.mtype);
         writeLog (msglog);
       }
       if (type==3){
         sprintf(msglog, "Il giocatore della squadra %d ha vinto il dribbling.", teamNumber);
-        printf("Sending %d type %d", msg.mtext, msg.mtype);
-        msgsnd(messageQueueId, &msg, sizeof(msg),0);
-        printf("Sent %d type %d", msg.mtext, msg.mtype);;
         writeLog (msglog);
       }
     }

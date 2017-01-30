@@ -20,7 +20,7 @@ TODO: Finish the comment.
 */
 
 //Global variables
-int teamNumber, semaphoreSetId,messageQueueId;
+int teamNumber, semaphoreSetId,messageQueueId,messageAnswerId;
 int arbitro;
 
 
@@ -113,11 +113,18 @@ void increaseSemaphore(){
   semop(semaphoreSetId, &ops, 1);
 }
 
+int createAnswerQueue(){
+  int messageQueue;
+  key_t messageKey = KEYMESSAGEANSWER;
+  messageQueue=msgget(messageKey, IPC_CREAT | 0666);
+  return messageQueue;
+}
+
 int sendTiro(){
   msg.mtype=1;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
-  msgrcv(messageQueueId,&msg,sizeof(msg), 4,0);
+  msgrcv(messageAnswerId,&msg,sizeof(msg), 4,0);
   int response = msg.mtext;
   return response;
 }
@@ -126,7 +133,7 @@ int sendInfortunio(){
   msg.mtype=2;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
-  msgrcv(messageQueueId,&msg,sizeof(msg), 4,0);
+  msgrcv(messageAnswerId,&msg,sizeof(msg), 4,0);
   int response = msg.mtext;
   return response;
 }
@@ -135,8 +142,7 @@ int sendDribbling(){
   msg.mtype=3;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
-  sleep(1);
-  msgrcv(messageQueueId,&msg,sizeof(msg.mtext), 4,0);
+  msgrcv(messageAnswerId,&msg,sizeof(msg), 4,0);
   int response = msg.mtext;
   return response;
 }
@@ -147,6 +153,7 @@ void main (int argc, char *argv[]){
   printf("Sono il giocatore %d della squadra %d\n",getpid(),teamNumber);
   semaphoreSetId=connectToSemaphore(); //printf("Semaphoreset id %d\n",semaphoreSetId);
   messageQueueId=connectToMessageQueue();
+  messageAnswerId=createAnswerQueue();
   if (semaphoreSetId==-1 || messageQueueId==-1) {
     printf("Non sono collegato al semaforo o alla coda messaggi");
     raise(SIGINT);

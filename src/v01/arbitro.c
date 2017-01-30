@@ -43,7 +43,7 @@ This is where the magic happens.
 
 
 //Declaration of global variables
-int semaphoreSetId, messageQueueId, sharedMemoryId,team1,team2,fato;
+int semaphoreSetId, messageQueueId,messageAnswerId, sharedMemoryId,team1,team2,fato;
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
 struct sembuf ops;
@@ -94,7 +94,7 @@ void sig_handler(int signo){
     destroyAll();
     exit(0);
   }
-   if (signo==SIGUSR1){
+  if (signo==SIGUSR1){
     printf("\nGoaaaaaaaaaaaaaal squadra 1\n");
     score[0]=score[0]+1;
     printf("Nuovo risultato:\n squadra 1 %d-%d squadra 2\n",score[0],score[1]);
@@ -187,6 +187,12 @@ int createMessageQueue(){
   messageQueue=msgget(messageKey, IPC_CREAT | 0666);
   return messageQueue;
 }
+int createAnswerQueue(){
+  int messageQueue;
+  key_t messageKey = KEYMESSAGEANSWER;
+  messageQueue=msgget(messageKey, IPC_CREAT | 0666);
+  return messageQueue;
+}
 int createSharedMemory(){
   int id;
   key_t sharedMemorykey = 461328;
@@ -215,6 +221,7 @@ void destroyAll(){
   printf("Destroying shared resources...\n");
   printf("Destroying semaphores %d\n", destroySharedResources(1,semaphoreSetId));
   printf("Destroying message queue %d\n", destroySharedResources(2,messageQueueId));
+  printf("Destroying message answer queue %d\n", destroySharedResources(2,messageAnswerId));
   printf("Destroying shared memory segment %d\n", destroySharedResources(3,sharedMemoryId));
 }
 
@@ -240,7 +247,7 @@ int createTeam(int teamNumber){
       char parentId[16];
       sprintf(parentId, "%d", parent);
       execl("squadra", "squadra", &teamName,&parentId, (char* )0);
-      }
+    }
     return team;
   }
 }
@@ -251,7 +258,7 @@ int createFato(){
     pid_t fato = fork();
     if (fato==0){
       execl("fato", "fato", (char* )0);
-      }
+    }
     return fato;
   }
   else return -1;
@@ -275,6 +282,11 @@ int main(){
   }
   if((messageQueueId = createMessageQueue())==-1) {
     printf("Errore message\n");
+    destroyAll();
+    exit(-1);
+  }
+  if((messageAnswerId = createAnswerQueue())==-1) {
+    printf("Errore message answer\n");
     destroyAll();
     exit(-1);
   }

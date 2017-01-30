@@ -58,6 +58,7 @@ void decreaseSemaphore(){
   semop(semaphoreSetId, &ops, 1);
 }
 
+
 int main (int argc, char *argv[]){
   teamNumber = atoi(argv[1]);
   strcpy(arbitro, argv[2]);
