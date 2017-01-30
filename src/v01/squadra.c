@@ -16,7 +16,7 @@
 #include "commonKeys.h"
 
 struct sembuf ops;
-int semaphoreSetId, teamNumber;
+int semaphoreSetId, teamNumber, val;
 
 
 int connectToBall();
@@ -67,7 +67,8 @@ int main (int argc, char *argv[]){
       printf("Fine partita./n");
       exit(0);
     }
-    if (semctl(semaphoreSetId,teamNumber,GETVAL)<=5){
+    val = semctl(semaphoreSetId,teamNumber,GETVAL);
+    if (val <=5 && val!=-1 ){
       decreaseSemaphore();
       printf("Team: %d ,numero giocatori: %d\n", teamNumber,semctl(semaphoreSetId,teamNumber,GETVAL));
       spawn(teamNumber);

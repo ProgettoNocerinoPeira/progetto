@@ -85,7 +85,7 @@ void sig_handler(int signo){
   if(signo==SIGALRM){
     printf("Timer up.\n");
     ops.sem_num=4;
-    ops.sem_op=0;
+    ops.sem_op=-1;
     ops.sem_flg = 0;
     semop(semaphoreSetId, &ops, 1);
     sleep(10);
@@ -274,10 +274,7 @@ int main(){
 
 
     //From here we start to create all the other process needed for our simulation
-    ops.sem_num=4;
-    ops.sem_op=1;
-    ops.sem_flg = 0;
-    semop(semaphoreSetId, &ops, 1);
+    semctl(semaphoreSetId,4,SETVAL,1);
 
     alarm(Durata_Partita);
     createTeam(1);
