@@ -52,9 +52,9 @@ int createMessageQueue(){
 
 int readAndAnswerMessage(){
   bool forMe=false;
-  if (msgrcv(messageQueueId, &msg, sizeof(msg), 1, IPC_NOWAIT)) forMe=true;
-  if (msgrcv(messageQueueId, &msg, sizeof(msg), 2, IPC_NOWAIT)) forMe=true;
-  if (msgrcv(messageQueueId, &msg, sizeof(msg), 3, IPC_NOWAIT)) forMe=true;
+  if (msgrcv(messageQueueId, &msg, sizeof(msg), 1, IPC_NOWAIT)!=-1) forMe=true;
+  if (msgrcv(messageQueueId, &msg, sizeof(msg), 2, IPC_NOWAIT)!=-1) forMe=true;
+  if (msgrcv(messageQueueId, &msg, sizeof(msg), 3, IPC_NOWAIT)!=-1) forMe=true;
   while (forMe){
     teamNumber = msg.mtext;
     type = msg.mtype;
