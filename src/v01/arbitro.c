@@ -31,6 +31,7 @@ This is where the magic happens.
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
+#include <sys/shm.h>
 #include <sys/msg.h>
 #include <sys/sem.h>
 #include <sys/errno.h>
