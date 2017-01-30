@@ -154,6 +154,7 @@ int main (int argc, char *argv[]){
       exit(0);
     }
     takeBall();
+    printf("Ho preso la palla\n");
     bool dribbling = true;
     while (dribbling){
       if (sendTiro()){
