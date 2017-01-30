@@ -20,7 +20,7 @@
 int messageQueueId,messageAnswerId;
 int teamNumber;
 char msglog [256];
-
+int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 
 struct mymsg
 {
