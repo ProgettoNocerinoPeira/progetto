@@ -117,7 +117,7 @@ int main(int argc, char *argv[]){
   }
 
   shared_data * my_data;
-  my_data = (shared_data *)shmat(sharedMemoryId, NULL, 0);
+  my_data = shmat(sharedMemoryId, NULL, 0);
 
   perc_Tiro=my_data->tiro;
   perc_Infortunio=my_data->infortunio;
