@@ -84,7 +84,7 @@ void sig_handler(int signo){
   }
   if(signo==SIGALRM){
     printf("Timer up.\n");
-    ops.sem_num=4;
+    ops.sem_num=3;
     ops.sem_op=-1;
     ops.sem_flg = 0;
     semop(semaphoreSetId, &ops, 1);
@@ -251,7 +251,7 @@ int main(){
   //I'll also create the message queue and the handlers for our signals.
 
   //We're creating a set of 3 semaphore, first two will be used by teams to manage
-  if((semaphoreSetId=createSemaphores(4))==-1){
+  if((semaphoreSetId=createSemaphores(3))==-1){
     printf("Errore semaforo\n");
     exit(-1);
   }
@@ -275,7 +275,7 @@ int main(){
 
     //From here we start to create all the other process needed for our simulation
     int valoreKill = 1;
-    semctl(semaphoreSetId,4,SETVAL,valoreKill);
+    semctl(semaphoreSetId,3,SETVAL,valoreKill);
     printf("Valore killare: %d\n", semctl(semaphoreSetId,4,GETVAL));
     sleep(2);
     alarm(Durata_Partita);
