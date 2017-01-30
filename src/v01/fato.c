@@ -66,8 +66,8 @@ int readAndAnswerMessage(){
   else msg.mtext=0;
   msg.mtype=4;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
-  return msg.mtext;
   printf("ricevuto %d da %d, risposto %d tipo %d", type, teamNumber, msg.mtext, msg.mtype);
+  return msg.mtext;
 }
 
 void writeLog(char* text){
@@ -102,16 +102,16 @@ int main(int argc, char *argv[]){
   if ((messageQueueId==-1)) writeLog("Failed to create/attach to messageQueue");
   while(1){
     int response = readAndAnswerMessage();
-    if (msg.mtext==1){
-      if (response==1){
+    if (response==1){
+      if (type==1){
         sprintf(msglog, "La squadra %d ha fatto Goal.", teamNumber);
         writeLog (msglog);
       }
-      if (response==2){
+      if (type==2){
         sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
         writeLog (msglog);
       }
-      if (response==3){
+      if (type==3){
         sprintf(msglog, "Il giocatore della squadra %d ha vinto il dribbling.", teamNumber);
         writeLog (msglog);
       }
