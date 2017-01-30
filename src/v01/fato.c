@@ -111,6 +111,7 @@ int main(int argc, char *argv[]){
     printf("Fato: ho ricevuto un messaggio %d, %d\n", msg.mtype, msg.mtext);
     teamNumber=msg.mtext;
     if (msg.mtype==1){
+      printf("Messaggio ricevuto di tipo %d",msg.mtype);
       if(generateRandom(30)==1){
         msg.mtype=4;
         msg.mtext=1;
@@ -121,6 +122,7 @@ int main(int argc, char *argv[]){
       }
     }
     else if (msg.mtype==2){
+      printf("Messaggio ricevuto di tipo %d",msg.mtype);
       if(generateRandom(30)==1){
         msg.mtype=4;
         msg.mtext=1;
@@ -130,6 +132,7 @@ int main(int argc, char *argv[]){
       }
     }
     else if (msg.mtype==3){
+      printf("Messaggio ricevuto di tipo %d",msg.mtype);
       if(generateRandom(30)==1){
         msg.mtype=4;
         msg.mtext=1;
