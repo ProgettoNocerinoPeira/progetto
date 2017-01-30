@@ -272,10 +272,7 @@ int main(){
     createTeam(1);
     createTeam(2);
 
-    sleep(10);
-    raise(SIGINT);
-    sleep(1);
-    destroyAll();
+    sleep(60);
   }
   return -1;
 }
