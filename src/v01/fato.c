@@ -91,7 +91,7 @@ int main(int argc, char *argv[]){
   if ((messageAnswerId==-1)) writeLog("Failed to create/attach to messageQueue");
   while(1){
     msg.mtype=0;
-    sleep(1);
+    //sleep(1);
     msgrcv(messageQueueId,&msg,sizeof(msg),0,IPC_NOWAIT);
     if (msg.mtype!=0){
       teamNumber=msg.mtext;

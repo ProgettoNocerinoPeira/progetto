@@ -122,13 +122,10 @@ int createAnswerQueue(){
 }
 
 int sendTiro(){
-  printf("Sto inviando tiro...\n");
   msg.mtype=1;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
-  printf("Ho inviato tiro.\n");
   msgrcv(messageAnswerId,&msg,sizeof(msg), 0,0);
-  printf("Ho ricevuto risposta\n");
   int response = msg.mtext;
   return response;
 }
@@ -137,18 +134,15 @@ int sendInfortunio(){
   msg.mtype=2;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
-  printf("Ho inviato infortunio.\n");
   msgrcv(messageAnswerId,&msg,sizeof(msg),0,0);
   int response = msg.mtext;
   return response;
 }
 
 int sendDribbling(){
-  printf("PROVO DRIBBLING ++++++++++++++");
   msg.mtype=3;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
-  printf("Ho inviato dribbling.\n");
   msgrcv(messageAnswerId,&msg,sizeof(msg), 0,0);
   int response = msg.mtext;
   return response;
@@ -170,7 +164,7 @@ void main (int argc, char *argv[]){
       exit(0);
     }
     takeBall();
-    sleep(1);
+    //sleep(1);
     if (semctl(semaphoreSetId,teamNumber,GETVAL)==-1){
       exit(0);
     }
