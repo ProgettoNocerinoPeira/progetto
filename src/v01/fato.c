@@ -19,6 +19,7 @@
 #include "commonKeys.h"
 //Global variables needed for this piece of software
 int messageQueueId,messageAnswerId,sharedMemoryId;
+int Perc_Tiro,Perc_Dribbling,Perc_Infortunio;
 int teamNumber;
 char msglog [256];
 struct shared_data{
@@ -113,7 +114,10 @@ int main(int argc, char *argv[]){
     writeLog("Failed to attach to shared memory");
     kill(0,SIGKILL);
   }
-
+  struct shared_data * my_data;
+  Perc_Tiro=my_data.tiro;
+  Perc_Infortunio=my_data.infortunio;
+  Perc_Dribbling=my_data.dribbling;
   while(1){
     msg.mtype=0;
     //sleep(1);
@@ -122,7 +126,7 @@ int main(int argc, char *argv[]){
       teamNumber=msg.mtext;
       type=msg.mtype;
       if (type==1){
-        if(generateRandom(60)==1){
+        if(generateRandom(Perc_Tiro)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "La squadra %d ha fatto Goal.", teamNumber);
@@ -138,7 +142,7 @@ int main(int argc, char *argv[]){
       }
       else if (type==2){
 
-        if(generateRandom(60)==1){
+        if(generateRandom(Perc_Infortunio)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
@@ -152,7 +156,7 @@ int main(int argc, char *argv[]){
         }
       }
       else if (type==3){
-        if(generateRandom(30)==1){
+        if(generateRandom(Perc_Dribbling)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "Il giocatore della squadra %d ha vinto il DRIBBLING.", teamNumber);
