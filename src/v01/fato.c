@@ -51,23 +51,26 @@ int createMessageQueue(){
 
 
 int readAndAnswerMessage(){
-
-  msgrcv(messageQueueId, &msg, sizeof(msg), 0, 0);
-  if (msg.mtype=4) printf("mi sto mangiando il messaggio \n\n");
-  teamNumber = msg.mtext;
-  type = msg.mtype;
-  if (msg.mtype==1){
-    if (generateRandom(30)==1) msg.mtext=1;
+  bool forMe=false;
+  if (msgrcv(messageQueueId, &msg, sizeof(msg), 1, IPC_NOWAIT)) forMe=true;
+  if (msgrcv(messageQueueId, &msg, sizeof(msg), 2, IPC_NOWAIT)) forMe=true;
+  if (msgrcv(messageQueueId, &msg, sizeof(msg), 3, IPC_NOWAIT)) forMe=true;
+  while (forMe){
+    teamNumber = msg.mtext;
+    type = msg.mtype;
+    if (msg.mtype==1){
+      if (generateRandom(30)==1) msg.mtext=1;
+    }
+    else if (msg.mtype==2){
+      if (generateRandom(30)==1) msg.mtext=1;
+    }
+    else if (msg.mtype==3){
+      if (generateRandom(30)==1) msg.mtext=1;
+    }
+    else msg.mtext=0;
+    msg.mtype=4;
+    return msg.mtext;
   }
-  else if (msg.mtype==2){
-    if (generateRandom(30)==1) msg.mtext=1;
-  }
-  else if (msg.mtype==3){
-    if (generateRandom(30)==1) msg.mtext=1;
-  }
-  else msg.mtext=0;
-  msg.mtype=4;
-  return msg.mtext;
 }
 
 void writeLog(char* text){
@@ -125,7 +128,7 @@ int main(int argc, char *argv[]){
         writeLog (msglog);
       }
     }
-    sleep(1);
+
   }
   return 0;
 }
