@@ -63,8 +63,11 @@ int main (int argc, char *argv[]){
   semaphoreSetId=connectToSemaphore();
   semctl(semaphoreSetId,teamNumber, SETVAL, 5);
   while (1){
-    decreaseSemaphore();
-    printf("Team: %d ,numero giocatori: %d\n", teamNumber,semctl(semaphoreSetId,teamNumber,GETVAL));
-    spawn(teamNumber);
+    if (semctl(semaphoreSetId,teamNumber,GETVAL)<=5){
+      decreaseSemaphore();
+      printf("Team: %d ,numero giocatori: %d\n", teamNumber,semctl(semaphoreSetId,teamNumber,GETVAL));
+      spawn(teamNumber);
+    }
+    else sleep(2);
   }
 }
