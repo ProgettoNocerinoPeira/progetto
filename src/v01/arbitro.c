@@ -47,6 +47,7 @@ int semaphoreSetId, messageQueueId,messageAnswerId, sharedMemoryId,team1,team2,f
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
 char datiCondivisi[12];
+char *pun1, *pun2;
 struct sembuf ops;
 
 //Protitype our functions
@@ -223,8 +224,8 @@ void destroyAll(){
 
 bool writeConfigToSharedMemorySegment(){
   bool completed=false;
-  datiCondivisi = (char *) shmat(sharedMemoryId,(void *)0,0);
-  if (datiCondivisi == (char *)(-1)) return completed;
+  pun1 = (char *)(sharedMemoryId,0, SHM_RND);
+  if (pun1 == (char *)(-1)) return completed;
   completed = true;
   return completed;
 }
