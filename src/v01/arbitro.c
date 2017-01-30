@@ -244,7 +244,7 @@ int createTeam(int teamNumber){
     return team;
   }
 }
-int createFato(){
+bool createFato(){
   int pid = getpid();
 
   if(pid==getpid()){
@@ -252,8 +252,9 @@ int createFato(){
     if (fato==0){
       execl("fato", "fato", (char* )0);
       }
-    return fato;
+    return true;
   }
+  else return false;
 }
 
 int main(){
