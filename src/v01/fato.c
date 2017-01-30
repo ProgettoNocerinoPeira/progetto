@@ -118,6 +118,7 @@ int main(int argc, char *argv[]){
   Perc_Tiro=my_data->tiro;
   Perc_Infortunio=my_data->infortunio;
   Perc_Dribbling=my_data->dribbling;
+  printf("Dati di configurazione: %d %d %d",Perc_Tiro, Perc_Infortunio, Perc_Dribbling);
   while(1){
     msg.mtype=0;
     //sleep(1);
