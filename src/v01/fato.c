@@ -66,7 +66,7 @@ int readAndAnswerMessage(){
   else msg.mtext=0;
   msg.mtype=4;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
-  printf("ricevuto %d da %d, risposto %d tipo %d", type, teamNumber, msg.mtext, msg.mtype);
+  printf("ricevuto %d da %d, risposto %d tipo %d\n", type, teamNumber, msg.mtext, msg.mtype);
   return msg.mtext;
 }
 
