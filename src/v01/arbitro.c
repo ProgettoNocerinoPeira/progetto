@@ -68,7 +68,7 @@ bool destroySharedResources(int type, int idResource);
 void destroyAll();
 
 //These functions will fork and execute other code
-bool createTeam(int teamNumber);
+int createTeam(int teamNumber);
 bool createFato();
 
 bool writeConfigToSharedMemorySegment();
