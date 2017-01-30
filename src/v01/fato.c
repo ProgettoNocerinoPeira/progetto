@@ -109,7 +109,7 @@ int main(int argc, char *argv[]){
   }
   messageAnswerId=createAnswerQueue();
   if ((messageAnswerId==-1)) {
-    writeLog("Failed to create/attach to messageQueue"); 
+    writeLog("Failed to create/attach to messageQueue");
     kill(0,SIGKILL);
   }
   if ((sharedMemoryId==-1)) {
@@ -117,9 +117,9 @@ int main(int argc, char *argv[]){
     kill(0,SIGKILL);
   }
 
-  perc_Tiro=argv[1];
-  perc_Infortunio=argv[2];
-  perc_Dribbling=argv[3];
+  perc_Tiro=atoi(argv[1];)
+  perc_Infortunio=atoi(argv[2]);
+  perc_Dribbling=atoi(argv[3]);
   printf("Dati di configurazione: %d %d %d",perc_Tiro, perc_Infortunio, perc_Dribbling);
   while(1){
     msg.mtype=0;
