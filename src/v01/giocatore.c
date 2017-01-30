@@ -43,31 +43,28 @@ void releseSemaphore();
 int connectToSemaphore();
 
 //From here we start writing our functions
-void releaseSemaphore(int semaphoreNumber, int type){
-  if (type==1){
+void releaseSemaphore(int semaphoreNumber){
     int semValue = semctl(semaphoreSetId, semaphoreNumber, GETVAL, semaphore);
-    
-  }
-  int semValue = semctl(semaphoreSetId, semaphoreNumber, GETVAL, semaphore);
-
+    semaphore.val=semaphore.val-1;
+    semctl(semaphoreSetId, semaphoreNumber, SETVAL, semaphore);
 }
 void tiro(){
   if (team==1){
     //goal team 1
     raise(SIGUSR1);
-    releaseSemaphore();
+    releaseSemaphore(3);
   }else{
     //goal team 2
     raise(SIGUSR2);
-    releaseSemaphore();
+    releaseSemaphore(3);
   }
 }
 
 int infortunio(){
   //decremento di 1 il semaforo
   printf("Giocatore %d della squadra %d infortunato\n",(int) getpid(),team);
-  releaseSemaphore(team);
-  releaseSemaphore(3)
+  releaseSemaphore(team); //Release teamPlayer
+  releaseSemaphore(3) //Release palla
   exit(1);//dovrebbe chiudere il processo
 }
 
