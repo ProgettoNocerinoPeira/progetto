@@ -184,6 +184,7 @@ void main (int argc, char *argv[]){
         //Do nothing.
       }
     }
+    sleep(1);
     releaseBall();
   }
 }
