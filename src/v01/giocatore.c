@@ -144,6 +144,7 @@ int sendInfortunio(){
 }
 
 int sendDribbling(){
+  printf("PROVO DRIBBLING ++++++++++++++");
   msg.mtype=3;
   msg.mtext=teamNumber;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
