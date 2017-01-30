@@ -114,6 +114,7 @@ int main(int argc, char *argv[]){
       if(generateRandom(30)==1){
         msg.mtype=4;
         msg.mtext=1;
+        printf("Rispondo %d, %d",msg.mtext, msg.mtype);
         msgsnd(messageAnswerId, &msg, sizeof(msg),0);
 
       }
@@ -122,6 +123,7 @@ int main(int argc, char *argv[]){
       if(generateRandom(30)==1){
         msg.mtype=4;
         msg.mtext=1;
+        printf("Rispondo %d, %d",msg.mtext, msg.mtype);
         msgsnd(messageAnswerId, &msg, sizeof(msg),0);
       }
     }
@@ -129,6 +131,7 @@ int main(int argc, char *argv[]){
       if(generateRandom(30)==1){
         msg.mtype=4;
         msg.mtext=1;
+        printf("Rispondo %d, %d",msg.mtext, msg.mtype);
         msgsnd(messageAnswerId, &msg, sizeof(msg),0);
       }
     }
