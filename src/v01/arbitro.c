@@ -82,10 +82,6 @@ void sig_handler(int signo){
   }
    else if(signo==SIGALRM){
     printf("\n\n=====FINE PARTITA=====\n\n");
-    ops.sem_num=4;
-    ops.sem_op=-1;
-    ops.sem_flg = 0;
-    semop(semaphoreSetId, &ops, 1);
     sleep(1);
     destroyAll();
     kill(0,SIGKILL);
