@@ -79,7 +79,7 @@ int main (int argc, char *argv[]){
     printf("Semaforo team: %d, valore: %d\n", teamNumber, semaphore.val);
     sleep(1);
 
-    while(semaphore.val>0 && semaphore.val<=5){
+    while(semaphore.val>=0 && semaphore.val<=5){
       //TODO Spawn players
       semaphore.val=semaphore.val-1;
       semctl(semaphoreSetId,teamNumber, SETVAL, semaphore);
