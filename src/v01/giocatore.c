@@ -132,7 +132,7 @@ int sendTiro(){
 int sendInfortunio(){
   msg.mtype=2;
   msg.mtext=teamNumber;
-  msgsnd(messageQueueId, &msg, sizeof(msg),0);
+  msgsnd(messageQueueId, &msg, sizeof(msg),IPC_NOWAIT);
   msgrcv(messageAnswerId,&msg,sizeof(msg), 4,0);
   int response = msg.mtext;
   return response;
