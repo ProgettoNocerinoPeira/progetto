@@ -107,10 +107,45 @@ int main(int argc, char *argv[]){
   messageAnswerId=createAnswerQueue();
   if ((messageAnswerId==-1)) writeLog("Failed to create/attach to messageQueue");
   while(1){
+    msg.mtype=0;
     msgrcv(messageQueueId,&msg,sizeof(msg),0,IPC_NOWAIT);
-    teamNumber=msg.mtext;
-    type=msg.mtype;
-    printf("Type %d, team %d",type, teamNumber);
+    if (msg.mtype!=0){
+      teamNumber=msg.mtext;
+      type=msg.mtype;
+      if (type==1){
+        if(generateRandom(30)==1){
+          msg.mtype=4;
+          msg.mtext=1;
+          sprintf(msglog, "La squadra %d ha fatto Goal.", teamNumber);
+          writeLog (msglog);
+          msgsnd(messageAnswerId, &msg, sizeof(msg),0);
+        }
+      }
+      else if (type==2){
+
+        if(generateRandom(30)==1){
+          msg.mtype=4;
+          msg.mtext=1;
+          sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
+          writeLog (msglog);
+          msgsnd(messageAnswerId, &msg, sizeof(msg),0);
+        }
+      }
+      else if (type==3){
+        if(generateRandom(30)==1){
+          msg.mtype=4;
+          msg.mtext=1;
+          sprintf(msglog, "Il giocatore della squadra %d ha vinto il dribbling.", teamNumber);
+          writeLog (msglog);
+          msgsnd(messageAnswerId, &msg, sizeof(msg),0);
+        }
+      }
+      else {
+        msg.mtype=4;
+        msg.mtext=0;
+        msgsnd(messageAnswerId, &msg, sizeof(msg),0);
+      }
+    }
   }
 
   /*
