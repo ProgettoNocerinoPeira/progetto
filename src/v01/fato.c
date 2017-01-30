@@ -19,7 +19,7 @@
 #include "commonKeys.h"
 //Global variables needed for this piece of software
 int messageQueueId,messageAnswerId;
-int perc_Tiro,perc_Dribbling,perc_Infortunio;
+int Perc_Tiro,Perc_Dribbling,Perc_Infortunio;
 int teamNumber;
 char msglog [256];
 
@@ -38,6 +38,7 @@ void writeLog(char *message);
 int generateRandom(int value);
 int readMessage();
 void sig_handler(int signo);
+bool readConfigFile();
 
 
 
@@ -89,10 +90,75 @@ int generateRandom(int value){
   }
 }
 
+bool readConfigFile() {
+  char *token;
+  char *search = "=";
+  static const char filename[] = "config.txt";
+  FILE *file = fopen ( filename, "r" );
+  if ( file != NULL )
+  {
+    char line [ 128 ];
+    while ( fgets ( line, sizeof line, file ) != NULL ) //Lettura del file riga per riga
+    {
+      token = strtok(line, search);
+      if ((strcmp(token, "Durata_Partita")) == 0) {
+        token = strtok(NULL, search);
+        char *value = token;
+        if (atoi(value)<1){
+          printf("Dato durata partita non valido");
+          return false;
+        }
+        Durata_Partita = atoi(value);
+        char buffer[256];
+        //sprintf(buffer, "Dato Durata_Partita valido: %d", Durata_Partita);
+        //printf(buffer);
+      }
+      else if ((strcmp(token, "Perc_Infortunio")) == 0) {
+        token = strtok(NULL, search);
+        char *value = token;
+        if (atoi(value)<1 && atoi(value)>100){
+          printf("Dato Perc_Infortunio non valido");
+          return false;
+        }
+        Perc_Infortunio = atoi(value);
+        char buffer[256];
+        //sprintf(buffer, "Dato Perc_Infortunio valido: %d", Perc_Infortunio);
+        //printf(buffer);
+      }
+      else if ((strcmp(token, "Perc_Tiro")) == 0) {
+        token = strtok(NULL, search);
+        char *value = token;
+        if (atoi(value)<1 && atoi(value)>100){
+          printf("Dato Perc_Tiro non valido");
+          return false;
+        }
+        Perc_Tiro = atoi(value);
+        char buffer[256];
+        //sprintf(buffer, "Dato Perc_Tiro valido: %d", Perc_Tiro);
+        //printf(buffer);
+      }
+      else if ((strcmp(token, "Perc_Dribbling")) == 0) {
+        token = strtok(NULL, search);
+        char *value = token;
+        if (atoi(value)<1 || atoi(value)>100){
+          printf("Dato Perc_Dribbling non valido");
+          return false;
+        }
+        Perc_Dribbling = atoi(value);
+        char buffer[256];
+        //sprintf(buffer, "Dato Perc_Dribbling valido: %d", Perc_Dribbling);
+        //printf(buffer);
+      }
+    }
+    fclose (file);
+    printf("Tutti i dati di configurazione sono stati trovati e caricati");
+    return true;
+  }
+  else printf("Errore nell'apertura del file");
+  return false;
+}
+
 int main(int argc, char *argv[]){
-  perc_Tiro=atoi(argv[1]);
-  perc_Infortunio=atoi(argv[2]);
-  perc_Dribbling=atoi(argv[3]);
   signal(SIGKILL, sig_handler);
   messageQueueId=createMessageQueue();
   if ((messageQueueId==-1)) {
@@ -104,8 +170,8 @@ int main(int argc, char *argv[]){
     writeLog("Failed to create/attach to messageQueue");
     kill(0,SIGKILL);
   }
-
-  printf("Dati di configurazione: %d %d %d",perc_Tiro, perc_Infortunio, perc_Dribbling);
+  readConfigFile();
+  printf("Dati di configurazione: %d %d %d",Perc_Tiro, Perc_Infortunio, Perc_Dribbling);
   while(1){
     msg.mtype=0;
     //sleep(1);
