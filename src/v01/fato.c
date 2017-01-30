@@ -105,6 +105,11 @@ int main(int argc, char *argv[]){
           msgsnd(messageAnswerId, &msg, sizeof(msg),0);
           writeLog (msglog);
         }
+        else {
+          msg.mtype=4;
+          msg.mtext=0;
+          msgsnd(messageAnswerId,&msg,sizeof(msg),0);
+        }
       }
       else if (type==2){
 
