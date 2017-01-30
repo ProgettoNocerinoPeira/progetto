@@ -51,7 +51,9 @@ int createMessageQueue(){
 
 
 int readAndAnswerMessage(){
+
   msgrcv(messageQueueId, &msg, sizeof(msg), 0, 0);
+  if (msg.mtype=4) printf("mi sto mangiando il messaggio \n\n");
   teamNumber = msg.mtext;
   type = msg.mtype;
   if (msg.mtype==1){
