@@ -115,11 +115,11 @@ int main(int argc, char *argv[]){
     kill(0,SIGKILL);
   }
   struct shared_data * my_data;
-  struct shared_data dataConfig;
-  my_data = &dataConfig;
-  perc_Tiro=(*dataConfig.tiro);
-  perc_Infortunio=(*dataConfig.infortunio);
-  perc_Dribbling=(*dataConfig.dribbling);
+  my_data = shmat(sharedMemoryId, NULL, 0);
+
+  perc_Tiro=my_data->tiro;
+  perc_Infortunio=my_data->infortunio;
+  perc_Dribbling=my_data->dribbling;
   printf("Dati di configurazione: %d %d %d",perc_Tiro, perc_Infortunio, perc_Dribbling);
   while(1){
     msg.mtype=0;
