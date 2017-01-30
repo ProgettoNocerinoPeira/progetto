@@ -115,7 +115,7 @@ int main(int argc, char *argv[]){
         msg.mtype=4;
         msg.mtext=1;
         printf("Rispondo %d, %d",msg.mtext, msg.mtype);
-        msgrcv(messageAnswerid,&msgbuf,sizeof(msgbuf),0,IPC_NOWAIT);
+        msgrcv(messageAnswerId,&msgbuf,sizeof(msgbuf),0,IPC_NOWAIT);
         msgsnd(messageAnswerId, &msg, sizeof(msg),0);
 
       }
@@ -125,7 +125,7 @@ int main(int argc, char *argv[]){
         msg.mtype=4;
         msg.mtext=1;
         printf("Rispondo %d, %d",msg.mtext, msg.mtype);
-        msgrcv(messageAnswerid,&msgbuf,sizeof(msgbuf),0,IPC_NOWAIT);
+        msgrcv(messageAnswerId,&msgbuf,sizeof(msgbuf),0,IPC_NOWAIT);
         msgsnd(messageAnswerId, &msg, sizeof(msg),0);
       }
     }
@@ -134,7 +134,7 @@ int main(int argc, char *argv[]){
         msg.mtype=4;
         msg.mtext=1;
         printf("Rispondo %d, %d",msg.mtext, msg.mtype);
-        msgrcv(messageAnswerid,&msgbuf,sizeof(msgbuf),0,IPC_NOWAIT);
+        msgrcv(messageAnswerId,&msgbuf,sizeof(msgbuf),0,IPC_NOWAIT);
         msgsnd(messageAnswerId, &msg, sizeof(msg),0);
       }
     }
@@ -142,7 +142,7 @@ int main(int argc, char *argv[]){
       printf("Ho riceuvto %d da %d\n",msg.mtype, msg.mtext);
       msg.mtype=4;
       msg.mtext=0;
-      msgrcv(messageAnswerid,&msgbuf,sizeof(msgbuf),0,IPC_NOWAIT);
+      msgrcv(messageAnswerId,&msgbuf,sizeof(msgbuf),0,IPC_NOWAIT);
       msgsnd(messageAnswerId,&msg,sizeof(msg),0);
       printf("Ho inviato un messaggio con testo 0, tipo 4 perche non so che succede");
     }
