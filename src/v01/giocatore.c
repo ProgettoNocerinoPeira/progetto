@@ -180,6 +180,7 @@ int main (int argc, char *argv[]){
       printf("Ho fatto goal.\n");
       tiro();
       dribbling = false;
+      sleep(2);
     }
     releaseBall();
   }
