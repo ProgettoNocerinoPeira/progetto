@@ -67,7 +67,7 @@ int readAndAnswerMessage(){
   msg.mtype=4;
   msgsnd(messageQueueId, &msg, sizeof(msg),0);
   return msg.mtext;
-  printf("ricevuto %d da %d, risposto %d tipo %d" type, teamNumber, msg.mtext, msg.mtype);
+  printf("ricevuto %d da %d, risposto %d tipo %d", type, teamNumber, msg.mtext, msg.mtype);
 }
 
 void writeLog(char* text){
