@@ -274,8 +274,9 @@ int main(){
 
 
     //From here we start to create all the other process needed for our simulation
-    semctl(semaphoreSetId,4,SETVAL,1);
-
+    semctl(semaphoreSetId,4,SETVAL, 1);
+    printf("Valore killare: %d\n", semctl(semaphoreSetId,4,GETVAL));
+    sleep(2);
     alarm(Durata_Partita);
     createTeam(1);
     createTeam(2);
