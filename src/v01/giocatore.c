@@ -92,6 +92,10 @@ int main (int argc, char *argv[]){
     raise(SIGINT);
   }
   while(1){
+    if (semctl(semaphoreSetId,4,GETVAL)==0){
+      printf("Fine partita./n");
+      exit(0);
+    }
     sleep(1);
     infortunio();
   }

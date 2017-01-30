@@ -63,6 +63,10 @@ int main (int argc, char *argv[]){
   semaphoreSetId=connectToSemaphore();
   semctl(semaphoreSetId,teamNumber, SETVAL, 5);
   while (1){
+    if (semctl(semaphoreSetId,4,GETVAL)==0){
+      printf("Fine partita./n");
+      exit(0);
+    }
     if (semctl(semaphoreSetId,teamNumber,GETVAL)<=5){
       decreaseSemaphore();
       printf("Team: %d ,numero giocatori: %d\n", teamNumber,semctl(semaphoreSetId,teamNumber,GETVAL));
