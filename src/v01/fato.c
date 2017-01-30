@@ -14,6 +14,8 @@
 #include <sys/sem.h>
 #include <sys/errno.h>
 #include <sys/stat.h>
+#include <sys/time.h>		/* for setitimer */
+#include <signal.h>		/* for signal */
 
 //Include our commonKeys header file
 #include "commonKeys.h"
