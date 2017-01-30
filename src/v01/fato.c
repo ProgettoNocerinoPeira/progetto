@@ -56,25 +56,7 @@ int createAnswerQueue(){
   return messageQueue;
 }
 
-int readAndAnswerMessage(){
-  msgrcv(messageQueueId, &msg, sizeof(msg), 0, 0);
-  teamNumber=msg.mtext;
-  if (msg.mtype==1){
-    if(generateRandom(50)==1) msg.mtext=1;
-  }
-  else if (msg.mtype==2){
-    if(generateRandom(50)==1) msg.mtext=1;
-  }
-  else if (msg.mtype==3){
-    if(generateRandom(50)==1) msg.mtext=1;
-  }
-  else msg.mtext=0;
-  msg.mtype=4;
-  printf("Sto rispondendo...\n");
-  msgsnd(messageAnswerId,&msg,sizeof(msg), 0);
-  printf("Ho risposto.\n");
-  return msg.mtext;
-}
+
 
 void writeLog(char* text){
   FILE *logFile = fopen("log.txt", "a");
@@ -115,7 +97,7 @@ int main(int argc, char *argv[]){
       teamNumber=msg.mtext;
       type=msg.mtype;
       if (type==1){
-        if(generateRandom(95)==1){
+        if(generateRandom(50)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "La squadra %d ha fatto Goal.", teamNumber);
@@ -126,7 +108,7 @@ int main(int argc, char *argv[]){
       }
       else if (type==2){
 
-        if(generateRandom(90)==1){
+        if(generateRandom(50)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
@@ -135,7 +117,7 @@ int main(int argc, char *argv[]){
         }
       }
       else if (type==3){
-        if(generateRandom(5)==1){
+        if(generateRandom(50)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "Il giocatore della squadra %d ha vinto il DRIBBLING.", teamNumber);

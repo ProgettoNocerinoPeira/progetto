@@ -31,3 +31,4 @@
 # Debug files
 *.dSYM/
 *.su
+src/v01/log.txt
