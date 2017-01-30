@@ -46,11 +46,13 @@ This is where the magic happens.
 int semaphoreSetId, messageQueueId,messageAnswerId, sharedMemoryId,team1,team2,fato;
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
+char datiCondivisi[12];
 struct sembuf ops;
 
 //Protitype our functions
 
 void sig_handler(int signo);
+
 
 bool readConfigFile();
 //It's scope is to read from our config.txt file the values like DurataPartita, Perc_Tiro etc.
@@ -218,16 +220,15 @@ void destroyAll(){
   printf("Destroying shared memory segment %d\n", destroySharedResources(3,sharedMemoryId));
 }
 
-/*
+
 bool writeConfigToSharedMemorySegment(){
-bool completed=false;
-char *data;
-data = (char *) shmat(sharedMemoryId,(void *)0,0);
-if (data == (char *)(-1)) return completed;
-completed = true;
-return completed;
+  bool completed=false;
+  datiCondivisi = (char *) shmat(sharedMemoryId,(void *)0,0);
+  if (data == (char *)(-1)) return completed;
+  completed = true;
+  return completed;
 }
-*/
+
 int createTeam(int teamNumber){
   int pid = getpid();
   int parent = pid;
