@@ -190,8 +190,8 @@ int createAnswerQueue(){
 }
 int createSharedMemory(){
   int id;
-  key_t sharedMemorykey = 461328;
-  size_t size = sizeof(SIZESHAREDMEMORY);
+  key_t sharedMemorykey = KEYSHAREDMEMORY;
+  size_t size = sizeof(datiCondivisi);
   id = shmget(sharedMemorykey, size, IPC_CREAT | 0666);
   return id;
 }
