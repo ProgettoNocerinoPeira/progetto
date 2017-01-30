@@ -33,7 +33,7 @@ void sig_handler(int signo);
 void increaseSemaphore();
 
 void sig_handler(int signo){
-  if (signo == SIGTERM){
+  if (signo == SIGINT){
     printf("received SIGTERM - giocatore\n");
     exit(0);
   }

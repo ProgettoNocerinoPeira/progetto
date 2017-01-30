@@ -274,7 +274,7 @@ int main(){
 
 
     //From here we start to create all the other process needed for our simulation
-    int valoreKill = 1;.
+    int valoreKill = 1;
     semctl(semaphoreSetId,4,SETVAL,valoreKill);
     valoreKill=semctl(semaphoreSetId,4,GETVAL);
     printf("Valore killare: %d\n", valoreKill);
