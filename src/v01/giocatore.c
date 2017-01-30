@@ -70,13 +70,11 @@ void releaseBall(){
 void tiro(){
   if (teamNumber==1){
     //goal teamNumberNumber 1
-    printf("Invio SIGUSR1 a %d\n", arbitro);
     kill(arbitro,SIGUSR1);
 
   }
   else {
     //goal teamNumber 2
-    printf("Invio SIGUSR2 a %d\n", arbitro);
     kill(arbitro,SIGUSR2);
 
   }
@@ -150,7 +148,7 @@ void main (int argc, char *argv[]){
   teamNumber=atoi(argv[1]);
   arbitro = atoi(argv[2]);
   signal(SIGKILL, sig_handler);
-  printf("Sono il giocatore %d della squadra %d\n",getpid(),teamNumber);
+  printf("Nuovo giocatore > %d della squadra %d\n",getpid(),teamNumber);
   semaphoreSetId=connectToSemaphore(); //printf("Semaphoreset id %d\n",semaphoreSetId);
   messageQueueId=connectToMessageQueue();
   messageAnswerId=createAnswerQueue();
@@ -167,7 +165,7 @@ void main (int argc, char *argv[]){
     if (semctl(semaphoreSetId,teamNumber,GETVAL)==-1){
       exit(0);
     }
-    printf("Ho preso la palla, squadra %d\n",teamNumber);
+    printf("La squadra %d ha il possesso della palla.\n",teamNumber);
     bool dribbling = true;
     bool didSomething = false;
     while (dribbling && !didSomething){

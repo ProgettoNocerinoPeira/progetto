@@ -72,7 +72,7 @@ int main (int argc, char *argv[]){
     val = semctl(semaphoreSetId,teamNumber,GETVAL);
     if (val <=5 && val!=-1 ){
       decreaseSemaphore();
-      printf("Team: %d ,numero giocatori: %d\n", teamNumber,semctl(semaphoreSetId,teamNumber,GETVAL));
+      //printf("Team: %d ,numero giocatori: %d\n", teamNumber,semctl(semaphoreSetId,teamNumber,GETVAL));
       spawn(teamNumber);
     }
     //else sleep(2);
