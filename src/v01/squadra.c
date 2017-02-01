@@ -35,6 +35,7 @@ bool spawn(int teamNumber){
   if(pid==getpid()){
     pid_t player = fork();
     if (player==0){
+      printf("Nuovo giocatore > %d della squadra %d\n",getpid(),teamNumber);
       char team[2];
       sprintf(team, "%d", teamNumber);
       execl("giocatore", "giocatore",&team, &arbitro, (char* )0);

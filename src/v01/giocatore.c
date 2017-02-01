@@ -15,14 +15,20 @@
 //Include our commonKeys header file
 #include "commonKeys.h"
 
+/*
+TODO: Finish the comment.
+*/
+
+//Global variables
+int teamNumber, semaphoreSetId,messageQueueId,messageAnswerId;
+int arbitro;
+
+
 struct mymsg {
   int mtype;
   int mtext;
 };
 
-//Global variables
-int teamNumber, semaphoreSetId,messageQueueId,messageAnswerId;
-int arbitro;
 struct mymsg msg;
 
 struct sembuf ops;
@@ -33,6 +39,7 @@ int infortunio();
 int connectToSemaphore();
 void sig_handler(int signo);
 void increaseSemaphore();
+void decreaseSemaphore();
 int sendTiro();
 int sendInfortunio();
 int sendDribbling();
@@ -147,10 +154,7 @@ void main (int argc, char *argv[]){
     printf("Non sono collegato al semaforo o alla coda messaggi");
     exit(0);
   }
-  if (semctl(semaphoreSetId,teamNumber,GETVAL)==-1){
-    exit(0);
-  }
-  printf("Nuovo giocatore > %d della squadra %d\n",getpid(),teamNumber);
+  
   while(1){
     if (semctl(semaphoreSetId,teamNumber,GETVAL)==-1){
       exit(0);
@@ -173,7 +177,7 @@ void main (int argc, char *argv[]){
         didSomething=true;
       }
       if (sendDribbling()==1){
-        sleep(1);
+        //Do nothing.
       }
     }
     releaseBall();
