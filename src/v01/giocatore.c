@@ -140,10 +140,6 @@ void main (int argc, char *argv[]){
   teamNumber=atoi(argv[1]);
   arbitro = atoi(argv[2]);
   signal(SIGKILL, sig_handler);
-  if (semctl(semaphoreSetId,teamNumber,GETVAL)==-1){
-    exit(0);
-  }
-  printf("Nuovo giocatore > %d della squadra %d\n",getpid(),teamNumber);
   semaphoreSetId=connectToSemaphore();
   messageQueueId=connectToMessageQueue();
   messageAnswerId=createAnswerQueue();
@@ -151,6 +147,10 @@ void main (int argc, char *argv[]){
     printf("Non sono collegato al semaforo o alla coda messaggi");
     exit(0);
   }
+  if (semctl(semaphoreSetId,teamNumber,GETVAL)==-1){
+    exit(0);
+  }
+  printf("Nuovo giocatore > %d della squadra %d\n",getpid(),teamNumber);
   while(1){
     if (semctl(semaphoreSetId,teamNumber,GETVAL)==-1){
       exit(0);
