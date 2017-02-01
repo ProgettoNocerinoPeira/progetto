@@ -154,7 +154,6 @@ void main (int argc, char *argv[]){
     printf("Non sono collegato al semaforo o alla coda messaggi");
     exit(0);
   }
-  
   while(1){
     if (semctl(semaphoreSetId,teamNumber,GETVAL)==-1){
       exit(0);
