@@ -78,6 +78,7 @@ void sig_handler(int signo){
     kill(0,SIGALRM);
   }
   else if(signo==SIGALRM){
+    alarm(0);
     destroyAll();
     printf("\n\n=====FINE PARTITA=====\n\n");
     sleep(1);
