@@ -147,7 +147,7 @@ void main (int argc, char *argv[]){
   teamNumber=atoi(argv[1]);
   arbitro = atoi(argv[2]);
   signal(SIGKILL, sig_handler);
-  semaphoreSetId=connectToSemaphore(); 
+  semaphoreSetId=connectToSemaphore();
   messageQueueId=connectToMessageQueue();
   messageAnswerId=createAnswerQueue();
   if (semaphoreSetId==-1 || messageQueueId==-1) {
