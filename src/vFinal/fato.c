@@ -35,9 +35,11 @@ int generateRandom(int value);
 int readMessage();
 void sig_handler(int signo);
 
+
 bool readConfigFile() {
   char *token;
   char *search = "=";
+  int complete=0;
   static const char filename[] = "config.txt";
   FILE *file = fopen ( filename, "r" );
   if ( file != NULL )
@@ -54,49 +56,48 @@ bool readConfigFile() {
           return false;
         }
         Durata_Partita = atoi(value);
-        char buffer[256];
-        //sprintf(buffer, "Dato Durata_Partita valido: %d", Durata_Partita);
-        //printf(buffer);
+        complete++;
       }
       else if ((strcmp(token, "Perc_Infortunio")) == 0) {
         token = strtok(NULL, search);
         char *value = token;
-        if (atoi(value)<1 && atoi(value)>100){
+        if (atoi(value)<0 && atoi(value)>100){
           printf("Dato Perc_Infortunio non valido");
           return false;
         }
         Perc_Infortunio = atoi(value);
-        char buffer[256];
-        //sprintf(buffer, "Dato Perc_Infortunio valido: %d", Perc_Infortunio);
-        //printf(buffer);
+        complete++;
       }
       else if ((strcmp(token, "Perc_Tiro")) == 0) {
         token = strtok(NULL, search);
         char *value = token;
-        if (atoi(value)<1 && atoi(value)>100){
+        if (atoi(value)<0 && atoi(value)>100){
           printf("Dato Perc_Tiro non valido");
           return false;
         }
         Perc_Tiro = atoi(value);
         char buffer[256];
-        //sprintf(buffer, "Dato Perc_Tiro valido: %d", Perc_Tiro);
-        //printf(buffer);
+        complete++;
       }
       else if ((strcmp(token, "Perc_Dribbling")) == 0) {
         token = strtok(NULL, search);
         char *value = token;
-        if (atoi(value)<1 || atoi(value)>100){
+        if (atoi(value)<0 || atoi(value)>100){
           printf("Dato Perc_Dribbling non valido");
           return false;
         }
         Perc_Dribbling = atoi(value);
-        char buffer[256];
-        //sprintf(buffer, "Dato Perc_Dribbling valido: %d", Perc_Dribbling);
-        //printf(buffer);
+        complete++;
       }
     }
     fclose (file);
-    return true;
+    if (complete==4){
+      return true;
+    }
+    else {
+      printf("Dati non validi\n");
+      return false;
+    }
   }
   else printf("Errore nell'apertura del file");
   return false;
@@ -160,7 +161,6 @@ int main(int argc, char *argv[]){
   if ((messageAnswerId==-1)) writeLog("Failed to create/attach to messageQueue");
   while(1){
     msg.mtype=0;
-    //sleep(1);
     msgrcv(messageQueueId,&msg,sizeof(msg),0,IPC_NOWAIT);
     if (msg.mtype!=0){
       teamNumber=msg.mtext;
