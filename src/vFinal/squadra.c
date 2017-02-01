@@ -37,6 +37,7 @@ bool spawn(int teamNumber){
     if (player==0){
       char team[2];
       sprintf(team, "%d", teamNumber);
+      printf("Nuovo giocatore > %d della squadra %d\n",pid,teamNumber);
       execl("giocatore", "giocatore",&team, &arbitro, (char* )0);
       return 0;
     }
