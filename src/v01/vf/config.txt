@@ -1,4 +1,0 @@
-Durata_Partita=30
-Perc_Infortunio=20
-Perc_Tiro=30
-Perc_Dribbling=100
