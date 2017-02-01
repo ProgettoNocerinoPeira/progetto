@@ -26,7 +26,7 @@ This is where the magic happens.
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <time.h>
+//#include <time.h>
 #include <stdbool.h>
 #include <sys/wait.h>
 #include <sys/types.h>
@@ -35,7 +35,7 @@ This is where the magic happens.
 #include <sys/sem.h>
 #include <sys/errno.h>
 #include <sys/stat.h>
-#include <sys/time.h>		/* for setitimer */
+//#include <sys/time.h>		/* for setitimer */
 #include <signal.h>		/* for signal */
 
 //Include our commonKeys header file
@@ -51,6 +51,7 @@ struct sembuf ops;
 //Protitype our functions
 
 void sig_handler(int signo);
+//For sighnal handling
 
 bool readConfigFile();
 //It's scope is to read from our config.txt file the values like DurataPartita, Perc_Tiro etc.
@@ -58,23 +59,25 @@ bool readConfigFile();
 int createSemaphores();
 //This function will create semaphores and return the id of the semaphore itself.
 
-
 int createMessageQueue();
 //This function will create a message queue.
 
 bool destroySharedResources(int type, int idResource);
 //Scope of this function is to delete all shared resources like semaphores and message queues.The type is passed as int, 1 equals semaphore set, 2 message queues
-void destroyAll();
 
-//These functions will fork and execute other code
+void destroyAll();
+//We use this as a container for our destroySharedResources()
+
 int createTeam(int teamNumber);
 int createFato();
+//These functions will fork and execute other code
 
 
 //From here we start writing our functions
 
 void sig_handler(int signo){
   if (signo==SIGINT){
+    //We use SIGINT to recall SIGALRM to print the final scores and start closing our processes.
     kill(0,SIGALRM);
   }
   else if(signo==SIGALRM){
@@ -96,7 +99,9 @@ void sig_handler(int signo){
   }
 }
 
+//We read a file called config.txt which has to be in the same directory as our executables.
 bool readConfigFile() {
+  int complete=0;
   char *token;
   char *search = "=";
   static const char filename[] = "config.txt";
@@ -115,9 +120,8 @@ bool readConfigFile() {
           return false;
         }
         Durata_Partita = atoi(value);
-        char buffer[256];
-        //sprintf(buffer, "Dato Durata_Partita valido: %d", Durata_Partita);
-        //printf(buffer);
+        complete++;
+
       }
       else if ((strcmp(token, "Perc_Infortunio")) == 0) {
         token = strtok(NULL, search);
@@ -127,9 +131,7 @@ bool readConfigFile() {
           return false;
         }
         Perc_Infortunio = atoi(value);
-        char buffer[256];
-        //sprintf(buffer, "Dato Perc_Infortunio valido: %d", Perc_Infortunio);
-        //printf(buffer);
+        complete++;
       }
       else if ((strcmp(token, "Perc_Tiro")) == 0) {
         token = strtok(NULL, search);
@@ -139,9 +141,7 @@ bool readConfigFile() {
           return false;
         }
         Perc_Tiro = atoi(value);
-        char buffer[256];
-        //sprintf(buffer, "Dato Perc_Tiro valido: %d", Perc_Tiro);
-        //printf(buffer);
+        complete++;
       }
       else if ((strcmp(token, "Perc_Dribbling")) == 0) {
         token = strtok(NULL, search);
@@ -151,14 +151,15 @@ bool readConfigFile() {
           return false;
         }
         Perc_Dribbling = atoi(value);
-        char buffer[256];
-        //sprintf(buffer, "Dato Perc_Dribbling valido: %d", Perc_Dribbling);
-        //printf(buffer);
+        complete++;
       }
     }
     fclose (file);
-    printf("Tutti i dati di configurazione sono stati trovati e caricati\n\n");
-    return true;
+    if (complete==4) return true;
+    else {
+      printf("Il file di configurazione non è completo.\n");
+      return false;
+    }
   }
   else printf("Errore nell'apertura del file");
   return false;
@@ -171,12 +172,15 @@ int createSemaphores(int numSem){
   semaphoreId=semget(semaphoreKey, numSem, IPC_CREAT | 0666);
   return semaphoreId;
 }
+
+//Create the message queue for sending from giocatore to fato
 int createMessageQueue(){
   int messageQueue;
   key_t messageKey = KEYMESSAGEQUEUE;
   messageQueue=msgget(messageKey, IPC_CREAT | 0666);
   return messageQueue;
 }
+//Create the message queue for sending answers from fato to giocatore
 int createAnswerQueue(){
   int messageQueue;
   key_t messageKey = KEYMESSAGEANSWER;
@@ -184,7 +188,7 @@ int createAnswerQueue(){
   return messageQueue;
 }
 
-
+//Destroy function, releases all resources (semaphores and message queues)
 bool destroySharedResources(int type, int id){
   if(type==1){
     if(semctl(id, 0, IPC_RMID)) return 1;
@@ -205,6 +209,7 @@ void destroyAll(){
   printf("Destroying message answer queue %d\n", destroySharedResources(2,messageAnswerId));
 }
 
+//Create team function.
 int createTeam(int teamNumber){
   int pid = getpid();
   int parent = pid;
@@ -221,6 +226,8 @@ int createTeam(int teamNumber){
     return team;
   }
 }
+
+//Create fato function
 int createFato(){
   int pid = getpid();
 
@@ -234,19 +241,19 @@ int createFato(){
   else return -1;
 }
 
+//Our main function.
 int main(){
+  //We start with the signal handlers
   signal(SIGINT, sig_handler);
   signal(SIGALRM, sig_handler);
-  signal(SIGUSR1, sig_handler);//goal squadra 1
-  signal(SIGUSR2, sig_handler);//goal squadra 2
+  signal(SIGUSR1, sig_handler);
+  signal(SIGUSR2, sig_handler);
 
-  //First of all I'll create a semaphoreset with 3 semaphores, 1 for the ball,2 for the teams.
-
+  //First of all we'll create a semaphoreset with 3 semaphores, 1 for the ball,2 for the teams.
   //I'll also create the message queue and the handlers for our signals.
 
-  //We're creating a set of 3 semaphore, first two will be used by teams to manage
   printf("Process id: %d\n\n",getpid());
-  if((semaphoreSetId=createSemaphores(4))==-1){
+  if((semaphoreSetId=createSemaphores(3))==-1){
     printf("Errore semaforo\n");
     exit(-1);
   }

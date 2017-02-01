@@ -29,13 +29,17 @@ struct mymsg
 } msg;
 struct mymsg msgbuf;
 int team,type;
+
+//Prototype our functions:
 int createMessageQueue();
 void writeLog(char *message);
 int generateRandom(int value);
 int readMessage();
 void sig_handler(int signo);
 
+//We read all the configuration from file.
 bool readConfigFile() {
+  int complete=0;
   char *token;
   char *search = "=";
   static const char filename[] = "config.txt";
@@ -54,9 +58,8 @@ bool readConfigFile() {
           return false;
         }
         Durata_Partita = atoi(value);
-        char buffer[256];
-        //sprintf(buffer, "Dato Durata_Partita valido: %d", Durata_Partita);
-        //printf(buffer);
+        complete++;
+
       }
       else if ((strcmp(token, "Perc_Infortunio")) == 0) {
         token = strtok(NULL, search);
@@ -66,9 +69,7 @@ bool readConfigFile() {
           return false;
         }
         Perc_Infortunio = atoi(value);
-        char buffer[256];
-        //sprintf(buffer, "Dato Perc_Infortunio valido: %d", Perc_Infortunio);
-        //printf(buffer);
+        complete++;
       }
       else if ((strcmp(token, "Perc_Tiro")) == 0) {
         token = strtok(NULL, search);
@@ -78,9 +79,7 @@ bool readConfigFile() {
           return false;
         }
         Perc_Tiro = atoi(value);
-        char buffer[256];
-        //sprintf(buffer, "Dato Perc_Tiro valido: %d", Perc_Tiro);
-        //printf(buffer);
+        complete++;
       }
       else if ((strcmp(token, "Perc_Dribbling")) == 0) {
         token = strtok(NULL, search);
@@ -90,13 +89,15 @@ bool readConfigFile() {
           return false;
         }
         Perc_Dribbling = atoi(value);
-        char buffer[256];
-        //sprintf(buffer, "Dato Perc_Dribbling valido: %d", Perc_Dribbling);
-        //printf(buffer);
+        complete++;
       }
     }
     fclose (file);
-    return true;
+    if (complete==4) return true;
+    else {
+      printf("Il file di configurazione non è completo.\n");
+      return false;
+    }
   }
   else printf("Errore nell'apertura del file");
   return false;
