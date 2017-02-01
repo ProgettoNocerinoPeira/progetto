@@ -31,7 +31,6 @@ This is where the magic happens.
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
-#include <sys/shm.h>
 #include <sys/msg.h>
 #include <sys/sem.h>
 #include <sys/errno.h>
@@ -49,12 +48,9 @@ int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 int score[] = {0,0};
 struct sembuf ops;
 
-
-
 //Protitype our functions
 
 void sig_handler(int signo);
-
 
 bool readConfigFile();
 //It's scope is to read from our config.txt file the values like DurataPartita, Perc_Tiro etc.
@@ -67,7 +63,7 @@ int createMessageQueue();
 //This function will create a message queue.
 
 bool destroySharedResources(int type, int idResource);
-//Scope of this function is to delete all shared resources like semaphores and message queues.The type is passed as int, 1 equals semaphore set, 2 message queues, 3 shared memory
+//Scope of this function is to delete all shared resources like semaphores and message queues.The type is passed as int, 1 equals semaphore set, 2 message queues
 void destroyAll();
 
 //These functions will fork and execute other code
@@ -81,12 +77,12 @@ void sig_handler(int signo){
   if (signo==SIGINT){
     kill(0,SIGALRM);
   }
-   else if(signo==SIGALRM){
+  else if(signo==SIGALRM){
+    destroyAll();
     printf("\n\n=====FINE PARTITA=====\n\n");
     sleep(1);
-    destroyAll();
+    printf("\n\n*****Risultato: squadra 1: %d-%d :squadra 2*****\n\n",score[0],score[1]);
     kill(0,SIGKILL);
-    //exit(0);
   }
   else if (signo==SIGUSR1){
     printf("\nGOAL squadra 1\n");
@@ -161,7 +157,7 @@ bool readConfigFile() {
       }
     }
     fclose (file);
-    printf("Tutti i dati di configurazione sono stati trovati e caricati");
+    printf("Tutti i dati di configurazione sono stati trovati e caricati\n\n");
     return true;
   }
   else printf("Errore nell'apertura del file");
@@ -198,6 +194,7 @@ bool destroySharedResources(int type, int id){
     if(msgctl(id, IPC_RMID, 0)) return 1;
     else return -1;
   }
+
   return -1;
 }
 
@@ -206,10 +203,7 @@ void destroyAll(){
   printf("Destroying semaphores %d\n", destroySharedResources(1,semaphoreSetId));
   printf("Destroying message queue %d\n", destroySharedResources(2,messageQueueId));
   printf("Destroying message answer queue %d\n", destroySharedResources(2,messageAnswerId));
-
 }
-
-
 
 int createTeam(int teamNumber){
   int pid = getpid();
@@ -233,13 +227,7 @@ int createFato(){
   if(pid==getpid()){
     pid_t fato = fork();
     if (fato==0){
-      char config_tiro[3];
-      sprintf(config_tiro,"%d", Perc_Tiro);
-      char config_infortunio[3];
-      sprintf(config_infortunio,"%d", Perc_Infortunio);
-      char config_dribbling[3];
-      sprintf(config_dribbling,"%d", Perc_Dribbling);
-      execl("fato", "fato",&config_tiro,&config_infortunio,&config_dribbling ,(char* )0);
+      execl("fato", "fato", (char* )0);
     }
     return fato;
   }
@@ -252,13 +240,13 @@ int main(){
   signal(SIGUSR1, sig_handler);//goal squadra 1
   signal(SIGUSR2, sig_handler);//goal squadra 2
 
-  //First of all I'll create a semaphoreset with 2 semaphores, 1 for the ball, and 1 to let "fato" know when I'll have the configuration data.
-  //The ball semaphore will be locked and released when all the children will be running.
+  //First of all I'll create a semaphoreset with 3 semaphores, 1 for the ball,2 for the teams.
+
   //I'll also create the message queue and the handlers for our signals.
 
   //We're creating a set of 3 semaphore, first two will be used by teams to manage
   printf("Process id: %d\n\n",getpid());
-  if((semaphoreSetId=createSemaphores(3))==-1){
+  if((semaphoreSetId=createSemaphores(4))==-1){
     printf("Errore semaforo\n");
     exit(-1);
   }
@@ -275,13 +263,6 @@ int main(){
 
   //If i can read the config file I can go on with the execution of the program, otherwise I'll exit the program.
   if (readConfigFile()){
-    // I store the values on the shared memory to let fato know the probabiliy values.
-    printf("\n\nsemaphoreSetId: %d, messageQueueId: %d, \n", semaphoreSetId, messageQueueId);
-
-
-    printf("Everyting looks fine right now.\n");
-
-
 
     //From here we start to create all the other process needed for our simulation
     semctl(semaphoreSetId,3,SETVAL,0);

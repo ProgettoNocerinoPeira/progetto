@@ -84,9 +84,8 @@ int infortunio(){
   //decremento di 1 il semaforo
   printf("Giocatore %d della squadra %d infortunato\n",(int) getpid(),teamNumber);
   releaseBall();
-  increaseSemaphore(); //Release teamNumberPlayer
-  //releaseSemaphore(3); //Release palla
-  exit(1);//dovrebbe chiudere il processo
+  increaseSemaphore();
+  exit(1);
 }
 
 
@@ -149,7 +148,7 @@ void main (int argc, char *argv[]){
   arbitro = atoi(argv[2]);
   signal(SIGKILL, sig_handler);
   printf("Nuovo giocatore > %d della squadra %d\n",getpid(),teamNumber);
-  semaphoreSetId=connectToSemaphore(); //printf("Semaphoreset id %d\n",semaphoreSetId);
+  semaphoreSetId=connectToSemaphore(); 
   messageQueueId=connectToMessageQueue();
   messageAnswerId=createAnswerQueue();
   if (semaphoreSetId==-1 || messageQueueId==-1) {

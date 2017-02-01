@@ -1,28 +1,43 @@
-/*
-  Processo del fato, in fase di test legge autonomamente il file di configurazione
-  in fase di produzione leggerà i dati da memoria condivisa con Arbitro
-  La funzione può essere copiata direttamente in Arbitro.c
-  La funzione controlla anche la presenza di errori nella impostazioni delle percentuali.
-*/
 
+//Libraries includes
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
-#include <stdbool.h>
 #include <time.h>
+#include <stdbool.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
 #include <sys/msg.h>
-#include "chiaviComuni.h"
+#include <sys/sem.h>
+#include <sys/errno.h>
+#include <sys/stat.h>
 
+//Include our commonKeys header file
+#include "commonKeys.h"
+//Global variables needed for this piece of software
+int messageQueueId,messageAnswerId;
+int teamNumber;
+char msglog [256];
 int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
-int idMessaggi;
-bool writeLog(char* text);
-int leggiConfigurazione();
-void removeMessageQueue();
 
+struct mymsg
+{
+  int  mtype;	/* Message type */
+  int  mtext;     /* Message body */
+} msg;
+struct mymsg msgbuf;
+int team,type;
+int createMessageQueue();
+void writeLog(char *message);
+int generateRandom(int value);
+int readMessage();
+void sig_handler(int signo);
 
-int leggiConfigurazione() {
+bool readConfigFile() {
   char *token;
   char *search = "=";
-  int valore;
   static const char filename[] = "config.txt";
   FILE *file = fopen ( filename, "r" );
   if ( file != NULL )
@@ -33,95 +48,174 @@ int leggiConfigurazione() {
       token = strtok(line, search);
       if ((strcmp(token, "Durata_Partita")) == 0) {
         token = strtok(NULL, search);
-		char *value = token;
-		if (atoi(value)<1){
-			writeLog("Dato durata partita non valido");
-			return -1;
-		}
-		Durata_Partita = atoi(value);
-		char buffer[256];
-		sprintf(buffer, "Dato Durata_Partita valido: %d", Durata_Partita);
-		writeLog(buffer);
-	}
+        char *value = token;
+        if (atoi(value)<1){
+          printf("Dato durata partita non valido");
+          return false;
+        }
+        Durata_Partita = atoi(value);
+        char buffer[256];
+        //sprintf(buffer, "Dato Durata_Partita valido: %d", Durata_Partita);
+        //printf(buffer);
+      }
       else if ((strcmp(token, "Perc_Infortunio")) == 0) {
         token = strtok(NULL, search);
-		char *value = token;
-		if (atoi(value)<1 && atoi(value)>100){
-			writeLog("Dato Perc_Infortunio non valido");
-			return -1;
-		}
-		Perc_Infortunio = atoi(value);
-		char buffer[256];
-		sprintf(buffer, "Dato Perc_Infortunio valido: %d", Perc_Infortunio);
-		writeLog(buffer);
+        char *value = token;
+        if (atoi(value)<1 && atoi(value)>100){
+          printf("Dato Perc_Infortunio non valido");
+          return false;
+        }
+        Perc_Infortunio = atoi(value);
+        char buffer[256];
+        //sprintf(buffer, "Dato Perc_Infortunio valido: %d", Perc_Infortunio);
+        //printf(buffer);
       }
       else if ((strcmp(token, "Perc_Tiro")) == 0) {
         token = strtok(NULL, search);
-		char *value = token;
-		if (atoi(value)<1 && atoi(value)>100){
-			writeLog("Dato Perc_Tiro non valido");
-			return -1;
-		}
-		Perc_Tiro = atoi(value);
-		char buffer[256];
-		sprintf(buffer, "Dato Perc_Tiro valido: %d", Perc_Tiro);
-		writeLog(buffer);
+        char *value = token;
+        if (atoi(value)<1 && atoi(value)>100){
+          printf("Dato Perc_Tiro non valido");
+          return false;
+        }
+        Perc_Tiro = atoi(value);
+        char buffer[256];
+        //sprintf(buffer, "Dato Perc_Tiro valido: %d", Perc_Tiro);
+        //printf(buffer);
       }
       else if ((strcmp(token, "Perc_Dribbling")) == 0) {
         token = strtok(NULL, search);
-		char *value = token;
-		if (atoi(value)<1 || atoi(value)>100){
-			writeLog("Dato Perc_Dribbling non valido");
-			return -1;
-		}
-		Perc_Dribbling = atoi(value);
-		char buffer[256];
-		sprintf(buffer, "Dato Perc_Dribbling valido: %d", Perc_Dribbling);
-		writeLog(buffer);
+        char *value = token;
+        if (atoi(value)<1 || atoi(value)>100){
+          printf("Dato Perc_Dribbling non valido");
+          return false;
+        }
+        Perc_Dribbling = atoi(value);
+        char buffer[256];
+        //sprintf(buffer, "Dato Perc_Dribbling valido: %d", Perc_Dribbling);
+        //printf(buffer);
       }
     }
-    fclose ( file );
-	writeLog("Tutti i dati di configurazione sono stati trovati e caricati");
+    fclose (file);
+    return true;
+  }
+  else printf("Errore nell'apertura del file");
+  return false;
+}
+
+
+void sig_handler(int signo){
+  if (signo == SIGKILL){
+    printf("received SIGKILL - fato\n");
+    exit(0);
+  }
+}
+
+int createMessageQueue(){
+  int messageQueue;
+  key_t messageKey = KEYMESSAGEQUEUE;
+  messageQueue=msgget(messageKey, IPC_CREAT | 0666);
+  return messageQueue;
+}
+
+int createAnswerQueue(){
+  int messageQueue;
+  key_t messageKey = KEYMESSAGEANSWER;
+  messageQueue=msgget(messageKey, IPC_CREAT | 0666);
+  return messageQueue;
+}
+
+
+
+void writeLog(char* text){
+  FILE *logFile = fopen("log.txt", "a");
+  if (logFile!=NULL){
+    time_t mytime;
+    mytime=time(NULL);
+    fputs(strtok(ctime(&mytime), "\n"),logFile);
+    fputs(" | ", logFile);
+    fputs(text, logFile);
+    fputs("\n", logFile);
+    printf(text);
+    printf("\n");
+    fclose(logFile);
+  }
+  else printf("Errore nel file di log!!!\n");
+}
+//funzione che randomizza in base al tempo  preso in input un parametro restituisce 0/1
+int generateRandom(int value){
+  srand(time(NULL));
+  if (value<=rand()%100+1){
+    return 0;
+  }else{
     return 1;
   }
-  else writeLog("Errore nell'apertura del file");
-  return 0;
 }
 
-void removeMessageQueue(){
-  msgctl(idMessaggi, IPC_RMID, 0);
-  writeLog("Ho eliminato la coda messaggi");
-}
-bool writeLog(char* text){
-	FILE *logFile = fopen("log.txt", "a");
-	if (logFile!=NULL){
-		time_t mytime;
-		mytime=time(NULL);
-		fputs(strtok(ctime(&mytime), "\n"),logFile);
-		fputs(" | ", logFile);
-		fputs(text, logFile);
-		fputs("\n", logFile);
-		printf(text);
-		printf("\n");
-		fclose(logFile);
-		return 1;
-	}
-	printf("Errore nel file di log!!!\n");
-	return 0;
-}
-int main() {
-  if (leggiConfigurazione()) {
-	 idMessaggi=msgget(KEYMESSAGGI, IPC_CREAT | 0666);
-	 if (idMessaggi==-1) {
-		writeLog("Errore nella creazione coda di messaggi");
+int main(int argc, char *argv[]){
+  signal(SIGKILL, sig_handler);
+  readConfigFile();
+  messageQueueId=createMessageQueue();
+  if ((messageQueueId==-1)) writeLog("Failed to create/attach to messageQueue");
+  messageAnswerId=createAnswerQueue();
+  if ((messageAnswerId==-1)) writeLog("Failed to create/attach to messageQueue");
+  while(1){
+    msg.mtype=0;
+    //sleep(1);
+    msgrcv(messageQueueId,&msg,sizeof(msg),0,IPC_NOWAIT);
+    if (msg.mtype!=0){
+      teamNumber=msg.mtext;
+      type=msg.mtype;
+      if (type==1){
+        if(generateRandom(Perc_Tiro)==1){
+          msg.mtype=4;
+          msg.mtext=1;
+          sprintf(msglog, "La squadra %d ha fatto Goal.", teamNumber);
 
-	}
-		else
-		{
-			writeLog("Ho creato la coda di messaggi");
-		}
-    return 0;
+          msgsnd(messageAnswerId, &msg, sizeof(msg),0);
+          writeLog (msglog);
+        }
+        else {
+          msg.mtype=4;
+          msg.mtext=0;
+          msgsnd(messageAnswerId,&msg,sizeof(msg),0);
+        }
+      }
+      else if (type==2){
+
+        if(generateRandom(Perc_Infortunio)==1){
+          msg.mtype=4;
+          msg.mtext=1;
+          sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
+          msgsnd(messageAnswerId, &msg, sizeof(msg),0);
+          writeLog (msglog);
+        }
+        else {
+          msg.mtype=4;
+          msg.mtext=0;
+          msgsnd(messageAnswerId,&msg,sizeof(msg),0);
+        }
+      }
+      else if (type==3){
+        if(generateRandom(Perc_Dribbling)==1){
+          msg.mtype=4;
+          msg.mtext=1;
+          sprintf(msglog, "Il giocatore della squadra %d ha vinto il DRIBBLING.", teamNumber);
+          msgsnd(messageAnswerId, &msg, sizeof(msg),0);
+          writeLog (msglog);
+        }
+        else {
+          msg.mtype=4;
+          msg.mtext=0;
+          msgsnd(messageAnswerId,&msg,sizeof(msg),0);
+        }
+      }
+      else {
+        msg.mtype=4;
+        msg.mtext=0;
+        printf("Mesaggio non valido\n");
+        msgsnd(messageAnswerId, &msg, sizeof(msg),0);
+      }
+    }
   }
-  else writeLog("Errore lettura file di configurazione");
-  return -1;
+  return 0;
 }

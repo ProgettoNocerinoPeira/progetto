@@ -1,3 +1,4 @@
+
 //Libraries includes
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +20,7 @@
 int messageQueueId,messageAnswerId;
 int teamNumber;
 char msglog [256];
-
+int Perc_Infortunio, Perc_Tiro, Perc_Dribbling, Durata_Partita;
 
 struct mymsg
 {
@@ -33,6 +34,74 @@ void writeLog(char *message);
 int generateRandom(int value);
 int readMessage();
 void sig_handler(int signo);
+
+bool readConfigFile() {
+  char *token;
+  char *search = "=";
+  static const char filename[] = "config.txt";
+  FILE *file = fopen ( filename, "r" );
+  if ( file != NULL )
+  {
+    char line [ 128 ];
+    while ( fgets ( line, sizeof line, file ) != NULL ) //Lettura del file riga per riga
+    {
+      token = strtok(line, search);
+      if ((strcmp(token, "Durata_Partita")) == 0) {
+        token = strtok(NULL, search);
+        char *value = token;
+        if (atoi(value)<1){
+          printf("Dato durata partita non valido");
+          return false;
+        }
+        Durata_Partita = atoi(value);
+        char buffer[256];
+        //sprintf(buffer, "Dato Durata_Partita valido: %d", Durata_Partita);
+        //printf(buffer);
+      }
+      else if ((strcmp(token, "Perc_Infortunio")) == 0) {
+        token = strtok(NULL, search);
+        char *value = token;
+        if (atoi(value)<1 && atoi(value)>100){
+          printf("Dato Perc_Infortunio non valido");
+          return false;
+        }
+        Perc_Infortunio = atoi(value);
+        char buffer[256];
+        //sprintf(buffer, "Dato Perc_Infortunio valido: %d", Perc_Infortunio);
+        //printf(buffer);
+      }
+      else if ((strcmp(token, "Perc_Tiro")) == 0) {
+        token = strtok(NULL, search);
+        char *value = token;
+        if (atoi(value)<1 && atoi(value)>100){
+          printf("Dato Perc_Tiro non valido");
+          return false;
+        }
+        Perc_Tiro = atoi(value);
+        char buffer[256];
+        //sprintf(buffer, "Dato Perc_Tiro valido: %d", Perc_Tiro);
+        //printf(buffer);
+      }
+      else if ((strcmp(token, "Perc_Dribbling")) == 0) {
+        token = strtok(NULL, search);
+        char *value = token;
+        if (atoi(value)<1 || atoi(value)>100){
+          printf("Dato Perc_Dribbling non valido");
+          return false;
+        }
+        Perc_Dribbling = atoi(value);
+        char buffer[256];
+        //sprintf(buffer, "Dato Perc_Dribbling valido: %d", Perc_Dribbling);
+        //printf(buffer);
+      }
+    }
+    fclose (file);
+    return true;
+  }
+  else printf("Errore nell'apertura del file");
+  return false;
+}
+
 
 void sig_handler(int signo){
   if (signo == SIGKILL){
@@ -84,6 +153,7 @@ int generateRandom(int value){
 
 int main(int argc, char *argv[]){
   signal(SIGKILL, sig_handler);
+  readConfigFile();
   messageQueueId=createMessageQueue();
   if ((messageQueueId==-1)) writeLog("Failed to create/attach to messageQueue");
   messageAnswerId=createAnswerQueue();
@@ -96,7 +166,7 @@ int main(int argc, char *argv[]){
       teamNumber=msg.mtext;
       type=msg.mtype;
       if (type==1){
-        if(generateRandom(60)==1){
+        if(generateRandom(Perc_Tiro)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "La squadra %d ha fatto Goal.", teamNumber);
@@ -112,7 +182,7 @@ int main(int argc, char *argv[]){
       }
       else if (type==2){
 
-        if(generateRandom(60)==1){
+        if(generateRandom(Perc_Infortunio)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "Il giocatore della squadra %d ha subito un infortunio.", teamNumber);
@@ -126,7 +196,7 @@ int main(int argc, char *argv[]){
         }
       }
       else if (type==3){
-        if(generateRandom(30)==1){
+        if(generateRandom(Perc_Dribbling)==1){
           msg.mtype=4;
           msg.mtext=1;
           sprintf(msglog, "Il giocatore della squadra %d ha vinto il DRIBBLING.", teamNumber);
